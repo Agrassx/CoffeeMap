@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 
@@ -20,7 +22,12 @@ public class MapsActivity extends Activity {
         myOpenMapView = (MapView)findViewById(R.id.openmapview);
         myOpenMapView.setBuiltInZoomControls(true);
         myMapController = (MapController) myOpenMapView.getController();
-        myMapController.setZoom(4);
+        // FIXME: find out how to set optimal zoom level
+        myMapController.setZoom(12);
+        // Moscow latitude: 55.7516, longitude: 37.6187
+        // FIXME: get center from user's profile or location from GPS
+        GeoPoint point = new GeoPoint(55.7516, 37.6187);
+        myMapController.setCenter(point);
 
     }
 
