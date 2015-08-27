@@ -93,24 +93,11 @@ public class MapsActivity extends Activity {
         mProvider = new MapTileProviderBasic(getApplicationContext());
         final ITileSource tileSource = new XYTileSource("Sputnik", null, 4, 18, 256, ".png", baseUrls);
         mProvider.setTileSource(tileSource);
-
         mTilesOverlay = new TilesOverlay(mProvider, this.getBaseContext());
-
-
-
         SputnikMap = (MapView)findViewById(R.id.openmapview);
         mTilesOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
         SputnikMap.getOverlays().add(mTilesOverlay);
-//        SputnikMap.setUseSafeCanvas(true);
-
-
-
-
-
-
-
         SputnikMap.setBuiltInZoomControls(true);
-        // zoom to the moscow
         SputnikMap.getController().setZoom(11);
         SputnikMap.getController().setCenter(new GeoPoint(55751556, 37624482));
 
@@ -134,7 +121,7 @@ public class MapsActivity extends Activity {
     private void setHardwareAccelerationOff() {
         // Turn off hardware acceleration here, or in manifest
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-            mMapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+    mMapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }*/
 
     @Override
