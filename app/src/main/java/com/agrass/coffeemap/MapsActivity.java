@@ -1,77 +1,127 @@
 package com.agrass.coffeemap;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
 
+import org.osmdroid.tileprovider.MapTileProviderBasic;
+import org.osmdroid.tileprovider.tilesource.ITileSource;
+import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MinimapOverlay;
+import org.osmdroid.views.overlay.TilesOverlay;
+import org.osmdroid.views.overlay.compass.CompassOverlay;
+import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+
 
 public class MapsActivity extends Activity {
 
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private MapView myOpenMapView;
-    private MapController myMapController;
+    public MapView SputnikMap;
+    public TilesOverlay mTilesOverlay;
+
+    CompassOverlay mCompassOverlay;
+    MyLocationNewOverlay mLocationOverlay;
+    public MapTileProviderBasic mProvider;
+    public MinimapOverlay mMinimapOverlay;
+    public static final String	baseUrls[] = { "http://a.tiles.maps.sputnik.ru/tiles/kmt2/",
+                                               "http://b.tiles.maps.sputnik.ru/tiles/kmt2/",
+                                               "http://c.tiles.maps.sputnik.ru/tiles/kmt2/",
+                                               "http://d.tiles.maps.sputnik.ru/tiles/kmt2/"};
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-//        setUpMapIfNeeded();
-        myOpenMapView = (MapView)findViewById(R.id.openmapview);
-        myOpenMapView.setBuiltInZoomControls(true);
-        myMapController = (MapController) myOpenMapView.getController();
-        // FIXME: find out how to set optimal zoom level
-        myMapController.setZoom(12);
-        // Moscow latitude: 55.7516, longitude: 37.6187
-        // FIXME: get center from user's profile or location from GPS
-        GeoPoint point = new GeoPoint(55.7516, 37.6187);
-        myMapController.setCenter(point);
 
+
+        final float scale = getBaseContext().getResources().getDisplayMetrics().density;
+        final int imageSize = (int) (256 * scale);
+        final ITileSource tileSource = new RetinaTileSource("Sputnik", null, 4, 18, imageSize, ".png", baseUrls);
+        mProvider = new MapTileProviderBasic(getApplicationContext(), tileSource);
+        mTilesOverlay = new TilesOverlay(mProvider, this.getBaseContext());
+        SputnikMap = (MapView)findViewById(R.id.openmapview);
+        mTilesOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
+        SputnikMap.getOverlays().clear();
+        SputnikMap.getOverlays().add(mTilesOverlay);
+        SputnikMap.setBuiltInZoomControls(true);
+        SputnikMap.setMultiTouchControls(true);
+        SputnikMap.getController().setZoom(11);
+        SputnikMap.getController().setCenter(new GeoPoint(55751556, 37624482));
+
+        mCompassOverlay = new CompassOverlay(getApplicationContext(), new InternalCompassOrientationProvider(getApplicationContext()),
+                SputnikMap);
+        mLocationOverlay = new MyLocationNewOverlay(getApplicationContext(), new GpsMyLocationProvider(getApplicationContext()),
+                SputnikMap);
+
+        mMinimapOverlay = new MinimapOverlay(getApplicationContext(), SputnikMap.getTileRequestCompleteHandler());
+        mMinimapOverlay.setWidth(5);
+        mMinimapOverlay.setHeight(5);
+        SputnikMap.setTileSource(tileSource);
+        SputnikMap.getOverlays().add(this.mLocationOverlay);
+        SputnikMap.getOverlays().add(this.mCompassOverlay);
+        SputnikMap.getOverlays().add(this.mMinimapOverlay);
+
+    }
+
+   /* public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mResourceProxy = new ResourceProxyImpl(inflater.getContext().getApplicationContext());
+        mMapView = new MapView(inflater.getContext(), 256, mResourceProxy,  tileProviderArray);
+        setHardwareAccelerationOff();
+        return mMapView;
     }
 
     @Override
-    protected void onResume() {
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        //final Context context = this.getActivity();
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void setHardwareAccelerationOff() {
+        // Turn off hardware acceleration here, or in manifest
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+    mMapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+    }*/
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        /*final SharedPreferences.Editor edit = mPrefs.edit();
+        edit.putString(PREFS_TILE_SOURCE, mMapView.getTileProvider().getTileSource().name());
+        edit.putInt(PREFS_SCROLL_X, mMapView.getScrollX());
+        edit.putInt(PREFS_SCROLL_Y, mMapView.getScrollY());
+        edit.putInt(PREFS_ZOOM_LEVEL, mMapView.getZoomLevel());
+        edit.putBoolean(PREFS_SHOW_LOCATION, mLocationOverlay.isMyLocationEnabled());
+        edit.putBoolean(PREFS_SHOW_COMPASS, mCompassOverlay.isCompassEnabled());
+        edit.commit();
+
+        this.mLocationOverlay.disableMyLocation();
+        this.mCompassOverlay.disableCompass();*/
+    }
+
+  /*  @Override
+    public void onResume() {
         super.onResume();
-//        setUpMapIfNeeded();
+        final String tileSourceName = mPrefs.getString(PREFS_TILE_SOURCE,
+                TileSourceFactory.DEFAULT_TILE_SOURCE.name());
+        try {
+            final ITileSource tileSource = TileSourceFactory.getTileSource(tileSourceName);
+            mMapView.setTileSource(tileSource);
+        } catch (final IllegalArgumentException e) {
+            mMapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
+        }
+        if (mPrefs.getBoolean(PREFS_SHOW_LOCATION, false)) {
+            this.mLocationOverlay.enableMyLocation();
+        }
+        if (mPrefs.getBoolean(PREFS_SHOW_COMPASS, false)) {
+            this.mCompassOverlay.enableCompass();
+        }
     }
+    public MapView getMapView() {
+        return mMapView;
+    } */
 
-    /**
-     * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
-     * installed) and the map has not already been instantiated.. This will ensure that we only ever
-     * call {@link #setUpMap()} once when {@link #mMap} is not null.
-     * <p/>
-     * If it isn't installed {@link SupportMapFragment} (and
-     * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
-     * install/update the Google Play services APK on their device.
-     * <p/>
-     * A user can return to this FragmentActivity after following the prompt and correctly
-     * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
-     * have been completely destroyed during this process (it is likely that it would only be
-     * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
-     * method in {@link #onResume()} to guarantee that it will be called.
-     */
-//    private void setUpMapIfNeeded() {
-//        // Do a null check to confirm that we have not already instantiated the map.
-//        if (mMap == null) {
-//            // Try to obtain the map from the SupportMapFragment.
-//            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-//                    .getMap();
-//            // Check if we were successful in obtaining the map.
-//            if (mMap != null) {
-//                setUpMap();
-//            }
-//        }
-//    }
-
-    /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
-     * This should only be called once and when we are sure that {@link #mMap} is not null.
-     */
-    private void setUpMap() {
-
-    }
 }
