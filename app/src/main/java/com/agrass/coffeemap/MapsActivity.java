@@ -1,11 +1,9 @@
 package com.agrass.coffeemap;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
-import org.osmdroid.ResourceProxy;
 import org.osmdroid.tileprovider.MapTileProviderBasic;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
@@ -23,6 +21,7 @@ public class MapsActivity extends Activity {
 
     public MapView SputnikMap;
     public TilesOverlay mTilesOverlay;
+
     CompassOverlay mCompassOverlay;
     MyLocationNewOverlay mLocationOverlay;
     public MapTileProviderBasic mProvider;
@@ -37,8 +36,9 @@ public class MapsActivity extends Activity {
         setContentView(R.layout.activity_maps);
 
 
-
-        final ITileSource tileSource = new XYTileSource("Sputnik",null, 4, 18, 256, ".png", baseUrls);
+        final float scale = getBaseContext().getResources().getDisplayMetrics().density;
+        final int newScale = (int) (256 * scale);
+        final ITileSource tileSource = new XYTileSource("Sputnik",null, 4, 18, newScale, ".png", baseUrls);
         mProvider = new MapTileProviderBasic(getApplicationContext(), tileSource);
         mTilesOverlay = new TilesOverlay(mProvider, this.getBaseContext());
         SputnikMap = (MapView)findViewById(R.id.openmapview);
