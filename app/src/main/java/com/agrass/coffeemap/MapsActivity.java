@@ -37,8 +37,8 @@ public class MapsActivity extends Activity {
 
 
         final float scale = getBaseContext().getResources().getDisplayMetrics().density;
-        final int newScale = (int) (256 * scale);
-        final ITileSource tileSource = new XYTileSource("Sputnik",null, 4, 18, newScale, ".png", baseUrls);
+        final int RetinaTiles = (int) (256 * scale);
+        final ITileSource tileSource = new XYTileSource("Sputnik",null, 4, 18, RetinaTiles, ".png", baseUrls);
         mProvider = new MapTileProviderBasic(getApplicationContext(), tileSource);
         mTilesOverlay = new TilesOverlay(mProvider, this.getBaseContext());
         SputnikMap = (MapView)findViewById(R.id.openmapview);
