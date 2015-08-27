@@ -1,23 +1,32 @@
 package com.agrass.coffeemap;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+
+import org.osmdroid.ResourceProxy;
 import org.osmdroid.tileprovider.MapTileProviderBasic;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MinimapOverlay;
 import org.osmdroid.views.overlay.TilesOverlay;
-
-
-
+import org.osmdroid.views.overlay.compass.CompassOverlay;
+import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 
 public class MapsActivity extends Activity {
+
     public MapView SputnikMap;
     public TilesOverlay mTilesOverlay;
+    CompassOverlay mCompassOverlay;
+    MyLocationNewOverlay mLocationOverlay;
     public MapTileProviderBasic mProvider;
+    public MinimapOverlay mMinimapOverlay;
     public static final String	baseUrls[] = { "http://a.tiles.maps.sputnik.ru/tiles/kmt2/",
                                                "http://b.tiles.maps.sputnik.ru/tiles/kmt2/",
                                                "http://c.tiles.maps.sputnik.ru/tiles/kmt2/",
@@ -26,16 +35,33 @@ public class MapsActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        mProvider = new MapTileProviderBasic(getApplicationContext());
-        final ITileSource tileSource = new XYTileSource("Sputnik", null, 4, 18, 256, ".png", baseUrls);
-        mProvider.setTileSource(tileSource);
+
+
+
+        final ITileSource tileSource = new XYTileSource("Sputnik",null, 4, 18, 256, ".png", baseUrls);
+        mProvider = new MapTileProviderBasic(getApplicationContext(), tileSource);
         mTilesOverlay = new TilesOverlay(mProvider, this.getBaseContext());
         SputnikMap = (MapView)findViewById(R.id.openmapview);
         mTilesOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
+        SputnikMap.getOverlays().clear();
         SputnikMap.getOverlays().add(mTilesOverlay);
         SputnikMap.setBuiltInZoomControls(true);
+        SputnikMap.setMultiTouchControls(true);
         SputnikMap.getController().setZoom(11);
         SputnikMap.getController().setCenter(new GeoPoint(55751556, 37624482));
+
+        mCompassOverlay = new CompassOverlay(getApplicationContext(), new InternalCompassOrientationProvider(getApplicationContext()),
+                SputnikMap);
+        mLocationOverlay = new MyLocationNewOverlay(getApplicationContext(), new GpsMyLocationProvider(getApplicationContext()),
+                SputnikMap);
+
+        mMinimapOverlay = new MinimapOverlay(getApplicationContext(), SputnikMap.getTileRequestCompleteHandler());
+        mMinimapOverlay.setWidth(5);
+        mMinimapOverlay.setHeight(5);
+        SputnikMap.setTileSource(tileSource);
+        SputnikMap.getOverlays().add(this.mLocationOverlay);
+        SputnikMap.getOverlays().add(this.mCompassOverlay);
+        SputnikMap.getOverlays().add(this.mMinimapOverlay);
 
     }
 
