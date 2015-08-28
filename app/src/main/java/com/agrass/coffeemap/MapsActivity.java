@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+
 
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.api.IGeoPoint;
@@ -18,7 +18,6 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.MinimapOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.TilesOverlay;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
@@ -51,7 +50,7 @@ public class MapsActivity extends Activity {
 
         final float scale = getBaseContext().getResources().getDisplayMetrics().density;
         final int imageSize = (int) (256 * scale);
-        final ITileSource tileSource = new RetinaTileSource("Sputnik", null, 4, 18, imageSize, ".png", baseUrls);
+        final ITileSource tileSource = new RetinaTileSource("Sputnik", null, 1, 18, imageSize, ".png", baseUrls);
         mProvider = new MapTileProviderBasic(getApplicationContext(), tileSource);
         mTilesOverlay = new TilesOverlay(mProvider, this.getBaseContext());
         SputnikMap = (MapView)findViewById(R.id.openmapview);
@@ -67,36 +66,35 @@ public class MapsActivity extends Activity {
                 SputnikMap);
         mLocationOverlay = new MyLocationNewOverlay(getApplicationContext(), new GpsMyLocationProvider(getApplicationContext()),
                 SputnikMap);
-
         mMinimapOverlay = new MinimapOverlay(getApplicationContext(), SputnikMap.getTileRequestCompleteHandler());
-        mMinimapOverlay.setWidth(5);
-        mMinimapOverlay.setHeight(5);
         SputnikMap.setTileSource(tileSource);
-        SputnikMap.getOverlays().add(this.mLocationOverlay);
-        SputnikMap.getOverlays().add(this.mCompassOverlay);
-//        SputnikMap.getOverlays().add(this.mMinimapOverlay);
+
         Projection projection = SputnikMap.getProjection();
-        IGeoPoint SW = projection.getNorthEast();
-        GeoPoint NE = (GeoPoint) projection.fromPixels(SputnikMap.getWidth() - 20, SputnikMap.getHeight() - 20);
-        double bottomLat = NE.getLatitudeE6()/1E6;
-        double bottomLon = NE.getLongitudeE6()/1E6;
+        IGeoPoint NE = projection.getNorthEast();
 
-        ArrayList anotherOverlayItemArray = new ArrayList<OverlayItem>();
-        anotherOverlayItemArray.add(new OverlayItem(
-                "SW", "SW", SW));
-        anotherOverlayItemArray.add(new OverlayItem(
-                "NE", "NE", new GeoPoint(bottomLat, bottomLon)));
+        Integer bottomLat1 = SputnikMap.getProjection().getNorthEast().getLatitudeE6();
+        Integer bottomLat2 = SputnikMap.getBoundingBox().getLatNorthE6();
+        Integer bottomLat3 = projection.fromPixels(0, 0).getLatitudeE6();
 
-        anotherOverlayItemArray.add(new OverlayItem(
-                "Russia", "Russia", new GeoPoint(55.75, 37.616667)));
+        Log.e("bottomLat", bottomLat1.toString());
+        Log.e("bottomLon", bottomLat2.toString());
+        Log.e("bottomLon", bottomLat3.toString());
+//        Log.e("bottomLon", bottomLon.toString());
 
-        ItemizedIconOverlay<OverlayItem> anotherItemizedIconOverlay
+        ArrayList CoffeeMarkers = new ArrayList<OverlayItem>();
+        // CoffeeMarkers.add(new OverlayItem("SW", "SW", NE));
+        CoffeeMarkers.add(new OverlayItem("NE", "NE", NE));
+        CoffeeMarkers.add(new OverlayItem("Moscow", "Test", new GeoPoint(55.75, 37.616667)));
+
+        ItemizedIconOverlay<OverlayItem> CoffeeMarkersItemizedIconOverlay
                 = new ItemizedIconOverlay<OverlayItem>(
-                this, anotherOverlayItemArray, null);
+                this, CoffeeMarkers, null);
 
-        SputnikMap.getOverlays().add(anotherItemizedIconOverlay);
+        SputnikMap.getOverlays().add(CoffeeMarkersItemizedIconOverlay);
+
 
     }
+
 
     @Override
     public void onPause() {
