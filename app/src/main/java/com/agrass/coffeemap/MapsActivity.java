@@ -1,12 +1,13 @@
 package com.agrass.coffeemap;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 
 import org.osmdroid.tileprovider.MapTileProviderBasic;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
-import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MinimapOverlay;
@@ -16,16 +17,15 @@ import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-
 public class MapsActivity extends Activity {
 
     public MapView SputnikMap;
     public TilesOverlay mTilesOverlay;
-
     CompassOverlay mCompassOverlay;
     MyLocationNewOverlay mLocationOverlay;
     public MapTileProviderBasic mProvider;
     public MinimapOverlay mMinimapOverlay;
+    public static final String PREFS_NAME = "MyPrefsFile";
     public static final String	baseUrls[] = { "http://a.tiles.maps.sputnik.ru/tiles/kmt2/",
                                                "http://b.tiles.maps.sputnik.ru/tiles/kmt2/",
                                                "http://c.tiles.maps.sputnik.ru/tiles/kmt2/",
@@ -33,6 +33,7 @@ public class MapsActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("On Create", "On Create…");
         setContentView(R.layout.activity_maps);
 
 
@@ -61,67 +62,67 @@ public class MapsActivity extends Activity {
         SputnikMap.setTileSource(tileSource);
         SputnikMap.getOverlays().add(this.mLocationOverlay);
         SputnikMap.getOverlays().add(this.mCompassOverlay);
-        SputnikMap.getOverlays().add(this.mMinimapOverlay);
+//        SputnikMap.getOverlays().add(this.mMinimapOverlay);
 
     }
-
-   /* public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mResourceProxy = new ResourceProxyImpl(inflater.getContext().getApplicationContext());
-        mMapView = new MapView(inflater.getContext(), 256, mResourceProxy,  tileProviderArray);
-        setHardwareAccelerationOff();
-        return mMapView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        //final Context context = this.getActivity();
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setHardwareAccelerationOff() {
-        // Turn off hardware acceleration here, or in manifest
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-    mMapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-    }*/
 
     @Override
     public void onPause() {
         super.onPause();
-        /*final SharedPreferences.Editor edit = mPrefs.edit();
-        edit.putString(PREFS_TILE_SOURCE, mMapView.getTileProvider().getTileSource().name());
-        edit.putInt(PREFS_SCROLL_X, mMapView.getScrollX());
-        edit.putInt(PREFS_SCROLL_Y, mMapView.getScrollY());
-        edit.putInt(PREFS_ZOOM_LEVEL, mMapView.getZoomLevel());
-        edit.putBoolean(PREFS_SHOW_LOCATION, mLocationOverlay.isMyLocationEnabled());
-        edit.putBoolean(PREFS_SHOW_COMPASS, mCompassOverlay.isCompassEnabled());
-        edit.commit();
-
-        this.mLocationOverlay.disableMyLocation();
-        this.mCompassOverlay.disableCompass();*/
+        Log.e("On pause", "On pause…");
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putFloat("PREFS_SCROLL_X", (float) SputnikMap.getMapCenter().getLatitude());
+        editor.putFloat("PREFS_SCROLL_Y", (float) SputnikMap.getMapCenter().getLongitude());
+        editor.putInt("PREFS_ZOOM_LEVEL", SputnikMap.getZoomLevel());
+//        editor.putString(PREFS_TILE_SOURCE, SputnikMap.getTileProvider().getTileSource().name());
+//        editor.putBoolean(PREFS_SHOW_LOCATION, mLocationOverlay.isMyLocationEnabled());
+//        editor.putBoolean(PREFS_SHOW_COMPASS, mCompassOverlay.isCompassEnabled());
+        editor.commit();
     }
 
-  /*  @Override
+   @Override
     public void onResume() {
-        super.onResume();
-        final String tileSourceName = mPrefs.getString(PREFS_TILE_SOURCE,
-                TileSourceFactory.DEFAULT_TILE_SOURCE.name());
-        try {
-            final ITileSource tileSource = TileSourceFactory.getTileSource(tileSourceName);
-            mMapView.setTileSource(tileSource);
-        } catch (final IllegalArgumentException e) {
-            mMapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
-        }
-        if (mPrefs.getBoolean(PREFS_SHOW_LOCATION, false)) {
-            this.mLocationOverlay.enableMyLocation();
-        }
-        if (mPrefs.getBoolean(PREFS_SHOW_COMPASS, false)) {
-            this.mCompassOverlay.enableCompass();
-        }
+       super.onResume();
+       Log.e("On Resume", "On Resume…");
+       SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+       float SX = settings.getFloat("PREFS_SCROLL_X", 55751556);
+       float SY = settings.getFloat("PREFS_SCROLL_Y", 37624482);
+       SputnikMap.getController().setCenter(new GeoPoint(SX,SY));
+       SputnikMap.getController().setZoom(settings.getInt("PREFS_ZOOM_LEVEL", 11));
+
+//       final String tileSourceName = mPrefs.getString(PREFS_TILE_SOURCE,
+//                TileSourceFactory.DEFAULT_TILE_SOURCE.name());
+//       try {
+//           final ITileSource tileSource = TileSourceFactory.getTileSource(tileSourceName);
+//           SputnikMap.setTileSource(tileSource);
+//       } catch (final IllegalArgumentException e) {
+//           SputnikMap.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
+//       }
+//       if (mPrefs.getBoolean(PREFS_SHOW_LOCATION, false)) {
+//           this.mLocationOverlay.enableMyLocation();
+//       }
+//       if (mPrefs.getBoolean(PREFS_SHOW_COMPASS, false)) {
+//           this.mCompassOverlay.enableCompass();
+//       }
     }
+    @Override
+    public void onStop(){
+        super.onStop();
+        Log.e("On Stop", "On Stop…");
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        settings.edit().clear();
+    }
+
+    @Override public void onDestroy() {
+        super.onDestroy();
+        Log.e("On destroy", "On Destroy…");
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        settings.edit().clear();
+    }
+
     public MapView getMapView() {
-        return mMapView;
-    } */
+        return SputnikMap;
+    }
 
 }
