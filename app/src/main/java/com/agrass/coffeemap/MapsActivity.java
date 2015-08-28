@@ -10,6 +10,7 @@ import org.osmdroid.tileprovider.MapTileProviderBasic;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.MinimapOverlay;
 import org.osmdroid.views.overlay.TilesOverlay;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
@@ -63,6 +64,9 @@ public class MapsActivity extends Activity {
         SputnikMap.getOverlays().add(this.mLocationOverlay);
         SputnikMap.getOverlays().add(this.mCompassOverlay);
 //        SputnikMap.getOverlays().add(this.mMinimapOverlay);
+//        Projection projection = SputnikMap.getProjection();
+//        GeoPoint SW = (GeoPoint) projection.fromPixels(0, 0);
+//        GeoPoint NE = (GeoPoint) projection.fromPixels(SputnikMap.getWidth() - 1, SputnikMap.getHeight() - 1);
 
     }
 
@@ -110,15 +114,12 @@ public class MapsActivity extends Activity {
     public void onStop(){
         super.onStop();
         Log.e("On Stop", "On Stop…");
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        settings.edit().clear();
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         super.onDestroy();
         Log.e("On destroy", "On Destroy…");
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        settings.edit().clear();
     }
 
     public MapView getMapView() {
