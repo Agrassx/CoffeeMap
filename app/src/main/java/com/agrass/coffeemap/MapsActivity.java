@@ -5,28 +5,39 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import org.osmdroid.ResourceProxy;
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.tileprovider.MapTileProviderBasic;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.Projection;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.MinimapOverlay;
+import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.TilesOverlay;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.util.ArrayList;
+
 public class MapsActivity extends Activity {
 
     public MapView SputnikMap;
     public TilesOverlay mTilesOverlay;
     CompassOverlay mCompassOverlay;
-    MyLocationNewOverlay mLocationOverlay;
+    public MyLocationNewOverlay mLocationOverlay;
+    private ItemizedOverlay<OverlayItem> mMyLocationOverlay;
     public MapTileProviderBasic mProvider;
     public MinimapOverlay mMinimapOverlay;
     public static final String PREFS_NAME = "MyPrefsFile";
+    public ResourceProxy mResourceProxy;
     public static final String	baseUrls[] = { "http://a.tiles.maps.sputnik.ru/tiles/kmt2/",
                                                "http://b.tiles.maps.sputnik.ru/tiles/kmt2/",
                                                "http://c.tiles.maps.sputnik.ru/tiles/kmt2/",
@@ -64,9 +75,26 @@ public class MapsActivity extends Activity {
         SputnikMap.getOverlays().add(this.mLocationOverlay);
         SputnikMap.getOverlays().add(this.mCompassOverlay);
 //        SputnikMap.getOverlays().add(this.mMinimapOverlay);
-//        Projection projection = SputnikMap.getProjection();
-//        GeoPoint SW = (GeoPoint) projection.fromPixels(0, 0);
-//        GeoPoint NE = (GeoPoint) projection.fromPixels(SputnikMap.getWidth() - 1, SputnikMap.getHeight() - 1);
+        Projection projection = SputnikMap.getProjection();
+        IGeoPoint SW = projection.getNorthEast();
+        GeoPoint NE = (GeoPoint) projection.fromPixels(SputnikMap.getWidth() - 20, SputnikMap.getHeight() - 20);
+        double bottomLat = NE.getLatitudeE6()/1E6;
+        double bottomLon = NE.getLongitudeE6()/1E6;
+
+        ArrayList anotherOverlayItemArray = new ArrayList<OverlayItem>();
+        anotherOverlayItemArray.add(new OverlayItem(
+                "SW", "SW", SW));
+        anotherOverlayItemArray.add(new OverlayItem(
+                "NE", "NE", new GeoPoint(bottomLat, bottomLon)));
+
+        anotherOverlayItemArray.add(new OverlayItem(
+                "Russia", "Russia", new GeoPoint(55.75, 37.616667)));
+
+        ItemizedIconOverlay<OverlayItem> anotherItemizedIconOverlay
+                = new ItemizedIconOverlay<OverlayItem>(
+                this, anotherOverlayItemArray, null);
+
+        SputnikMap.getOverlays().add(anotherItemizedIconOverlay);
 
     }
 
