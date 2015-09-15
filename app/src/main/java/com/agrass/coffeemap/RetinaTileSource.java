@@ -15,10 +15,7 @@ public class RetinaTileSource extends XYTileSource {
 
     @Override
     public String getTileURLString(final MapTile aTile) {
-
-        String url = getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY()
+        return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY()
                 + mImageFilenameEnding + "?tag=retina";
-
-        return url;
     }
 }
