@@ -6,6 +6,17 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.DelayedMapListener;
@@ -16,7 +27,6 @@ import org.osmdroid.tileprovider.MapTileProviderBasic;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.MinimapOverlay;
@@ -27,6 +37,7 @@ import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MapsActivity extends Activity {
@@ -73,23 +84,11 @@ public class MapsActivity extends Activity {
 
         SputnikMap.setTileSource(tileSource);
 
-        ArrayList CoffeeMarkers = new ArrayList<OverlayItem>();
-        GeoPoint NE = new GeoPoint(SputnikMap.getBoundingBox().getLatNorthE6(),SputnikMap.getBoundingBox().getLonEastE6());
-        GeoPoint SW = new GeoPoint(SputnikMap.getBoundingBox().getLatSouthE6(),SputnikMap.getBoundingBox().getLonWestE6());
-        CoffeeMarkers.add(new OverlayItem("NE", "NE", NE));
-        CoffeeMarkers.add(new OverlayItem("SW", "SW", SW));
-        ItemizedIconOverlay<OverlayItem> CoffeeMarkersItemizedIconOverlay
-                = new ItemizedIconOverlay<OverlayItem>(
-                this, CoffeeMarkers, null);
-
-        SputnikMap.getOverlays().add(CoffeeMarkersItemizedIconOverlay);
-
-
         SputnikMap.setMapListener(new DelayedMapListener(new MapListener() {
             public boolean onZoom(final ZoomEvent e) {
                 Log.wtf("zoom", "it was zoomed");
                 Integer Zoom = SputnikMap.getZoomLevel();
-                Log.wtf("zoom", "Zoom is "+Zoom.toString());
+                Log.wtf("zoom", "Zoom is " + Zoom.toString());
                 Integer N = SputnikMap.getBoundingBox().getLatNorthE6();
                 Integer E = SputnikMap.getBoundingBox().getLonEastE6();
                 Integer S = SputnikMap.getBoundingBox().getLatSouthE6();
@@ -102,10 +101,48 @@ public class MapsActivity extends Activity {
             }
 
             public boolean onScroll(final ScrollEvent e) {
-                Log.e("scroll", "it was scrolled");
+
+                Log.wtf("scroll", "it was scrolled");
                 return true;
             }
         }, 1000));
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "http://78.47.49.234:9000/api/points?s=55.75&n=55.74&w=37.60&e=37.66";
+        final ArrayList CoffeeMarkers = new ArrayList<OverlayItem>();
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray CoffeeArray = response.getJSONArray("points");
+                    for (int i = 0; i < CoffeeArray.length() - 1; i++){
+                        JSONObject JsonObject = CoffeeArray.getJSONObject(i);
+                        Log.wtf("Array",JsonObject.getString("name"));
+                        Log.wtf("Lat",JsonObject.getString("lat"));
+                        Log.wtf("Lon", JsonObject.getString("lon"));
+                        CoffeeMarkers.add(new OverlayItem(JsonObject.getString("name"), "", new GeoPoint(JsonObject.getDouble("lat"), JsonObject.getDouble("lon"))));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.wtf("Error!", error);
+            }
+        });
+
+        queue.add(jsObjRequest);
+        Boolean s = CoffeeMarkers.isEmpty();
+        Log.wtf("CoffeeMarkers is Empty?", s.toString());
+        ItemizedIconOverlay<OverlayItem> CoffeeMarkersItemizedIconOverlay
+                = new ItemizedIconOverlay<OverlayItem>(
+                this, CoffeeMarkers, null);
+        SputnikMap.getOverlays().add(CoffeeMarkersItemizedIconOverlay);
+
 
     }
 
@@ -132,13 +169,6 @@ public class MapsActivity extends Activity {
        SputnikMap.getController().setCenter(new GeoPoint(SX, SY));
        SputnikMap.getController().setZoom(settings.getInt("PREFS_ZOOM_LEVEL", 11));
 
-//       Integer bottomLat1 =
-       Integer bottomLat2 = SputnikMap.getBoundingBox().getLatNorthE6();
-
-
-//       Log.e("bottomLat", bottomLat1.toString());
-       Log.e("LatNorthE6", bottomLat2.toString());
-
        GeoPoint NE = new GeoPoint(SputnikMap.getBoundingBox().getLatNorthE6(),SputnikMap.getBoundingBox().getLonEastE6());
        GeoPoint SW = new GeoPoint(SputnikMap.getBoundingBox().getLatSouthE6(),SputnikMap.getBoundingBox().getLonWestE6());
        ArrayList CoffeeMarkers = new ArrayList<OverlayItem>();
@@ -150,15 +180,7 @@ public class MapsActivity extends Activity {
 
        SputnikMap.getOverlays().add(CoffeeMarkersItemizedIconOverlay);
 
-//       final String tileSourceName = mPrefs.getString(PREFS_TILE_SOURCE,
-//                TileSourceFactory.DEFAULT_TILE_SOURCE.name());
-//       try {
-//           final ITileSource tileSource = TileSourceFactory.getTileSource(tileSourceName);
-//           SputnikMap.setTileSource(tileSource);
-//       } catch (final IllegalArgumentException e) {
-//           SputnikMap.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
-//       }
-    }
+   }
 
     @Override
     public void onStop() {
