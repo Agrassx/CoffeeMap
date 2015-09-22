@@ -37,20 +37,20 @@ import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MapsActivity extends Activity {
 
     private MapView SputnikMap;
     private TilesOverlay mTilesOverlay;
-    CompassOverlay mCompassOverlay;
+    private CompassOverlay mCompassOverlay;
     private MyLocationNewOverlay mLocationOverlay;
     private ItemizedOverlay<OverlayItem> mMyLocationOverlay;
     private MapTileProviderBasic mProvider;
     private MinimapOverlay mMinimapOverlay;
     private static final String PREFS_NAME = "MyPrefsFile";
     private ResourceProxy mResourceProxy;
+    private GeoPoint Moscow = new GeoPoint(55751556, 37624482);
     private static final String	baseUrls[] = { "http://a.tiles.maps.sputnik.ru/tiles/kmt2/",
                                                "http://b.tiles.maps.sputnik.ru/tiles/kmt2/",
                                                "http://c.tiles.maps.sputnik.ru/tiles/kmt2/",
@@ -74,7 +74,7 @@ public class MapsActivity extends Activity {
         SputnikMap.setBuiltInZoomControls(true);
         SputnikMap.setMultiTouchControls(true);
         SputnikMap.getController().setZoom(11);
-        SputnikMap.getController().setCenter(new GeoPoint(55751556, 37624482));
+        SputnikMap.getController().setCenter(Moscow);
 
         mCompassOverlay = new CompassOverlay(getApplicationContext(), new InternalCompassOrientationProvider(getApplicationContext()),
                 SputnikMap);
@@ -83,6 +83,10 @@ public class MapsActivity extends Activity {
         mMinimapOverlay = new MinimapOverlay(getApplicationContext(), SputnikMap.getTileRequestCompleteHandler());
 
         SputnikMap.setTileSource(tileSource);
+
+        final String url = "http://78.47.49.234:9000/api/points?s=55.75&n=55.74&w=37.60&e=37.66";
+        final CoffeeAPI coffeeAPI = new CoffeeAPI();
+        final ArrayList CoffeeMarkers = new ArrayList<OverlayItem>();
 
         SputnikMap.setMapListener(new DelayedMapListener(new MapListener() {
             public boolean onZoom(final ZoomEvent e) {
@@ -101,48 +105,22 @@ public class MapsActivity extends Activity {
             }
 
             public boolean onScroll(final ScrollEvent e) {
-
                 Log.wtf("scroll", "it was scrolled");
+
+                coffeeAPI.setCoffeeOverlay(SputnikMap.getContext(), url);
+//                CoffeeMarkers.add(coffeeAPI.getOverlay());
+
+                Boolean s = CoffeeMarkers.isEmpty();
+                Log.wtf("CoffeeMarkers is Empty?", s.toString());
+
+                ItemizedIconOverlay<OverlayItem> CoffeeMarkersItemizedIconOverlay
+                        = new ItemizedIconOverlay<OverlayItem>(
+                        SputnikMap.getContext(), coffeeAPI.getOverlay(), null);
+                SputnikMap.getOverlays().add(CoffeeMarkersItemizedIconOverlay);
+
                 return true;
             }
         }, 1000));
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://78.47.49.234:9000/api/points?s=55.75&n=55.74&w=37.60&e=37.66";
-        final ArrayList CoffeeMarkers = new ArrayList<OverlayItem>();
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray CoffeeArray = response.getJSONArray("points");
-                    for (int i = 0; i < CoffeeArray.length() - 1; i++){
-                        JSONObject JsonObject = CoffeeArray.getJSONObject(i);
-                        Log.wtf("Array",JsonObject.getString("name"));
-                        Log.wtf("Lat",JsonObject.getString("lat"));
-                        Log.wtf("Lon", JsonObject.getString("lon"));
-                        CoffeeMarkers.add(new OverlayItem(JsonObject.getString("name"), "", new GeoPoint(JsonObject.getDouble("lat"), JsonObject.getDouble("lon"))));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.wtf("Error!", error);
-            }
-        });
-
-        queue.add(jsObjRequest);
-        Boolean s = CoffeeMarkers.isEmpty();
-        Log.wtf("CoffeeMarkers is Empty?", s.toString());
-        ItemizedIconOverlay<OverlayItem> CoffeeMarkersItemizedIconOverlay
-                = new ItemizedIconOverlay<OverlayItem>(
-                this, CoffeeMarkers, null);
-        SputnikMap.getOverlays().add(CoffeeMarkersItemizedIconOverlay);
-
 
     }
 

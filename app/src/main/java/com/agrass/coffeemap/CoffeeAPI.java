@@ -16,15 +16,15 @@ import org.json.JSONObject;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.OverlayItem;
 
-/**
- * Created by Agrass- on 22.09.15.
- */
+import java.util.ArrayList;
+
 public class CoffeeAPI {
 
-    private JSONArray CoffeeArray;
+    private JSONArray JsonCoffeeArray;
+    private ArrayList CoffeeList = new ArrayList<OverlayItem>();
 
 
-    public CoffeeAPI(Context context, String url) {
+    public void setCoffeeOverlay(Context context, String url) {
 
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
@@ -32,7 +32,11 @@ public class CoffeeAPI {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    CoffeeArray = response.getJSONArray("points");
+                    JsonCoffeeArray = response.getJSONArray("points");
+                    for (int i = 0; i < JsonCoffeeArray.length() - 1; i++) {
+                        JSONObject jsonObject = JsonCoffeeArray.getJSONObject(i);
+                        CoffeeList.add(new OverlayItem("Title","Snippet", new GeoPoint(jsonObject.getDouble("lat"), jsonObject.getDouble("lon"))));
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -44,24 +48,30 @@ public class CoffeeAPI {
                 Log.wtf("Error!", error);
             }
         });
-
         queue.add(jsObjRequest);
 
     }
 
     public String getName(int index) throws JSONException {
-        return CoffeeArray.getJSONObject(index).get("name").toString();
+        return JsonCoffeeArray.getJSONObject(index).get("name").toString();
     }
 
     public double getLon(int index) throws JSONException {
-        return CoffeeArray.getJSONObject(index).getDouble("lon");
+        return JsonCoffeeArray.getJSONObject(index).getDouble("lon");
     }
 
     public double getLat(int index) throws JSONException {
-        return CoffeeArray.getJSONObject(index).getDouble("lat");
+        return JsonCoffeeArray.getJSONObject(index).getDouble("lat");
     }
 
     public int getId(int index) throws JSONException {
-        return CoffeeArray.getJSONObject(index).getInt("id");
+        return JsonCoffeeArray.getJSONObject(index).getInt("id");
+    }
+
+    public int length(){
+        return JsonCoffeeArray.length();
+    }
+    public ArrayList<OverlayItem> getOverlay() {
+            return CoffeeList;
     }
 }
