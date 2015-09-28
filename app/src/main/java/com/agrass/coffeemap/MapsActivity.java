@@ -3,6 +3,7 @@ package com.agrass.coffeemap;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.location.Criteria;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -13,12 +14,12 @@ import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.MapTileProviderBasic;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
-import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.MinimapOverlay;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.TilesOverlay;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
@@ -26,7 +27,8 @@ import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.util.ArrayList;
+import java.util.List;
+
 
 public class MapsActivity extends Activity {
 
@@ -34,14 +36,11 @@ public class MapsActivity extends Activity {
     private TilesOverlay mTilesOverlay;
     private CompassOverlay mCompassOverlay;
     private MyLocationNewOverlay mLocationOverlay;
-    private ItemizedOverlay<OverlayItem> mMyLocationOverlay;
     private MapTileProviderBasic mProvider;
     private MinimapOverlay mMinimapOverlay;
     private static final String PREFS_NAME = "MyPrefsFile";
     private ResourceProxy mResourceProxy;
     private GeoPoint Moscow = new GeoPoint(55751556, 37624482);
-    private GeoPoint NE;
-    private GeoPoint SW;
     private static final String	baseUrls[] = { "http://a.tiles.maps.sputnik.ru/tiles/kmt2/",
                                                "http://b.tiles.maps.sputnik.ru/tiles/kmt2/",
                                                "http://c.tiles.maps.sputnik.ru/tiles/kmt2/",
@@ -60,9 +59,8 @@ public class MapsActivity extends Activity {
         mTilesOverlay = new TilesOverlay(mProvider, this.getBaseContext());
         SputnikMap = (MapView)findViewById(R.id.openmapview);
         mTilesOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
-        SputnikMap.getOverlays().clear();
+//        SputnikMap.getOverlays().clear();
         SputnikMap.getOverlays().add(mTilesOverlay);
-        SputnikMap.setBuiltInZoomControls(true);
         SputnikMap.setMultiTouchControls(true);
         SputnikMap.getController().setZoom(11);
         SputnikMap.getController().setCenter(Moscow);
@@ -71,36 +69,43 @@ public class MapsActivity extends Activity {
                 SputnikMap);
         mLocationOverlay = new MyLocationNewOverlay(getApplicationContext(), new GpsMyLocationProvider(getApplicationContext()),
                 SputnikMap);
-        mMinimapOverlay = new MinimapOverlay(getApplicationContext(), SputnikMap.getTileRequestCompleteHandler());
+        mMinimapOverlay = new MinimapOverlay(getApplicationContext(), SputnikMap.getTileRequestCompleteHandler(), mProvider);
 
         SputnikMap.setTileSource(tileSource);
 
         final CoffeeAPI coffeeAPI = new CoffeeAPI();
-        final ArrayList CoffeeMarkers = new ArrayList<OverlayItem>();
+
 
         SputnikMap.setMapListener(new DelayedMapListener(new MapListener() {
             public boolean onZoom(final ZoomEvent e) {
                 Log.wtf("zoom", "it was zoomed");
+
                 coffeeAPI.setCoffeeOverlay(SputnikMap.getContext(), SputnikMap.getBoundingBox());
+
                 ItemizedIconOverlay<OverlayItem> CoffeeMarkersItemizedIconOverlay
                         = new ItemizedIconOverlay<OverlayItem>(
                         SputnikMap.getContext(), coffeeAPI.getOverlay(), null);
+                SputnikMap.getOverlays().clear();
                 SputnikMap.getOverlays().add(CoffeeMarkersItemizedIconOverlay);
+                SputnikMap.postInvalidate();
 
                 return true;
             }
 
             public boolean onScroll(final ScrollEvent e) {
                 Log.wtf("scroll", "it was scrolled");
+
                 coffeeAPI.setCoffeeOverlay(SputnikMap.getContext(), SputnikMap.getBoundingBox());
+
                 ItemizedIconOverlay<OverlayItem> CoffeeMarkersItemizedIconOverlay
                         = new ItemizedIconOverlay<OverlayItem>(
                         SputnikMap.getContext(), coffeeAPI.getOverlay(), null);
+                SputnikMap.getOverlays().clear();
                 SputnikMap.getOverlays().add(CoffeeMarkersItemizedIconOverlay);
-
+                SputnikMap.postInvalidate();
                 return true;
             }
-        }, 1000));
+        }, 500));
 
     }
 
@@ -126,17 +131,6 @@ public class MapsActivity extends Activity {
        float SY = settings.getFloat("PREFS_SCROLL_Y", 37624482);
        SputnikMap.getController().setCenter(new GeoPoint(SX, SY));
        SputnikMap.getController().setZoom(settings.getInt("PREFS_ZOOM_LEVEL", 11));
-
-       GeoPoint NE = new GeoPoint(SputnikMap.getBoundingBox().getLatNorthE6(),SputnikMap.getBoundingBox().getLonEastE6());
-       GeoPoint SW = new GeoPoint(SputnikMap.getBoundingBox().getLatSouthE6(),SputnikMap.getBoundingBox().getLonWestE6());
-       ArrayList CoffeeMarkers = new ArrayList<OverlayItem>();
-       CoffeeMarkers.add(new OverlayItem("NE", "NE", NE));
-       CoffeeMarkers.add(new OverlayItem("SW", "SW", SW));
-       ItemizedIconOverlay<OverlayItem> CoffeeMarkersItemizedIconOverlay
-               = new ItemizedIconOverlay<OverlayItem>(
-               this, CoffeeMarkers, null);
-
-       SputnikMap.getOverlays().add(CoffeeMarkersItemizedIconOverlay);
 
    }
 
