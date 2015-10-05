@@ -21,16 +21,15 @@ import java.util.ArrayList;
 
 public class CoffeeAPI {
 
-    private ArrayList CoffeeList = new ArrayList<OverlayItem>();
-    private String urlMain = "http://78.47.49.234:9000/api/points?";
+    private ArrayList<OverlayItem> coffeeList;
 
-
-    public void setCoffeeOverlay(Context context, BoundingBoxE6 boundingBox) {
+    public void getCoffeeAPI(Context context, BoundingBoxE6 boundingBox) {
 
         Double north = boundingBox.getLatNorthE6()/1E6;
         Double south = boundingBox.getLatSouthE6()/1E6;
         Double west =  boundingBox.getLonWestE6()/1E6;
         Double east =  boundingBox.getLonEastE6()/1E6;
+        String urlMain = "http://78.47.49.234:9000/api/points?";
         String url = urlMain + "s="+south.toString()+"&"+"n="+north.toString()+"&"+"w="+west.toString()+"&"+"e="+east.toString();
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
@@ -40,7 +39,7 @@ public class CoffeeAPI {
                     JSONArray JsonCoffeeArray = response.getJSONArray("points");
                     for (int i = 0; i < JsonCoffeeArray.length() - 1; i++) {
                         JSONObject jsonObject = JsonCoffeeArray.getJSONObject(i);
-                        CoffeeList.add(new OverlayItem("Title","Snippet", new GeoPoint(jsonObject.getDouble("lat"), jsonObject.getDouble("lon"))));
+                        coffeeList.add(new OverlayItem("Title", "Snippet", new GeoPoint(jsonObject.getDouble("lat"), jsonObject.getDouble("lon"))));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -54,13 +53,19 @@ public class CoffeeAPI {
             }
         });
         queue.add(jsObjRequest);
-
+        Integer length = coffeeList.toString().length();
+        Log.wtf("API", "Reqest end; "+length.toString());
     }
 
-    public ArrayList<OverlayItem> getOverlay() {
-            return CoffeeList;
+    public ArrayList<OverlayItem> getOverlayList() {
+            return coffeeList;
     }
+
     public void clear() {
-        CoffeeList.clear();
+        coffeeList.clear();
+    }
+
+    public CoffeeAPI() {
+        coffeeList = new ArrayList<>();
     }
 }
