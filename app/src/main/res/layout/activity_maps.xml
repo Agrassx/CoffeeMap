@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:orientation="vertical" >
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
 
-    <org.osmdroid.views.MapView
-            android:id="@+id/openmapview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layerType="hardware"
-            tilesource="Sputnik"/>
+    <fragment
+        android:name="com.agrass.coffeemap.MapFragment"
+        android:id="@+id/MapFragment"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        tools:layout="@layout/map_fragment"/>
+
 </RelativeLayout>
 
 
