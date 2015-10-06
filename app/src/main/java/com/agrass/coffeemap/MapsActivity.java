@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
-
-
 public class MapsActivity extends FragmentActivity {
 
 
@@ -50,34 +48,6 @@ public class MapsActivity extends FragmentActivity {
 
    }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.e("On Stop", "On Stop…");
-    }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.e("On destroy", "On Destroy…");
-    }
-
-    private void refreshCoffeeOverlay() {
-
-//        if (coffeeOverlay == null) {
-//
-//            Log.wtf("coffeeOverlay","Coffee overlay is null");
-//            coffeeAPI.getCoffeeAPI(this, SputnikMap.get().getBoundingBox());
-//            coffeeOverlay.addAll(coffeeAPI.getOverlayList());
-//            SputnikMap.get().invalidate();
-//
-//        } else {
-//            Log.wtf("coffeeOverlay", "Coffee overlay not null<><><>");
-////            coffeeOverlay.clear();
-//            SputnikMap.get().invalidate();
-//            coffeeAPI.getCoffeeAPI(this, SputnikMap.get().getBoundingBox());
-//            coffeeOverlay.addAll(coffeeAPI.getOverlayList());
-//            SputnikMap.get().invalidate();
-        }
 
 }
