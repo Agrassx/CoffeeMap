@@ -1,7 +1,5 @@
 package com.agrass.coffeemap;
 
-import android.content.ClipData;
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 import org.osmdroid.ResourceProxy;
