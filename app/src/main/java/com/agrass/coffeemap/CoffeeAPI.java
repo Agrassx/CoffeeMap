@@ -1,6 +1,8 @@
 package com.agrass.coffeemap;
 
+import android.app.IntentService;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -19,19 +21,37 @@ import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
 
-public class CoffeeAPI {
+public class CoffeeAPI extends IntentService {
 
     private String urlMain = "http://78.47.49.234:9000/api/points?";
-
     private ArrayList<OverlayItem> coffeeList;
+    private Double north;
+    private Double south;
+    private Double west;
+    private Double east;
+    private Context context;
 
-    public void getCoffeeAPI(Context context, BoundingBoxE6 boundingBox) {
+    public CoffeeAPI() {
+        super("CoffeeAPI");
+        coffeeList = new ArrayList<>();
+    }
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
 
-        Double north = boundingBox.getLatNorthE6()/1E6;
-        Double south = boundingBox.getLatSouthE6()/1E6;
-        Double west =  boundingBox.getLonWestE6()/1E6;
-        Double east =  boundingBox.getLonEastE6()/1E6;
+    }
+
+    public void getBbox(Context context, BoundingBoxE6 boundingBox) {
+        this.north = boundingBox.getLatNorthE6()/1E6;
+        this.south = boundingBox.getLatSouthE6()/1E6;
+        this.west =  boundingBox.getLonWestE6()/1E6;
+        this.east =  boundingBox.getLonEastE6()/1E6;
+        this.context = context;
+    }
+
+    private void refreshCoffeeList() {
+
         String url = urlMain + "n="+north.toString()+"&"+"s="+south.toString()+"&"+"w="+west.toString()+"&"+"e="+east.toString();
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
@@ -56,6 +76,7 @@ public class CoffeeAPI {
             }
         });
         queue.add(jsObjRequest);
+        Log.wtf("API", "Request ended");
 
     }
 
@@ -67,7 +88,10 @@ public class CoffeeAPI {
         coffeeList.clear();
     }
 
-    public CoffeeAPI() {
-        coffeeList = new ArrayList<>();
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        refreshCoffeeList();
     }
+
+
 }

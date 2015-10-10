@@ -3,7 +3,6 @@ package com.agrass.coffeemap;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 
 public class MapsActivity extends FragmentActivity {
 
@@ -11,11 +10,8 @@ public class MapsActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.wtf("On Create", "On Create…");
         setContentView(R.layout.activity_maps);
-
         android.app.FragmentManager fragmentManager = getFragmentManager();
-
         if (fragmentManager.findFragmentById(R.id.MapFragment) == null) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.MapFragment, new MapFragment());
