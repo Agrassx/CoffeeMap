@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableContainer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,23 +23,27 @@ import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.util.ResourceProxyImpl;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.TilesOverlay;
+
+import java.util.ArrayList;
 
 
 public class MapFragment extends Fragment {
 
     protected MapView SputnikMap;
     protected TilesOverlay mTilesOverlay;
-    //    private static final String PREFS_NAME = "MyPrefsFile";
     private GeoPoint Moscow = new GeoPoint(55751556, 37624482);
-    private CoffeeAPI coffeeAPI;
-    ResourceProxy mResourceProxy;
-//    private ItemizedIconOverlay<OverlayItem> coffeeOverlay;
+    private ClientIntentRequest request;
+    private JsonTaskHandler taskHandler;
+    private ResourceProxy mResourceProxy;
+    private Drawable drawable;
     private CoffeeOverlay coffeeOverlay;
     private static final String	baseUrls[] = { "http://a.tiles.maps.sputnik.ru/tiles/kmt2/",
             "http://b.tiles.maps.sputnik.ru/tiles/kmt2/",
             "http://c.tiles.maps.sputnik.ru/tiles/kmt2/",
             "http://d.tiles.maps.sputnik.ru/tiles/kmt2/" };
+
 
 //    public static MapFragment newInstance() {
 //        return new MapFragment();
@@ -52,6 +57,7 @@ public class MapFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mResourceProxy = new ResourceProxyImpl(inflater.getContext().getApplicationContext());
+        drawable = mResourceProxy.getDrawable(ResourceProxy.bitmap.marker_default);
         SputnikMap = new MapView(inflater.getContext(), 256, mResourceProxy);
         return SputnikMap;
     }
@@ -72,14 +78,11 @@ public class MapFragment extends Fragment {
         SputnikMap.setMultiTouchControls(true);
         SputnikMap.getController().setZoom(11);
         SputnikMap.getController().setCenter(Moscow);
-
-        coffeeAPI = new CoffeeAPI();
         MapListener mapListener = new MapListener() {
             @Override
             public boolean onScroll(ScrollEvent event) {
                 refreshCoffeeOverlay();
                 Log.wtf("scroll", "it was scrolled");
-                SputnikMap.invalidate();
                 return false;
             }
 
@@ -87,13 +90,10 @@ public class MapFragment extends Fragment {
             public boolean onZoom(ZoomEvent event) {
                 refreshCoffeeOverlay();
                 Log.wtf("zoom", "it was zoomed");
-                SputnikMap.invalidate();
                 return false;
             }
         };
         SputnikMap.setMapListener(new DelayedMapListener(mapListener, 250));
-//        refreshCoffeeOverlay();
-//        SputnikMap.invalidate();
 
     }
 
@@ -110,22 +110,29 @@ public class MapFragment extends Fragment {
 
 
     private void refreshCoffeeOverlay() {
+        Context context = this.getActivity().getApplication().getBaseContext();
+        Intent intent = new Intent(context, ClientIntentRequest.class);
         BoundingBoxE6 boxE6 = SputnikMap.getBoundingBox();
-        Context mapContext = SputnikMap.getContext();
-        Intent intent = new Intent(mapContext, CoffeeAPI.class);
-        Drawable drawable = mResourceProxy.getDrawable(ResourceProxy.bitmap.marker_default);
-        coffeeAPI.getBbox(mapContext, boxE6);
-        coffeeAPI.onHandleIntent(intent);
-        if (coffeeOverlay == null) {
-//            coffeeOverlay = new ItemizedIconOverlay<>(mapContext, coffeeAPI.getOverlayList(), null);
-            coffeeOverlay = new CoffeeOverlay(coffeeAPI.getOverlayList(), drawable, null, mResourceProxy);
-            SputnikMap.getOverlays().add(coffeeOverlay);
-        } else {
-            SputnikMap.getOverlays().remove(coffeeOverlay);
-//            coffeeOverlay = new ItemizedIconOverlay<>(mapContext, coffeeAPI.getOverlayList(), null);
-            coffeeOverlay = new CoffeeOverlay(coffeeAPI.getOverlayList(), drawable, null, mResourceProxy);
-            SputnikMap.getOverlays().add(coffeeOverlay);
-        }
+        request = new ClientIntentRequest(context);
+        taskHandler = new JsonTaskHandler() {
+            @Override
+            public void taskSuccessful(ArrayList<OverlayItem> overlayItemArrayList) {
+                SputnikMap.getOverlays().remove(coffeeOverlay);
+                SputnikMap.invalidate();
+                coffeeOverlay = new CoffeeOverlay(overlayItemArrayList, drawable, null, mResourceProxy);
+                SputnikMap.getOverlays().add(coffeeOverlay);
+                SputnikMap.invalidate();
+            }
+
+            @Override
+            public void taskFaild() {
+                Log.wtf("Task","FAILD");
+            }
+        };
+        request.setJsonTaskHandler(taskHandler);
+        request.setBbox(boxE6);
+        request.onHandleIntent(intent);
     }
+
 
 }

@@ -19,6 +19,16 @@ public class CoffeeOverlay extends ItemizedIconOverlay<OverlayItem> implements I
         populate();
     }
 
+
+
+    public boolean isEmpty() {
+        if (itemList.isEmpty())  {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public boolean addItem(OverlayItem item) {
         return super.addItem(item);

@@ -36,7 +36,7 @@
         </activity>
         <service
             android:enabled="true"
-            android:name="com.agrass.coffeemap.CoffeeAPI" />
+            android:name=".ClientIntentRequest" />
     </application>
 
 </manifest>
