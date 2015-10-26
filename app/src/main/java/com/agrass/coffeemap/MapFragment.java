@@ -23,6 +23,7 @@ import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.util.ResourceProxyImpl;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.TilesOverlay;
 
@@ -34,8 +35,6 @@ public class MapFragment extends Fragment {
     protected MapView SputnikMap;
     protected TilesOverlay mTilesOverlay;
     private GeoPoint Moscow = new GeoPoint(55751556, 37624482);
-    private ClientIntentRequest request;
-    private JsonTaskHandler taskHandler;
     private ResourceProxy mResourceProxy;
     private Drawable drawable;
     private CoffeeOverlay coffeeOverlay;
@@ -58,6 +57,7 @@ public class MapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mResourceProxy = new ResourceProxyImpl(inflater.getContext().getApplicationContext());
         drawable = mResourceProxy.getDrawable(ResourceProxy.bitmap.marker_default);
+        drawable = getResources().getDrawable(R.drawable.marker01,null);
         SputnikMap = new MapView(inflater.getContext(), 256, mResourceProxy);
         return SputnikMap;
     }
@@ -113,20 +113,31 @@ public class MapFragment extends Fragment {
         Context context = this.getActivity().getApplication().getBaseContext();
         Intent intent = new Intent(context, ClientIntentRequest.class);
         BoundingBoxE6 boxE6 = SputnikMap.getBoundingBox();
-        request = new ClientIntentRequest(context);
-        taskHandler = new JsonTaskHandler() {
+        ClientIntentRequest request = new ClientIntentRequest(context);
+        JsonTaskHandler taskHandler = new JsonTaskHandler() {
             @Override
             public void taskSuccessful(ArrayList<OverlayItem> overlayItemArrayList) {
                 SputnikMap.getOverlays().remove(coffeeOverlay);
                 SputnikMap.invalidate();
-                coffeeOverlay = new CoffeeOverlay(overlayItemArrayList, drawable, null, mResourceProxy);
+                coffeeOverlay = new CoffeeOverlay(overlayItemArrayList, drawable,
+                        new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+                    @Override
+                    public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onItemLongPress(int index, OverlayItem item) {
+                        return false;
+                    }
+                }, mResourceProxy);
                 SputnikMap.getOverlays().add(coffeeOverlay);
                 SputnikMap.invalidate();
             }
 
             @Override
             public void taskFaild() {
-                Log.wtf("Task","FAILD");
+                Log.wtf("Task", "FAILD");
             }
         };
         request.setJsonTaskHandler(taskHandler);
