@@ -12,6 +12,7 @@
         android:layout_width="fill_parent"
         tools:layout="@layout/map_fragment"/>
 
+
 </RelativeLayout>
 
 

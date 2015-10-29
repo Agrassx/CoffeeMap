@@ -5,12 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.DrawableContainer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.events.DelayedMapListener;
@@ -110,7 +110,7 @@ public class MapFragment extends Fragment {
 
 
     private void refreshCoffeeOverlay() {
-        Context context = this.getActivity().getApplication().getBaseContext();
+        final Context context = this.getActivity().getApplication().getBaseContext();
         Intent intent = new Intent(context, ClientIntentRequest.class);
         BoundingBoxE6 boxE6 = SputnikMap.getBoundingBox();
         ClientIntentRequest request = new ClientIntentRequest(context);
@@ -123,6 +123,10 @@ public class MapFragment extends Fragment {
                         new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                        Toast.makeText(
+                                context,
+                                "Item '" + item.getTitle() + "' (index=" + index
+                                        + ") got single tapped up", Toast.LENGTH_LONG).show();
                         return false;
                     }
 

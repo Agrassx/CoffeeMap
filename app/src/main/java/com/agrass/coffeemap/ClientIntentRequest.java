@@ -34,6 +34,11 @@ public class ClientIntentRequest extends IntentService {
     private static String TAG_JSON_ARRAY_NAME = "points";
     private static final String TAG_URL_MAIN = "http://78.47.49.234:9000/api/";
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
     public ClientIntentRequest(Context context) {
         super("ClientIntentRequest");
         this.context = context;

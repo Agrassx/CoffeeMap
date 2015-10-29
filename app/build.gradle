@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.0'
+    compileSdkVersion 21
+    buildToolsVersion '21.1.2'
 
     defaultConfig {
         applicationId "com.agrass.coffeemap"
         minSdkVersion 19
-        targetSdkVersion 23
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
     }
@@ -21,14 +21,12 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:appcompat-v7:21.0.1'
     compile 'com.google.android.gms:play-services:8.1.0'
     compile 'org.osmdroid:osmdroid-android:4.3'
     compile 'org.slf4j:slf4j-simple:1.6.1'
     compile 'com.googlecode.json-simple:json-simple:1.1'
     compile 'com.mcxiaoke.volley:library:1.0.17'
     compile 'com.loopj.android:android-async-http:1.4.9'
-//    compile 'com.android.volley'
-//    compile 'org.osmdroid:osmdroid-third-party:4.3'
-//    compile 'org.apache.httpcomponents:httpmime:4.2.3'
+    compile 'com.android.support:support-v4:21.0.1'
 }
