@@ -12,11 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.flipboard.bottomsheet.BottomSheetLayout;
+import com.flipboard.bottomsheet.commons.MenuSheetView;
+
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.events.DelayedMapListener;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
+import org.osmdroid.tileprovider.MapTile;
 import org.osmdroid.tileprovider.MapTileProviderBasic;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.BoundingBoxE6;
@@ -38,6 +42,7 @@ public class MapFragment extends Fragment {
     private ResourceProxy mResourceProxy;
     private Drawable drawable;
     private CoffeeOverlay coffeeOverlay;
+    private BottomSheetLayout bottomSheetLayout;
     private static final String	baseUrls[] = { "http://a.tiles.maps.sputnik.ru/tiles/kmt2/",
             "http://b.tiles.maps.sputnik.ru/tiles/kmt2/",
             "http://c.tiles.maps.sputnik.ru/tiles/kmt2/",
@@ -51,6 +56,7 @@ public class MapFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -65,6 +71,11 @@ public class MapFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        bottomSheetLayout = (BottomSheetLayout) getActivity().findViewById(R.id.bottomsheet);
+        bottomSheetLayout.setPeekOnDismiss(true);
+
+
         Context mapContext = SputnikMap.getContext();
         float scale = mapContext.getResources().getDisplayMetrics().density;
         int imageSize = (int) (256 * scale);
@@ -97,6 +108,13 @@ public class MapFragment extends Fragment {
 
     }
 
+    public void showMenuSheet(final MenuSheetView.MenuType menuType, String name) {
+        MenuSheetView menuSheetView =
+                new MenuSheetView(getActivity().getApplicationContext(), menuType, "HELLO! "+name, null);
+        menuSheetView.inflateMenu(R.menu.activity_main_drawer);
+        bottomSheetLayout.showWithSheetView(menuSheetView);
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -123,10 +141,7 @@ public class MapFragment extends Fragment {
                         new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                        Toast.makeText(
-                                context,
-                                "Item '" + item.getTitle() + "' (index=" + index
-                                        + ") got single tapped up", Toast.LENGTH_LONG).show();
+                        showMenuSheet(MenuSheetView.MenuType.GRID, item.getTitle());
                         return false;
                     }
 
