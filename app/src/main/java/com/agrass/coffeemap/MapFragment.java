@@ -8,8 +8,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
@@ -74,7 +76,7 @@ public class MapFragment extends Fragment {
 
         bottomSheetLayout = (BottomSheetLayout) getActivity().findViewById(R.id.bottomsheet);
         bottomSheetLayout.setPeekOnDismiss(true);
-
+        bottomSheetLayout.setVerticalScrollBarEnabled(true);
 
         Context mapContext = SputnikMap.getContext();
         float scale = mapContext.getResources().getDisplayMetrics().density;
@@ -108,11 +110,14 @@ public class MapFragment extends Fragment {
 
     }
 
-    public void showMenuSheet(final MenuSheetView.MenuType menuType, String name) {
-        MenuSheetView menuSheetView =
-                new MenuSheetView(getActivity().getApplicationContext(), menuType, "HELLO! "+name, null);
-        menuSheetView.inflateMenu(R.menu.activity_main_drawer);
-        bottomSheetLayout.showWithSheetView(menuSheetView);
+    public void showMenuSheet(String snippet, String name) {
+        TextView textName = (TextView) getActivity().findViewById(R.id.name);
+        TextView textSnippet = (TextView) getActivity().findViewById(R.id.snippet);
+        bottomSheetLayout.showWithSheetView(LayoutInflater.from(getActivity().getApplication()
+                .getApplicationContext()).inflate(R.layout.bottom_sheet, bottomSheetLayout, false));
+//        textName.setText(name != null ? name : "null");
+//        textSnippet.setText(snippet != null ? snippet : "null");
+
     }
 
     @Override
@@ -141,7 +146,7 @@ public class MapFragment extends Fragment {
                         new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                        showMenuSheet(MenuSheetView.MenuType.GRID, item.getTitle());
+                        showMenuSheet(item.getSnippet(), item.getTitle());
                         return false;
                     }
 
