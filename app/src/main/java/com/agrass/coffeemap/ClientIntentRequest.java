@@ -55,7 +55,8 @@ public class ClientIntentRequest extends IntentService {
                 try {
                     coffeeList.clear();
                     JSONArray JsonCoffeeArray = response.getJSONArray("points");
-                    for (int i = 0; i < 30; i++) { //JsonCoffeeArray.length() - 1
+                    int length = JsonCoffeeArray.length() > 30 ? 30 : JsonCoffeeArray.length() - 1;
+                    for (int i = 0; i < length; i++) {
                         coffeeList.add(new OverlayItem(JsonCoffeeArray.getJSONObject(i).getString("name"),
                                 "Snippet", new GeoPoint(JsonCoffeeArray.getJSONObject(i).getDouble("lat"),
                                 JsonCoffeeArray.getJSONObject(i).getDouble("lon"))));
