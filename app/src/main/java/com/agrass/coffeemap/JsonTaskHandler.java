@@ -6,5 +6,5 @@ import java.util.ArrayList;
 
 public interface JsonTaskHandler {
     void taskSuccessful(ArrayList<OverlayItem> overlayItemArrayList);
-    void taskFaild();
+    void taskFailed();
 }

@@ -76,7 +76,6 @@ public class ClientIntentRequest extends IntentService {
         queue.add(jsObjRequest);
     }
 
-
     public void setJsonTaskHandler(JsonTaskHandler taskHandler) {
         this.taskHandler = taskHandler;
 

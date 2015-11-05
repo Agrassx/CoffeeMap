@@ -3,20 +3,17 @@ package com.agrass.coffeemap;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
-import com.flipboard.bottomsheet.ViewTransformer;
-import com.flipboard.bottomsheet.commons.MenuSheetView;
 
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.api.IGeoPoint;
@@ -24,7 +21,6 @@ import org.osmdroid.events.DelayedMapListener;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
-import org.osmdroid.tileprovider.MapTile;
 import org.osmdroid.tileprovider.MapTileProviderBasic;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.util.BoundingBoxE6;
@@ -40,6 +36,10 @@ import java.util.ArrayList;
 
 public class MapFragment extends Fragment {
 
+    private static final String MAP_PREFS = "MapPrefs";
+    private static final String MAP_PREFS_SCROLL_X = "scrollX";
+    private static final String MAP_PREFS_SCROLL_Y = "scrollY";
+    private static final String MAP_PREFS_ZOOM_LEVEL = "zoom";
     protected MapView SputnikMap;
     protected TilesOverlay mTilesOverlay;
     private GeoPoint Moscow = new GeoPoint(55751556, 37624482);
@@ -115,28 +115,33 @@ public class MapFragment extends Fragment {
     public void showMenuSheet(String snippet, final String name) {
         View bottomSheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet,
                 bottomSheetLayout, false);
-        TextView textView = (TextView) bottomSheetView.findViewById(R.id.name);
-        textView.setText(name != null ? name : "null");
+        TextView textName = (TextView) bottomSheetView.findViewById(R.id.name);
+        TextView textSnippet = (TextView) bottomSheetView.findViewById(R.id.snippet);
+        textName.setText(name != null ? name : "name is null");
+        textSnippet.setText(snippet != null ? snippet : "snippet is null");
         bottomSheetLayout.showWithSheetView(bottomSheetView);
-//        TextView textName = (TextView) getActivity().findViewById(R.id.name);
-//        TextView textSnippet = (TextView) getActivity().findViewById(R.id.snippet);
-//        bottomSheetLayout.showWithSheetView(LayoutInflater.from(getActivity().getApplication()
-//                .getApplicationContext()).inflate(R.layout.bottom_sheet, bottomSheetLayout, false));
-
-//        textName.setText(name != null ? name : "null");
-//        textSnippet.setText(snippet != null ? snippet : "null");
-
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        SharedPreferences settings = getActivity().getSharedPreferences(MAP_PREFS, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putFloat(MAP_PREFS_SCROLL_X, (float) SputnikMap.getMapCenter().getLatitude());
+        editor.putFloat(MAP_PREFS_SCROLL_Y, (float) SputnikMap.getMapCenter().getLongitude());
+        editor.putInt(MAP_PREFS_ZOOM_LEVEL, SputnikMap.getZoomLevel());
+        editor.apply();
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
+        SharedPreferences settings = getActivity().getSharedPreferences(MAP_PREFS, 0);
+        float SX = settings.getFloat(MAP_PREFS_SCROLL_X, Moscow.getLatitudeE6());
+        float SY = settings.getFloat(MAP_PREFS_SCROLL_Y, Moscow.getLongitudeE6());
+        SputnikMap.getController().setZoom(settings.getInt(MAP_PREFS_ZOOM_LEVEL, 11));
+        SputnikMap.getController().setCenter(new GeoPoint(SX, SY));
     }
 
 
@@ -169,8 +174,8 @@ public class MapFragment extends Fragment {
             }
 
             @Override
-            public void taskFaild() {
-                Log.wtf("Task", "FAILD");
+            public void taskFailed() {
+                Log.wtf("Task", "FAILED");
             }
         };
         request.setJsonTaskHandler(taskHandler);
