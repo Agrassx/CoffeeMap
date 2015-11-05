@@ -12,7 +12,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/name" />
+        android:id="@+id/name"
+        android:textColor="#ffffff" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -23,16 +23,16 @@ import java.util.ArrayList;
 
 public class ClientIntentRequest extends IntentService {
 
+    private static final String TAG_URL_MAIN = "http://78.47.49.234:9000/api/";
+    private static String TAG_JSON_ARRAY_NAME = "points";
     private ThreadLocal<Double> north = new ThreadLocal<>();
     private ThreadLocal<Double> south = new ThreadLocal<>();
     private ThreadLocal<Double> west = new ThreadLocal<>();
     private ThreadLocal<Double> east = new ThreadLocal<>();
-    private BoundingBoxE6 boundingBox;
     private ArrayList<OverlayItem> coffeeList;
-    private Context context;
     private JsonTaskHandler taskHandler;
-    private static String TAG_JSON_ARRAY_NAME = "points";
-    private static final String TAG_URL_MAIN = "http://78.47.49.234:9000/api/";
+    private BoundingBoxE6 boundingBox;
+    private Context context;
 
     @Override
     public void onCreate() {

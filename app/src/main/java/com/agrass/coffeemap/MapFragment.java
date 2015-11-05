@@ -15,9 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
+import com.flipboard.bottomsheet.ViewTransformer;
 import com.flipboard.bottomsheet.commons.MenuSheetView;
 
 import org.osmdroid.ResourceProxy;
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.DelayedMapListener;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
@@ -110,11 +112,17 @@ public class MapFragment extends Fragment {
 
     }
 
-    public void showMenuSheet(String snippet, String name) {
-        TextView textName = (TextView) getActivity().findViewById(R.id.name);
-        TextView textSnippet = (TextView) getActivity().findViewById(R.id.snippet);
-        bottomSheetLayout.showWithSheetView(LayoutInflater.from(getActivity().getApplication()
-                .getApplicationContext()).inflate(R.layout.bottom_sheet, bottomSheetLayout, false));
+    public void showMenuSheet(String snippet, final String name) {
+        View bottomSheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet,
+                bottomSheetLayout, false);
+        TextView textView = (TextView) bottomSheetView.findViewById(R.id.name);
+        textView.setText(name != null ? name : "null");
+        bottomSheetLayout.showWithSheetView(bottomSheetView);
+//        TextView textName = (TextView) getActivity().findViewById(R.id.name);
+//        TextView textSnippet = (TextView) getActivity().findViewById(R.id.snippet);
+//        bottomSheetLayout.showWithSheetView(LayoutInflater.from(getActivity().getApplication()
+//                .getApplicationContext()).inflate(R.layout.bottom_sheet, bottomSheetLayout, false));
+
 //        textName.setText(name != null ? name : "null");
 //        textSnippet.setText(snippet != null ? snippet : "null");
 
@@ -147,6 +155,7 @@ public class MapFragment extends Fragment {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
                         showMenuSheet(item.getSnippet(), item.getTitle());
+                        scrollOnMarker(item.getPoint());
                         return false;
                     }
 
@@ -167,6 +176,10 @@ public class MapFragment extends Fragment {
         request.setJsonTaskHandler(taskHandler);
         request.setBbox(boxE6);
         request.onHandleIntent(intent);
+    }
+
+    private void scrollOnMarker(IGeoPoint markerGeoPoint) {
+        SputnikMap.getController().animateTo(markerGeoPoint);
     }
 
 
