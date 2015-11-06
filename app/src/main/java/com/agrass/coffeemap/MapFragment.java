@@ -47,10 +47,17 @@ public class MapFragment extends Fragment {
     private Drawable drawable;
     private CoffeeOverlay coffeeOverlay;
     private BottomSheetLayout bottomSheetLayout;
-    private static final String	baseUrls[] = { "http://a.tiles.maps.sputnik.ru/tiles/kmt2/",
-            "http://b.tiles.maps.sputnik.ru/tiles/kmt2/",
-            "http://c.tiles.maps.sputnik.ru/tiles/kmt2/",
-            "http://d.tiles.maps.sputnik.ru/tiles/kmt2/" };
+//    private static final String	baseUrls[] = {
+//            "http://a.tiles.maps.sputnik.ru/tiles/kmt2/",
+//            "http://b.tiles.maps.sputnik.ru/tiles/kmt2/",
+//            "http://c.tiles.maps.sputnik.ru/tiles/kmt2/",
+//            "http://d.tiles.maps.sputnik.ru/tiles/kmt2/" };
+    private static final String baseUrls[] = {
+            "http://a.tilessputnik.ru/tiles/kmt2/",
+            "http://b.tilessputnik.ru/tiles/kmt2/",
+            "http://c.tilessputnik.ru/tiles/kmt2/",
+            "http://d.tilessputnik.ru/tiles/kmt2/"
+    };
 
 
 //    public static MapFragment newInstance() {
@@ -79,7 +86,6 @@ public class MapFragment extends Fragment {
         bottomSheetLayout = (BottomSheetLayout) getActivity().findViewById(R.id.bottomsheet);
         bottomSheetLayout.setPeekOnDismiss(true);
         bottomSheetLayout.setVerticalScrollBarEnabled(true);
-
         Context mapContext = SputnikMap.getContext();
         float scale = mapContext.getResources().getDisplayMetrics().density;
         int imageSize = (int) (256 * scale);
@@ -112,16 +118,6 @@ public class MapFragment extends Fragment {
 
     }
 
-    public void showMenuSheet(String snippet, final String name) {
-        View bottomSheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet,
-                bottomSheetLayout, false);
-        TextView textName = (TextView) bottomSheetView.findViewById(R.id.name);
-        TextView textSnippet = (TextView) bottomSheetView.findViewById(R.id.snippet);
-        textName.setText(name != null ? name : "name is null");
-        textSnippet.setText(snippet != null ? snippet : "snippet is null");
-        bottomSheetLayout.showWithSheetView(bottomSheetView);
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -133,7 +129,6 @@ public class MapFragment extends Fragment {
         editor.apply();
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -143,7 +138,6 @@ public class MapFragment extends Fragment {
         SputnikMap.getController().setZoom(settings.getInt(MAP_PREFS_ZOOM_LEVEL, 11));
         SputnikMap.getController().setCenter(new GeoPoint(SX, SY));
     }
-
 
     private void refreshCoffeeOverlay() {
         final Context context = this.getActivity().getApplication().getBaseContext();
@@ -183,9 +177,20 @@ public class MapFragment extends Fragment {
         request.onHandleIntent(intent);
     }
 
+    private void showMenuSheet(String snippet, final String name) {
+        View bottomSheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet,
+                bottomSheetLayout, false);
+        TextView textName = (TextView) bottomSheetView.findViewById(R.id.name);
+        TextView textSnippet = (TextView) bottomSheetView.findViewById(R.id.address);
+        textName.setText(name != null ? name : "name is null");
+        textSnippet.setText(snippet != null ? snippet : "snippet is null");
+        bottomSheetLayout.showWithSheetView(bottomSheetView);
+    }
+
     private void scrollOnMarker(IGeoPoint markerGeoPoint) {
         SputnikMap.getController().animateTo(markerGeoPoint);
     }
+
 
 
 }
