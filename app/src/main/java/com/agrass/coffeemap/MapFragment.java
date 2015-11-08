@@ -164,7 +164,7 @@ public class MapFragment extends Fragment {
             }
         };
         request.setJsonTaskHandler(taskHandler);
-        request.setBbox(boxE6);
+        request.setBoundingBox(boxE6);
         request.onHandleIntent(intent);
     }
 
