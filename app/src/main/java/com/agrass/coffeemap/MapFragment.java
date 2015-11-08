@@ -40,6 +40,7 @@ public class MapFragment extends Fragment {
     private static final String MAP_PREFS_SCROLL_X = "scrollX";
     private static final String MAP_PREFS_SCROLL_Y = "scrollY";
     private static final String MAP_PREFS_ZOOM_LEVEL = "zoom";
+    private SharedPreferences settings;
     protected MapView SputnikMap;
     protected TilesOverlay mTilesOverlay;
     private GeoPoint Moscow = new GeoPoint(55751556, 37624482);
@@ -82,23 +83,25 @@ public class MapFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         bottomSheetLayout = (BottomSheetLayout) getActivity().findViewById(R.id.bottomsheet);
         bottomSheetLayout.setPeekOnDismiss(true);
         bottomSheetLayout.setVerticalScrollBarEnabled(true);
-        Context mapContext = SputnikMap.getContext();
-        float scale = mapContext.getResources().getDisplayMetrics().density;
+        Context context = getActivity().getBaseContext();
+        settings = context.getSharedPreferences(MAP_PREFS, Context.MODE_PRIVATE);
+        float scale = SputnikMap.getResources().getDisplayMetrics().density;
         int imageSize = (int) (256 * scale);
         ITileSource tileSource = new RetinaTileSource("Sputnik", null, 1, 18, imageSize, ".png", baseUrls);
         SputnikMap.setTileSource(tileSource);
-        MapTileProviderBasic mProvider = new MapTileProviderBasic(mapContext, tileSource);
-        mTilesOverlay = new TilesOverlay(mProvider, mapContext);
+        MapTileProviderBasic mProvider = new MapTileProviderBasic(context, tileSource);
+        mTilesOverlay = new TilesOverlay(mProvider, context);
         mTilesOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
         SputnikMap.getOverlays().clear();
         SputnikMap.getOverlays().add(mTilesOverlay);
         SputnikMap.setMultiTouchControls(true);
-        SputnikMap.getController().setZoom(11);
-        SputnikMap.getController().setCenter(Moscow);
+        SputnikMap.getController().setZoom(settings.getInt(MAP_PREFS_ZOOM_LEVEL, 11));
+        SputnikMap.getController().setCenter(new GeoPoint(settings.getFloat(MAP_PREFS_SCROLL_X,
+                (float) Moscow.getLatitude()), settings.getFloat(MAP_PREFS_SCROLL_Y,
+                (float) Moscow.getLongitude())));
         MapListener mapListener = new MapListener() {
             @Override
             public boolean onScroll(ScrollEvent event) {
@@ -120,23 +123,17 @@ public class MapFragment extends Fragment {
 
     @Override
     public void onPause() {
-        super.onPause();
-        SharedPreferences settings = getActivity().getSharedPreferences(MAP_PREFS, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putFloat(MAP_PREFS_SCROLL_X, (float) SputnikMap.getMapCenter().getLatitude());
         editor.putFloat(MAP_PREFS_SCROLL_Y, (float) SputnikMap.getMapCenter().getLongitude());
         editor.putInt(MAP_PREFS_ZOOM_LEVEL, SputnikMap.getZoomLevel());
         editor.apply();
+        super.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences settings = getActivity().getSharedPreferences(MAP_PREFS, 0);
-        float SX = settings.getFloat(MAP_PREFS_SCROLL_X, Moscow.getLatitudeE6());
-        float SY = settings.getFloat(MAP_PREFS_SCROLL_Y, Moscow.getLongitudeE6());
-        SputnikMap.getController().setZoom(settings.getInt(MAP_PREFS_ZOOM_LEVEL, 11));
-        SputnikMap.getController().setCenter(new GeoPoint(SX, SY));
     }
 
     private void refreshCoffeeOverlay() {
@@ -181,9 +178,7 @@ public class MapFragment extends Fragment {
         View bottomSheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet,
                 bottomSheetLayout, false);
         TextView textName = (TextView) bottomSheetView.findViewById(R.id.name);
-        TextView textSnippet = (TextView) bottomSheetView.findViewById(R.id.address);
         textName.setText(name != null ? name : "name is null");
-        textSnippet.setText(snippet != null ? snippet : "snippet is null");
         bottomSheetLayout.showWithSheetView(bottomSheetView);
     }
 
