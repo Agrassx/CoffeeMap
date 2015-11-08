@@ -40,25 +40,19 @@ public class MapFragment extends Fragment {
     private static final String MAP_PREFS_SCROLL_X = "scrollX";
     private static final String MAP_PREFS_SCROLL_Y = "scrollY";
     private static final String MAP_PREFS_ZOOM_LEVEL = "zoom";
-    private SharedPreferences settings;
+    private static final String BASE_URLS[] = {
+            "http://a.tilessputnik.ru/tiles/kmt2/",
+            "http://b.tilessputnik.ru/tiles/kmt2/",
+            "http://c.tilessputnik.ru/tiles/kmt2/",
+            "http://d.tilessputnik.ru/tiles/kmt2/"};
     protected MapView SputnikMap;
     protected TilesOverlay mTilesOverlay;
+    private SharedPreferences settings;
     private GeoPoint Moscow = new GeoPoint(55751556, 37624482);
     private ResourceProxy mResourceProxy;
     private Drawable drawable;
     private CoffeeOverlay coffeeOverlay;
     private BottomSheetLayout bottomSheetLayout;
-//    private static final String	baseUrls[] = {
-//            "http://a.tiles.maps.sputnik.ru/tiles/kmt2/",
-//            "http://b.tiles.maps.sputnik.ru/tiles/kmt2/",
-//            "http://c.tiles.maps.sputnik.ru/tiles/kmt2/",
-//            "http://d.tiles.maps.sputnik.ru/tiles/kmt2/" };
-    private static final String baseUrls[] = {
-            "http://a.tilessputnik.ru/tiles/kmt2/",
-            "http://b.tilessputnik.ru/tiles/kmt2/",
-            "http://c.tilessputnik.ru/tiles/kmt2/",
-            "http://d.tilessputnik.ru/tiles/kmt2/"
-    };
 
 
 //    public static MapFragment newInstance() {
@@ -90,7 +84,7 @@ public class MapFragment extends Fragment {
         settings = context.getSharedPreferences(MAP_PREFS, Context.MODE_PRIVATE);
         float scale = SputnikMap.getResources().getDisplayMetrics().density;
         int imageSize = (int) (256 * scale);
-        ITileSource tileSource = new RetinaTileSource("Sputnik", null, 1, 18, imageSize, ".png", baseUrls);
+        ITileSource tileSource = new RetinaTileSource("Sputnik", null, 1, 18, imageSize, ".png", BASE_URLS);
         SputnikMap.setTileSource(tileSource);
         MapTileProviderBasic mProvider = new MapTileProviderBasic(context, tileSource);
         mTilesOverlay = new TilesOverlay(mProvider, context);

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class ClientIntentRequest extends IntentService {
 
-    private static final String TAG_URL_MAIN = "http://78.47.49.234:9000/api/";
+    private static final String TAG_URL_MAIN = "http://78.47.49.234:9000/api/v2/";
     private static String TAG_JSON_ARRAY_NAME = "points";
     private ThreadLocal<Double> north = new ThreadLocal<>();
     private ThreadLocal<Double> south = new ThreadLocal<>();
@@ -55,7 +55,7 @@ public class ClientIntentRequest extends IntentService {
                 try {
                     coffeeList.clear();
                     JSONArray JsonCoffeeArray = response.getJSONArray("points");
-                    int length = JsonCoffeeArray.length() > 30 ? 30 : JsonCoffeeArray.length() - 1;
+                    int length = JsonCoffeeArray.length() > 30 ? 30 : JsonCoffeeArray.length();
                     for (int i = 0; i < length; i++) {
                         coffeeList.add(new OverlayItem(JsonCoffeeArray.getJSONObject(i).getString("name"),
                                 "Snippet", new GeoPoint(JsonCoffeeArray.getJSONObject(i).getDouble("lat"),
@@ -78,7 +78,6 @@ public class ClientIntentRequest extends IntentService {
 
     public void setJsonTaskHandler(JsonTaskHandler taskHandler) {
         this.taskHandler = taskHandler;
-
     }
 
     public void setBbox(BoundingBoxE6 boundingBox) {
