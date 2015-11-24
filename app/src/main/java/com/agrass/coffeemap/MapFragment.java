@@ -175,7 +175,7 @@ public class MapFragment extends Fragment {
         TextView textName = (TextView) bottomSheetView.findViewById(R.id.name);
         TextView textOpenHour = (TextView) bottomSheetView.findViewById(R.id.open_hour);
         textName.setText(name != null ? name : "name is null");
-        textOpenHour.setText(snippet != null ? "Работает " + new OpenHourUnParser(snippet,
+        textOpenHour.setText(snippet != null ? new OpenHourUnParser(snippet,
                 Calendar.getInstance().get(Calendar.DAY_OF_WEEK)).getOpenHours() : "time is null");
         bottomSheetLayout.showWithSheetView(bottomSheetView);
     }

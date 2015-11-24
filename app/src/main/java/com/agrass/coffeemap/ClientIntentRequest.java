@@ -34,7 +34,6 @@ public class ClientIntentRequest extends IntentService {
     private JsonTaskHandler taskHandler;
     private BoundingBoxE6 boundingBox;
     private Context context;
-    private OpeningHoursParser hoursParser;
 
     @Override
     public void onCreate() {
