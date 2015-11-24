@@ -32,6 +32,7 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.TilesOverlay;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class MapFragment extends Fragment {
@@ -172,7 +173,10 @@ public class MapFragment extends Fragment {
         View bottomSheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet,
                 bottomSheetLayout, false);
         TextView textName = (TextView) bottomSheetView.findViewById(R.id.name);
+        TextView textOpenHour = (TextView) bottomSheetView.findViewById(R.id.open_hour);
         textName.setText(name != null ? name : "name is null");
+        textOpenHour.setText(snippet != null ? "Работает " + new OpenHourUnParser(snippet,
+                Calendar.getInstance().get(Calendar.DAY_OF_WEEK)).getOpenHours() : "time is null");
         bottomSheetLayout.showWithSheetView(bottomSheetView);
     }
 

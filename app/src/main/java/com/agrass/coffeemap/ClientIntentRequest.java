@@ -21,6 +21,7 @@ import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
 
+
 public class ClientIntentRequest extends IntentService {
 
     private static final String TAG_URL_MAIN = "http://78.47.49.234:9000/api/v2/";
@@ -33,6 +34,7 @@ public class ClientIntentRequest extends IntentService {
     private JsonTaskHandler taskHandler;
     private BoundingBoxE6 boundingBox;
     private Context context;
+    private OpeningHoursParser hoursParser;
 
     @Override
     public void onCreate() {
@@ -55,10 +57,11 @@ public class ClientIntentRequest extends IntentService {
                 try {
                     coffeeList.clear();
                     JSONArray JsonCoffeeArray = response.getJSONArray("points");
-                    int length = JsonCoffeeArray.length();// > 30 ? 30 : JsonCoffeeArray.length();
+                    int length = JsonCoffeeArray.length();
                     for (int i = 0; i < length; i++) {
                         coffeeList.add(new OverlayItem(JsonCoffeeArray.getJSONObject(i).getString("name"),
-                                "Snippet", new GeoPoint(JsonCoffeeArray.getJSONObject(i).getDouble("lat"),
+                                JsonCoffeeArray.getJSONObject(i).getString("opening_hours"),
+                                new GeoPoint(JsonCoffeeArray.getJSONObject(i).getDouble("lat"),
                                 JsonCoffeeArray.getJSONObject(i).getDouble("lon"))));
                     }
                     taskHandler.taskSuccessful(coffeeList);
