@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
@@ -78,6 +79,7 @@ public class MapFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Calendar.getInstance().setFirstDayOfWeek(Calendar.MONDAY);
         bottomSheetLayout = (BottomSheetLayout) getActivity().findViewById(R.id.bottomsheet);
         bottomSheetLayout.setPeekOnDismiss(true);
         bottomSheetLayout.setVerticalScrollBarEnabled(true);
@@ -172,12 +174,24 @@ public class MapFragment extends Fragment {
     private void showMenuSheet(String snippet, final String name) {
         View bottomSheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet,
                 bottomSheetLayout, false);
+
         TextView textName = (TextView) bottomSheetView.findViewById(R.id.name);
         TextView textOpenHour = (TextView) bottomSheetView.findViewById(R.id.open_hour);
+        TextView textfullOH = (TextView) bottomSheetView.findViewById(R.id.FullOH);
+
+//        ImageView image = (ImageView) bottomSheetView.findViewById(R.id.imageView);
+//        image.setImageDrawable(getResources().getDrawable(, null));
+
         textName.setText(name != null ? name : "name is null");
-        textOpenHour.setText(snippet != null ? new OpenHourParser(snippet,
-                Calendar.getInstance().get(Calendar.DAY_OF_WEEK)).getOpenHours() : "time is null");
+        textfullOH.setText(name != null ? snippet : "OH null");
+
+        Calendar.getInstance();
+        textOpenHour.setText(snippet == null ? "time is null" :
+                new OpenHourParser().getOpenHours(snippet, Calendar.DAY_OF_WEEK)
+        );
+
         bottomSheetLayout.showWithSheetView(bottomSheetView);
+
     }
 
     private void scrollOnMarker(IGeoPoint markerGeoPoint) {
