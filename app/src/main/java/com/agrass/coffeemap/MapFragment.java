@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
@@ -34,6 +33,7 @@ import org.osmdroid.views.overlay.TilesOverlay;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class MapFragment extends Fragment {
@@ -55,7 +55,6 @@ public class MapFragment extends Fragment {
     private Drawable drawable;
     private CoffeeOverlay coffeeOverlay;
     private BottomSheetLayout bottomSheetLayout;
-
 
 //    public static MapFragment newInstance() {
 //        return new MapFragment();
@@ -79,7 +78,6 @@ public class MapFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Calendar.getInstance().setFirstDayOfWeek(Calendar.MONDAY);
         bottomSheetLayout = (BottomSheetLayout) getActivity().findViewById(R.id.bottomsheet);
         bottomSheetLayout.setPeekOnDismiss(true);
         bottomSheetLayout.setVerticalScrollBarEnabled(true);
@@ -184,8 +182,6 @@ public class MapFragment extends Fragment {
 
         textName.setText(name != null ? name : "name is null");
         textfullOH.setText(name != null ? snippet : "OH null");
-
-        Calendar.getInstance();
         textOpenHour.setText(snippet == null ? "time is null" :
                 new OpenHourParser().getOpenHours(snippet, Calendar.DAY_OF_WEEK)
         );

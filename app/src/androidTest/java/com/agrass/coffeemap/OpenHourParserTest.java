@@ -2,24 +2,55 @@ package com.agrass.coffeemap;
 
 import junit.framework.TestCase;
 
-import java.util.Calendar;
-
-/**
- * Created by Agrass- on 02.12.15.
- */
 public class OpenHourParserTest extends TestCase {
 
-    OpenHourParser openHourParser;
-    String[] variantsOfRules = {"24/7", "Mo-Su 09:00-23:00", "Mo-Fr 08:00-23:00; Sa,Su 10:00-23:00",
-            "Mo-Th 09:00-23:00; Fr 09:00-23:00; Sa 11:00-23:00; Su 11:00-24:00",
-            "Mo-Su 08:00-23:00; Fr off; Sa off", "Mo-Fr 08:00-23:00; Sa-Su 09:00-23:00"};
+    final static int MONDAY = 1;
+    final static int TUESDAY = 2;
+    final static int WEDNESDAY = 3;
+    final static int THURSDAY = 4;
+    final static int FRIDAY = 5;
+    final static int SATURDAY = 6;
+    final static int SUNDAY = 7;
 
+    OpenHourParser openHourParser;
+    String[] variantsOfRules = {
+            "24/7",
+            "Mo-Fr 09:00-23:00",
+            "Mo-Su 08:00-23:00; Fr off; Sa off",
+            "Mo-Fr 08:00-23:00; Sa,Su 10:00-22:00",
+            "Mo-Fr 08:00-23:00; Sa-Su 09:00-22:00",
+            "Mo-Th 09:00-23:00; Fr 09:00-23:00; Sa 11:00-23:00; Su off"
+    };
 
     public void setUp() throws Exception {
         super.setUp();
+        openHourParser = new OpenHourParser();
     }
 
-    public void testGetOpenHours() throws Exception {
+    public void testGetOpenHoursMoTh() throws Exception {
+
+        for (int i = 1; i < variantsOfRules.length; i++) {
+            assertEquals("MONDAY", openHourParser.getOpenHours(variantsOfRules[i], MONDAY),
+                    "Работает до 23:00");
+
+            assertEquals("TUESDAY", openHourParser.getOpenHours(variantsOfRules[i], TUESDAY),
+                    "Работает до 23:00");
+
+            assertEquals("WEDNESDAY", openHourParser.getOpenHours(variantsOfRules[i], WEDNESDAY),
+                    "Работает до 23:00");
+
+            assertEquals("THURSDAY", openHourParser.getOpenHours(variantsOfRules[i], THURSDAY),
+                    "Работает до 23:00");
+        }
+    }
+
+    public void testGetOpenHoursOff() throws Exception {
+
+        assertEquals("FRIDAY", openHourParser.getOpenHours(variantsOfRules[1], SATURDAY),
+                "Сегодня закрыто");
+
+        assertEquals("SUNDAY", openHourParser.getOpenHours(variantsOfRules[5], SUNDAY),
+                "Сегодня закрыто");
 
     }
 }
