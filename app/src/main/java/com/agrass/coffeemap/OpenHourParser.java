@@ -27,6 +27,10 @@ public class OpenHourParser {
     }
 
     public String getOpenHours(String openHours, int dayNumber) {
+        --dayNumber;
+        if (dayNumber == 0) {
+            dayNumber = 7;
+        }
         if (!Objects.equals(openHours, always)) {
             try {
                 return parseOpenHours(openHours, dayNumber);

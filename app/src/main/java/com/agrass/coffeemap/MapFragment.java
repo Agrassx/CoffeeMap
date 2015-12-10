@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static java.util.Calendar.DAY_OF_WEEK;
+
 
 public class MapFragment extends Fragment {
 
@@ -55,6 +57,7 @@ public class MapFragment extends Fragment {
     private Drawable drawable;
     private CoffeeOverlay coffeeOverlay;
     private BottomSheetLayout bottomSheetLayout;
+    private Calendar mCalendar = Calendar.getInstance();
 
 //    public static MapFragment newInstance() {
 //        return new MapFragment();
@@ -177,14 +180,11 @@ public class MapFragment extends Fragment {
         TextView textOpenHour = (TextView) bottomSheetView.findViewById(R.id.open_hour);
         TextView textfullOH = (TextView) bottomSheetView.findViewById(R.id.FullOH);
 
-//        ImageView image = (ImageView) bottomSheetView.findViewById(R.id.imageView);
-//        image.setImageDrawable(getResources().getDrawable(, null));
-
         textName.setText(name != null ? name : "name is null");
         textfullOH.setText(name != null ? snippet : "OH null");
         textOpenHour.setText(snippet == null ? "time is null" :
-                new OpenHourParser().getOpenHours(snippet, Calendar.DAY_OF_WEEK)
-        );
+                        new OpenHourParser().getOpenHours(snippet,
+                                mCalendar.get(Calendar.DAY_OF_WEEK)));
 
         bottomSheetLayout.showWithSheetView(bottomSheetView);
 

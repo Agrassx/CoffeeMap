@@ -4,13 +4,13 @@ import junit.framework.TestCase;
 
 public class OpenHourParserTest extends TestCase {
 
-    final static int MONDAY = 1;
-    final static int TUESDAY = 2;
-    final static int WEDNESDAY = 3;
-    final static int THURSDAY = 4;
-    final static int FRIDAY = 5;
-    final static int SATURDAY = 6;
-    final static int SUNDAY = 7;
+    final static int MONDAY = 2;
+    final static int TUESDAY = 3;
+    final static int WEDNESDAY = 4;
+    final static int THURSDAY = 5;
+    final static int FRIDAY = 6;
+    final static int SATURDAY = 7;
+    final static int SUNDAY = 1;
 
     OpenHourParser openHourParser;
     String[] variantsOfRules = {
@@ -31,26 +31,26 @@ public class OpenHourParserTest extends TestCase {
 
         for (int i = 1; i < variantsOfRules.length; i++) {
             assertEquals("MONDAY", openHourParser.getOpenHours(variantsOfRules[i], MONDAY),
-                    "Работает до 23:00");
+                    "до 23:00");
 
             assertEquals("TUESDAY", openHourParser.getOpenHours(variantsOfRules[i], TUESDAY),
-                    "Работает до 23:00");
+                    "до 23:00");
 
             assertEquals("WEDNESDAY", openHourParser.getOpenHours(variantsOfRules[i], WEDNESDAY),
-                    "Работает до 23:00");
+                    "до 23:00");
 
             assertEquals("THURSDAY", openHourParser.getOpenHours(variantsOfRules[i], THURSDAY),
-                    "Работает до 23:00");
+                    "до 23:00");
         }
     }
 
     public void testGetOpenHoursOff() throws Exception {
 
-        assertEquals("FRIDAY", openHourParser.getOpenHours(variantsOfRules[1], SATURDAY),
-                "Сегодня закрыто");
+        assertEquals("FRIDAY", openHourParser.getOpenHours(variantsOfRules[2], FRIDAY),
+                "закрыто");
 
         assertEquals("SUNDAY", openHourParser.getOpenHours(variantsOfRules[5], SUNDAY),
-                "Сегодня закрыто");
+                "закрыто");
 
     }
 }
