@@ -1,37 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<GridLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="#50000000"
-    android:orientation="vertical">
+    android:columnCount="9"
+    android:rowCount="9">
+
+    <ImageView
+        android:layout_columnSpan="2"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/imageCoffee"
+        android:src="@drawable/cafe_coffee"/>
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_row="0"
+        android:layout_columnSpan="7"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="start|center_vertical"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="name"
-        android:layout_gravity="center_horizontal"
         android:id="@+id/name"
         android:textColor="#ffffff"
-        android:autoLink="none"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="name"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/open_hour"
-        android:textColor="#ffffff"
-        android:autoLink="none"/>
+        android:autoLink="none"
+        android:layout_column="2" />
+    <ImageView
+        android:layout_row="1"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="15dp"
+        android:id="@+id/imageClock"
+        android:src="@drawable/clock_of_work"
+        android:layout_column="1" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_columnSpan="7"
+        android:layout_row="1"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_gravity="start|center_vertical"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="name"
+        android:id="@+id/open_hour"
+        android:textColor="#ffffff"
+        android:autoLink="none"
+        android:layout_column="2" />
+    <TextView
+        android:layout_row="3"
+        android:layout_columnSpan="9"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="15dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/FullOH"
-        android:layout_gravity="center_horizontal"
         android:textColor="#ffffff"
-        android:autoLink="none"/>
+        android:autoLink="none"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"/>
 
-</LinearLayout>
+</GridLayout>

@@ -10,6 +10,11 @@ import java.util.Objects;
 public class OpenHourParser {
     private Map<String, Integer> weekDays = new HashMap<>();
     private int numOfTimePart;
+    private String closed= "закрыто";
+    private String noData = "нет данных";
+    private String always = "24/7";
+    private String workingTo = "до %s";
+    private String dayOff = "off";
 
     public OpenHourParser() {
         weekDays.put("Mo", 1);
@@ -22,18 +27,20 @@ public class OpenHourParser {
     }
 
     public String getOpenHours(String openHours, int dayNumber) {
-        if (!Objects.equals(openHours, "24/7")) {
+        if (!Objects.equals(openHours, always)) {
             try {
                 return parseOpenHours(openHours, dayNumber);
             } catch (Exception e){
                 Log.e("Open Hour",e.toString());
             }
         } else {
-            return "Работает круглосуточно";
+            return always;
         }
         return "";
     }
-
+    /*
+     * TODO: Add 2 rules - "09:00-23:00" and "Su-Mo 08:00-23:00"
+     */
     private String parseOpenHours(String StrOpenHour, int dayNumber) {
         if (StrOpenHour.contains(";")) { //for rules where many rules as the "Mo-Th 09:00-23:00; Fr 09:00-23:00; Sa 11:00-23:00; Su off"
             String[] timeParts = StrOpenHour.split(";");
@@ -62,9 +69,9 @@ public class OpenHourParser {
             }
         }
         if (StrOpenHour.equals("")) {
-            return "Нет данных";
+            return noData;
         }
-        return "Сегодня закрыто";
+        return closed;
     }
 
     private boolean isInInterval(String interval, int dayNumber){
@@ -91,9 +98,9 @@ public class OpenHourParser {
 
     private String getEndTimeWork(String time) {
         if (time.contains("-")) {
-            return String.format("Работает до %s", time.split("-")[1]);
-        } else if(time.contains("off")) {
-            return "Сегодня закрыто";
+            return String.format(workingTo, time.split("-")[1]);
+        } else if(time.contains(dayOff)) {
+            return closed;
         } else {
             return "";
         }
