@@ -30,8 +30,8 @@ dependencies {
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.android.support:support-v4:22.0.0'
     compile 'com.android.support:design:22.2.1'
-    compile 'com.flipboard:bottomsheet-core:1.4.3'
-    compile 'com.flipboard:bottomsheet-commons:1.4.3'
+    compile 'com.flipboard:bottomsheet-core:1.5.0'
+    compile 'com.flipboard:bottomsheet-commons:1.5.0'
     // Unit testing dependencies
     //    testCompile 'junit:junit:4.12'
     // Set this dependency if you want to use Mockito

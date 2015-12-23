@@ -1,18 +1,20 @@
 package com.agrass.coffeemap;
 
+import android.graphics.Color;
 import android.util.Log;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class OpenHourParser {
+    private static final int MARKER_COLOR_GREEN = 1;
+    private static final int MARKER_COLOR_BLUE = 2;
     private Map<String, Integer> weekDays = new HashMap<>();
     private int numOfTimePart;
     private String closed= "закрыто";
     private String noData = "нет данных";
-    private String always = "24/7";
+    private String always = "Круглосуточно";
     private String workingTo = "до %s";
     private String dayOff = "off";
 
@@ -31,7 +33,7 @@ public class OpenHourParser {
         if (dayNumber == 0) {
             dayNumber = 7;
         }
-        if (!Objects.equals(openHours, always)) {
+        if (!Objects.equals(openHours, "24/7")) {
             try {
                 return parseOpenHours(openHours, dayNumber);
             } catch (Exception e){
@@ -128,5 +130,13 @@ public class OpenHourParser {
             }
         }
         return null;
+    }
+
+    public int getMarkerColor(String openHours, int dayNumber) {
+        if (openHours.equals("24/7")) {
+            Log.e("Marker color is: - ","Green");
+            return MARKER_COLOR_GREEN;
+        }
+        return Color.parseColor("#C80084FF");
     }
 }

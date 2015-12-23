@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,9 +34,6 @@ import org.osmdroid.views.overlay.TilesOverlay;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-
-import static java.util.Calendar.DAY_OF_WEEK;
 
 
 public class MapFragment extends Fragment {
@@ -53,11 +51,11 @@ public class MapFragment extends Fragment {
     protected TilesOverlay mTilesOverlay;
     private SharedPreferences settings;
     private GeoPoint Moscow = new GeoPoint(55751556, 37624482);
-    private ResourceProxy mResourceProxy;
-    private Drawable drawable;
-    private CoffeeOverlay coffeeOverlay;
     private BottomSheetLayout bottomSheetLayout;
-    private Calendar mCalendar = Calendar.getInstance();
+    private ResourceProxy mResourceProxy;
+    private CafeOverlay coffeeOverlay;
+    private Drawable drawable;
+    private View bottomSheetView;
 
 //    public static MapFragment newInstance() {
 //        return new MapFragment();
@@ -73,7 +71,8 @@ public class MapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mResourceProxy = new ResourceProxyImpl(inflater.getContext().getApplicationContext());
         drawable = mResourceProxy.getDrawable(ResourceProxy.bitmap.marker_default);
-        drawable = getResources().getDrawable(R.drawable.marker01,null);
+        drawable = getResources().getDrawable(R.drawable.marker01, null);
+        drawable = getResources().getDrawable(R.drawable.ic_place_36dp, null);
         SputnikMap = new MapView(inflater.getContext(), 256, mResourceProxy);
         return SputnikMap;
     }
@@ -83,7 +82,10 @@ public class MapFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         bottomSheetLayout = (BottomSheetLayout) getActivity().findViewById(R.id.bottomsheet);
         bottomSheetLayout.setPeekOnDismiss(true);
+        bottomSheetLayout.setPeekSheetTranslation(200);
         bottomSheetLayout.setVerticalScrollBarEnabled(true);
+        bottomSheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet,
+                bottomSheetLayout, false);
         Context context = getActivity().getBaseContext();
         settings = context.getSharedPreferences(MAP_PREFS, Context.MODE_PRIVATE);
         float scale = SputnikMap.getResources().getDisplayMetrics().density;
@@ -117,6 +119,13 @@ public class MapFragment extends Fragment {
         };
         SputnikMap.setMapListener(new DelayedMapListener(mapListener, 250));
 
+        final FloatingActionButton buttonAddPoint = (FloatingActionButton) getActivity().findViewById(R.id.buttonAddPoint);
+        buttonAddPoint.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+            }
+        });
+
     }
 
     @Override
@@ -141,22 +150,25 @@ public class MapFragment extends Fragment {
         ClientIntentRequest request = new ClientIntentRequest(context);
         JsonTaskHandler taskHandler = new JsonTaskHandler() {
             @Override
-            public void taskSuccessful(ArrayList<OverlayItem> overlayItemArrayList) {
+            public void taskSuccessful(ArrayList<CafeItem> overlayItemArrayList) {
                 SputnikMap.getOverlays().remove(coffeeOverlay);
                 SputnikMap.invalidate();
-                coffeeOverlay = new CoffeeOverlay(overlayItemArrayList, drawable,
-                        new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
-                    @Override
-                    public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                        showMenuSheet(item.getSnippet(), item.getTitle());
-                        scrollOnMarker(item.getPoint());
-                        return false;
-                    }
+                coffeeOverlay = new CafeOverlay(overlayItemArrayList, drawable,
+                        new ItemizedIconOverlay.OnItemGestureListener<CafeItem>() {
+                            @Override
+                            public boolean onItemSingleTapUp(int index, CafeItem item) {
+                                scrollOnMarker(item.getPoint());
+//                                drawable = item.getDrawable();
+//                                drawable.setTint(Color.RED);
+//                                item.setMarker(drawable);
+                                showMenuSheet(item.getUid(), item.getSnippet(), item.getTitle());
+                                return false;
+                            }
 
-                    @Override
-                    public boolean onItemLongPress(int index, OverlayItem item) {
-                        return false;
-                    }
+                            @Override
+                            public boolean onItemLongPress(int index, CafeItem item) {
+                                return false;
+                            }
                 }, mResourceProxy);
                 SputnikMap.getOverlays().add(coffeeOverlay);
                 SputnikMap.invalidate();
@@ -172,22 +184,16 @@ public class MapFragment extends Fragment {
         request.onHandleIntent(intent);
     }
 
-    private void showMenuSheet(String snippet, final String name) {
-        View bottomSheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet,
-                bottomSheetLayout, false);
-
+    private void showMenuSheet(final String name, final String endTimeWork, final String schedule) {
         TextView textName = (TextView) bottomSheetView.findViewById(R.id.name);
-        TextView textOpenHour = (TextView) bottomSheetView.findViewById(R.id.open_hour);
         TextView textfullOH = (TextView) bottomSheetView.findViewById(R.id.FullOH);
+        TextView textOpenHour = (TextView) bottomSheetView.findViewById(R.id.open_hour);
 
         textName.setText(name != null ? name : "name is null");
-        textfullOH.setText(name != null ? snippet : "OH null");
-        textOpenHour.setText(snippet == null ? "time is null" :
-                        new OpenHourParser().getOpenHours(snippet,
-                                mCalendar.get(Calendar.DAY_OF_WEEK)));
-
+        textfullOH.setText(endTimeWork != null ? endTimeWork : "OH null");
+        textOpenHour.setText(schedule != null ? schedule : "time is null");
+        bottomSheetLayout.setPeekSheetTranslation(200);
         bottomSheetLayout.showWithSheetView(bottomSheetView);
-
     }
 
     private void scrollOnMarker(IGeoPoint markerGeoPoint) {
