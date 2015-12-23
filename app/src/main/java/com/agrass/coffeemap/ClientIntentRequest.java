@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,20 +18,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 
-public class ClientIntentRequest extends IntentService {
+public class ClientIntentRequest extends IntentService implements MarkerColors {
 
     private static final String TAG_URL_MAIN = "http://78.47.49.234:9000/api/v2/";
     private static String TAG_JSON_ARRAY_NAME = "points";
-
-    private static final int MARKER_COLOR_GREEN = 1;
-    private static final int MARKER_COLOR_BLUE = 2;
-
     private ThreadLocal<Double> north = new ThreadLocal<>();
     private ThreadLocal<Double> south = new ThreadLocal<>();
     private ThreadLocal<Double> west = new ThreadLocal<>();
@@ -43,7 +37,7 @@ public class ClientIntentRequest extends IntentService {
     private Context context;
     private Drawable greenMarker;
     private Drawable blueMarker;
-//    private Drawable drawable;
+    private Drawable redMarker;
 
     @Override
     public void onCreate() {
@@ -54,9 +48,8 @@ public class ClientIntentRequest extends IntentService {
         super("ClientIntentRequest");
         this.context = context;
         coffeeList = new ArrayList<>();
-//        marker = (ImageView) getApplicationContext().getResources().getResourceName(R.) //findViewById( R.id.left_right_arrow );
-//        drawable = mArrowImageView.getDrawable();
         greenMarker = context.getResources().getDrawable(R.drawable.ic_place_green_36dp, null);
+        redMarker = context.getResources().getDrawable(R.drawable.ic_place_red_36dp, null);
         blueMarker = context.getResources().getDrawable(R.drawable.ic_place_36dp, null);
     }
 
@@ -78,7 +71,7 @@ public class ClientIntentRequest extends IntentService {
                                 JsonCoffeeArray.getJSONObject(i).getString("opening_hours"),
                                 new GeoPoint(JsonCoffeeArray.getJSONObject(i).getDouble("lat"),
                                         JsonCoffeeArray.getJSONObject(i).getDouble("lon")),
-                                getColor(new OpenHourParser().getMarkerColor(JsonCoffeeArray.getJSONObject(i).getString("opening_hours"),
+                                getMarkerColor(new OpenHourParser().getMarkerColor(JsonCoffeeArray.getJSONObject(i).getString("opening_hours"),
                                         Calendar.getInstance().get(Calendar.DAY_OF_WEEK)))
                         );
                         coffeeList.add(cafeItem);
@@ -98,11 +91,12 @@ public class ClientIntentRequest extends IntentService {
         queue.add(jsObjRequest);
     }
 
-    private Drawable getColor(int color) {
-        if (color == MARKER_COLOR_GREEN) {
-            return greenMarker;
-        } else {
-            return blueMarker;
+    private Drawable getMarkerColor(int color) {
+        switch (color) {
+            case MARKER_COLOR_GREEN: return greenMarker;
+            case MARKER_COLOR_BLUE: return blueMarker;
+            case MARKER_COLOR_RED: return redMarker;
+            default: return blueMarker;
         }
     }
 

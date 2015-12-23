@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
+import com.flipboard.bottomsheet.OnSheetDismissedListener;
 
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.api.IGeoPoint;
@@ -56,6 +57,7 @@ public class MapFragment extends Fragment {
     private CafeOverlay coffeeOverlay;
     private Drawable drawable;
     private View bottomSheetView;
+    private Drawable returnDrawable;
 
 //    public static MapFragment newInstance() {
 //        return new MapFragment();
@@ -106,14 +108,12 @@ public class MapFragment extends Fragment {
             @Override
             public boolean onScroll(ScrollEvent event) {
                 refreshCoffeeOverlay();
-                Log.wtf("scroll", "it was scrolled");
                 return false;
             }
 
             @Override
             public boolean onZoom(ZoomEvent event) {
                 refreshCoffeeOverlay();
-                Log.wtf("zoom", "it was zoomed");
                 return false;
             }
         };
@@ -157,11 +157,11 @@ public class MapFragment extends Fragment {
                         new ItemizedIconOverlay.OnItemGestureListener<CafeItem>() {
                             @Override
                             public boolean onItemSingleTapUp(int index, CafeItem item) {
-                                scrollOnMarker(item.getPoint());
-//                                drawable = item.getDrawable();
-//                                drawable.setTint(Color.RED);
-//                                item.setMarker(drawable);
-                                showMenuSheet(item.getUid(), item.getSnippet(), item.getTitle());
+                                returnDrawable = item.getDrawable();
+                                item.setMarker(drawable);
+                                SputnikMap.invalidate();
+//                                scrollOnMarker(item.getPoint(), item);
+                                showMenuSheet(item);
                                 return false;
                             }
 
@@ -184,19 +184,28 @@ public class MapFragment extends Fragment {
         request.onHandleIntent(intent);
     }
 
-    private void showMenuSheet(final String name, final String endTimeWork, final String schedule) {
+    private void showMenuSheet(final CafeItem item) {
         TextView textName = (TextView) bottomSheetView.findViewById(R.id.name);
         TextView textfullOH = (TextView) bottomSheetView.findViewById(R.id.FullOH);
         TextView textOpenHour = (TextView) bottomSheetView.findViewById(R.id.open_hour);
 
-        textName.setText(name != null ? name : "name is null");
-        textfullOH.setText(endTimeWork != null ? endTimeWork : "OH null");
-        textOpenHour.setText(schedule != null ? schedule : "time is null");
+        textName.setText(item.getName() != null ? item.getName() : "name is null");
+        textfullOH.setText(item.getSchedule() != null ? item.getSchedule() : "OH null");
+        textOpenHour.setText(item.getEndTimeWork() != null ? item.getEndTimeWork() : "time is null");
+
+        bottomSheetLayout.addOnSheetDismissedListener(new OnSheetDismissedListener() {
+            @Override
+            public void onDismissed(BottomSheetLayout bottomSheetLayout) {
+                item.setMarker(returnDrawable);
+                SputnikMap.invalidate();
+            }
+        });
+
         bottomSheetLayout.setPeekSheetTranslation(200);
         bottomSheetLayout.showWithSheetView(bottomSheetView);
     }
 
-    private void scrollOnMarker(IGeoPoint markerGeoPoint) {
+    private void scrollOnMarker(IGeoPoint markerGeoPoint, CafeItem item) {
         SputnikMap.getController().animateTo(markerGeoPoint);
     }
 

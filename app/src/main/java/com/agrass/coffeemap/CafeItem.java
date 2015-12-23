@@ -7,10 +7,16 @@ import org.osmdroid.views.overlay.OverlayItem;
 
 public class CafeItem extends OverlayItem {
     private Drawable aMarker;
+    private String name;
+    private String endTimeWork;
+    private String schedule;
 
     public CafeItem(String aName, String aEndTimeWork, String aSchedule, IGeoPoint aGeoPoint, Drawable marker) {
         super(aName, aEndTimeWork, aSchedule, aGeoPoint);
         setMarker(marker);
+        setName(aName);
+        setEndTimeWork(aEndTimeWork);
+        setSchedule(aSchedule);
     }
 
     @Override
@@ -34,4 +40,27 @@ public class CafeItem extends OverlayItem {
         return aMarker;
     }
 
+    public String getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
+    }
+
+    public String getEndTimeWork() {
+        return endTimeWork;
+    }
+
+    public void setEndTimeWork(String endTimeWork) {
+        this.endTimeWork = endTimeWork;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
