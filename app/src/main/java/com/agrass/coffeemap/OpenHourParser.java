@@ -37,8 +37,7 @@ public class OpenHourParser implements MarkerColors {
         if (!Objects.equals(openHours, "24/7")) {
             try {
                 Integer cafeHours = Integer.valueOf(parseOpenHours(openHours, dayNumber).split(" ")[1].split(":")[0]);
-                int currentHours = getCurrentHour();
-                if (currentHours <= cafeHours) {
+                if (getCurrentHour() <= cafeHours && !parseOpenHours(openHours, dayNumber).equals(closed)) {
                     return parseOpenHours(openHours, dayNumber);
                 } else {
                     return closed;
@@ -120,7 +119,7 @@ public class OpenHourParser implements MarkerColors {
     }
 
     private boolean checkDay(String[] timeParts, int dayNumber) {
-        String strDay = (String) (getKeyFromValue(weekDays, dayNumber) == null ? getKeyFromValue(weekDays, dayNumber) : "");
+        String strDay = (String) getKeyFromValue(weekDays, dayNumber);
         for (int i = 0; i < timeParts.length; i++) {
             if (timeParts[i].contains(strDay)) {
                 numOfTimePart = i;
