@@ -59,10 +59,6 @@ public class MapFragment extends Fragment {
     private View bottomSheetView;
     private Drawable returnDrawable;
 
-//    public static MapFragment newInstance() {
-//        return new MapFragment();
-//    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +80,6 @@ public class MapFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         bottomSheetLayout = (BottomSheetLayout) getActivity().findViewById(R.id.bottomsheet);
         bottomSheetLayout.setPeekOnDismiss(true);
-        bottomSheetLayout.setPeekSheetTranslation(200);
         bottomSheetLayout.setVerticalScrollBarEnabled(true);
         bottomSheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet,
                 bottomSheetLayout, false);
@@ -200,8 +195,6 @@ public class MapFragment extends Fragment {
                 SputnikMap.invalidate();
             }
         });
-
-        bottomSheetLayout.setPeekSheetTranslation(200);
         bottomSheetLayout.showWithSheetView(bottomSheetView);
     }
 
