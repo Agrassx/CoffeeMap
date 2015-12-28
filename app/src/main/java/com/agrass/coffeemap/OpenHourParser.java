@@ -2,12 +2,16 @@ package com.agrass.coffeemap;
 
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
 public class OpenHourParser implements MarkerColors {
     private Map<String, Integer> weekDays = new HashMap<>();
+    private Calendar mCalendar = Calendar.getInstance();
     private int numOfTimePart;
     private String closed= "закрыто";
     private String noData = "нет данных";
@@ -32,7 +36,13 @@ public class OpenHourParser implements MarkerColors {
         }
         if (!Objects.equals(openHours, "24/7")) {
             try {
-                return parseOpenHours(openHours, dayNumber);
+                Integer cafeHours = Integer.valueOf(parseOpenHours(openHours, dayNumber).split(" ")[1].split(":")[0]);
+                int currentHours = getCurrentHour();
+                if (currentHours <= cafeHours) {
+                    return parseOpenHours(openHours, dayNumber);
+                } else {
+                    return closed;
+                }
             } catch (Exception e){
                 Log.e("Open Hour",e.toString());
             }
@@ -110,7 +120,7 @@ public class OpenHourParser implements MarkerColors {
     }
 
     private boolean checkDay(String[] timeParts, int dayNumber) {
-        String strDay = (String) getKeyFromValue(weekDays, dayNumber);
+        String strDay = (String) (getKeyFromValue(weekDays, dayNumber) == null ? getKeyFromValue(weekDays, dayNumber) : "");
         for (int i = 0; i < timeParts.length; i++) {
             if (timeParts[i].contains(strDay)) {
                 numOfTimePart = i;
@@ -138,5 +148,15 @@ public class OpenHourParser implements MarkerColors {
             return MARKER_COLOR_RED;
         }
         return MARKER_COLOR_BLUE;
+    }
+
+    private int getCurrentHour() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH", Locale.US);
+        String currentHours = simpleDateFormat.format(mCalendar.getTime());
+        if (currentHours.contains("0")){
+            return Integer.valueOf(currentHours.replace("0",""));
+        } else {
+            return Integer.valueOf(currentHours);
+        }
     }
 }
