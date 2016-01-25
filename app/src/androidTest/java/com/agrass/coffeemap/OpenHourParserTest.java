@@ -53,4 +53,9 @@ public class OpenHourParserTest extends TestCase {
                 "закрыто");
 
     }
+
+    public void testIsOpenNow() throws Exception {
+
+//        assertEquals();
+    }
 }

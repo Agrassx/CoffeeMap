@@ -36,8 +36,7 @@ public class OpenHourParser implements MarkerColors {
         }
         if (!Objects.equals(openHours, "24/7")) {
             try {
-                Integer cafeHours = Integer.valueOf(parseOpenHours(openHours, dayNumber).split(" ")[1].split(":")[0]);
-                if (getCurrentHour() <= cafeHours && !parseOpenHours(openHours, dayNumber).equals(closed)) {
+                if (isOpen(openHours, dayNumber)) {
                     return parseOpenHours(openHours, dayNumber);
                 } else {
                     return closed;
@@ -54,8 +53,14 @@ public class OpenHourParser implements MarkerColors {
      * TODO: Add 2 rules - "09:00-23:00" and "Su-Mo 08:00-23:00"
      */
     private String parseOpenHours(String StrOpenHour, int dayNumber) {
+
+        if (StrOpenHour.equals("")) {
+            return noData;
+        }
+
         if (StrOpenHour.contains(";")) { //for rules where many rules as the "Mo-Th 09:00-23:00; Fr 09:00-23:00; Sa 11:00-23:00; Su off"
             String[] timeParts = StrOpenHour.split(";");
+
             if (checkDay(timeParts, dayNumber)) { //for exceptions in large intervals as the "Mo-Su 08:00-23:00; Fr off"
                 if (numOfTimePart != 0) {
                     timeParts[numOfTimePart] = new StringBuilder(timeParts[numOfTimePart]).deleteCharAt(0).toString();
@@ -63,25 +68,25 @@ public class OpenHourParser implements MarkerColors {
                 String time = timeParts[numOfTimePart].split(" ")[1];
                 return getEndTimeWork(time);
             }
+
             for (int k = 0; k < timeParts.length; k++) {
                 if (k != 0) {
                     timeParts[k] = new StringBuilder(timeParts[k]).deleteCharAt(0).toString();
                 }
+
                 String days = timeParts[k].split(" ")[0];
                 String time = timeParts[k].split(" ")[1];
+
                 if (isInInterval(days, dayNumber)){
                     return getEndTimeWork(time);
                 }
             }
-        } else { // for rules small where small interval "Mo-Fr 09:00-23:00"
+        } else { // for rules where small interval "Mo-Fr 09:00-23:00"
             String days = StrOpenHour.split(" ")[0];
             String time = StrOpenHour.split(" ")[1];
             if (isInInterval(days, dayNumber)){
                 return getEndTimeWork(time);
             }
-        }
-        if (StrOpenHour.equals("")) {
-            return noData;
         }
         return closed;
     }
@@ -114,7 +119,7 @@ public class OpenHourParser implements MarkerColors {
         } else if(time.contains(dayOff)) {
             return closed;
         } else {
-            return "";
+            return noData;
         }
     }
 
@@ -150,12 +155,58 @@ public class OpenHourParser implements MarkerColors {
     }
 
     private int getCurrentHour() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH", Locale.US);
+        //kk - Hour in day (1-24)
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("kk", Locale.US);
         String currentHours = simpleDateFormat.format(mCalendar.getTime());
         if (currentHours.contains("0")){
             return Integer.valueOf(currentHours.replace("0",""));
         } else {
             return Integer.valueOf(currentHours);
+        }
+    }
+
+    private int getCurrentMin() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm", Locale.US);
+        String currentHours = simpleDateFormat.format(mCalendar.getTime());
+        if (currentHours.contains("0")){
+            return Integer.valueOf(currentHours.replace("0",""));
+        } else {
+            return Integer.valueOf(currentHours);
+        }
+    }
+
+    private int getCafeOpenHours(String openHours, int dayNumber) {
+        String hours = parseOpenHours(openHours, dayNumber).split(" ")[1].split(":")[0];
+        if (hours.equals("00")) {
+            return  24;
+        } else {
+            hours = hours.startsWith("0") ? hours.substring(1) : hours;
+            return Integer.valueOf(hours);
+        }
+    }
+
+    private int getCafeOpenMins(String openHours, int dayNumber){
+        String mins = parseOpenHours(openHours, dayNumber).split(" ")[1].split(":")[1];
+        if (mins.equals("00")) {
+            return  0;
+        } else {
+            mins = mins.startsWith("0") ? mins.substring(1) : mins;
+            return Integer.valueOf(mins);
+        }
+    }
+
+    private boolean isOpen(String openHours, int dayNumber) {
+
+        if (parseOpenHours(openHours, dayNumber).equals(closed)) {
+            return false;
+        }
+        if (getCurrentHour() < getCafeOpenHours(openHours, dayNumber)) {
+            return true;
+        } else if (getCurrentHour() == getCafeOpenHours(openHours, dayNumber)
+                        && getCurrentMin() < getCafeOpenMins(openHours, dayNumber)) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
