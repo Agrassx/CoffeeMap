@@ -51,13 +51,9 @@ public class OpenHourParser implements MarkerColors {
         return "";
     }
     /*
-     * TODO: Add 2 rules - "09:00-23:00" and "Su-Mo 08:00-23:00"
+     * TODO: Add rule: "Su-Mo 08:00-23:00"
      */
     private String parseOpenHours(String StrOpenHour, int dayNumber) {
-
-        if (StrOpenHour.equals("")) {
-            return noData;
-        }
 
         if (StrOpenHour.contains(";")) { //for rules where many rules as the "Mo-Th 09:00-23:00; Fr 09:00-23:00; Sa 11:00-23:00; Su off"
             String[] timeParts = StrOpenHour.split(";");
@@ -82,13 +78,22 @@ public class OpenHourParser implements MarkerColors {
                     return time;
                 }
             }
-        } else { // for rules where small interval "Mo-Fr 09:00-23:00"
+        } else if (isConsistDays(StrOpenHour)) { // for rules where small interval "Mo-Fr 09:00-23:00"
             String days = StrOpenHour.split(" ")[0];
             String time = StrOpenHour.split(" ")[1];
             if (isInInterval(days, dayNumber)){
                 return time;
             }
         }
+
+        if (!isConsistDays(StrOpenHour)) { // for rules where "08:00-20:00" (without days)
+            return StrOpenHour;
+        }
+
+        if (StrOpenHour.equals("")) { // if empty
+            return noData;
+        }
+
         return closed;
     }
 
@@ -122,6 +127,10 @@ public class OpenHourParser implements MarkerColors {
         } else {
             return noData;
         }
+    }
+
+    private boolean isConsistDays(String openHours) {
+        return openHours.contains(" ");
     }
 
     private boolean checkDay(String[] timeParts, int dayNumber) {
