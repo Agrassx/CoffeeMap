@@ -1,13 +1,10 @@
 package com.agrass.coffeemap;
 
 import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
+
+import layout.MapFragment;
 
 
 public class MapsActivity extends FragmentActivity {
@@ -15,7 +12,7 @@ public class MapsActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.activity_main);
 
         android.app.FragmentManager fragmentManager = getFragmentManager();
         if (fragmentManager.findFragmentById(R.id.MapFragment) == null) {

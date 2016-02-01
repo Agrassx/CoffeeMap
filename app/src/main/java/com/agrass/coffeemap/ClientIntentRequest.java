@@ -54,7 +54,7 @@ public class ClientIntentRequest extends IntentService implements MarkerColors {
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    public void onHandleIntent(Intent intent) {
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET,
                 getFinaleUrl(boundingBox), new Response.Listener<JSONObject>() {
