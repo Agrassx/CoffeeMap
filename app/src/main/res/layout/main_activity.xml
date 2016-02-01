@@ -1,3 +1,8 @@
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto">
 <com.flipboard.bottomsheet.BottomSheetLayout
     android:id="@+id/bottomsheet"
     android:layout_width="match_parent"
@@ -19,16 +24,56 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonAddPoint"
-            android:src="@drawable/ic_add_circle_outline_72dp"
+            android:src="@drawable/ic_add_48dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_place_36dp"
+            android:id="@+id/imageViewCenterMarker"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/multiple_actions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_addButtonColorNormal="@color/blue_semi_transparent"
+            fab:fab_addButtonColorPressed="@color/blue_semi_transparent_pressed"
+            fab:fab_addButtonPlusIconColor="@color/white"
+            fab:fab_labelStyle="@style/menu_labels_style"
+            android:layout_marginRight="16dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/imageViewCenterMarker"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="20dp" />
+            android:layout_alignParentEnd="true">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/action_a"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/blue_semi_transparent"
+                fab:fab_title="My location"
+                fab:fab_colorPressed="@color/blue_semi_transparent_pressed"/>
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/action_b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/blue_semi_transparent"
+                fab:fab_title=" Add new cafe"
+                fab:fab_colorPressed="@color/blue_semi_transparent_pressed"/>
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
     </RelativeLayout>
     </android.support.design.widget.CoordinatorLayout>
+
+
 </com.flipboard.bottomsheet.BottomSheetLayout>
 
-
-
+</RelativeLayout>
 
 
