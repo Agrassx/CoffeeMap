@@ -1,90 +1,22 @@
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
 <com.flipboard.bottomsheet.BottomSheetLayout
-    android:id="@+id/bottomsheet"
+    android:id="@+id/bottomSheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.design.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <include layout="@layout/container_main"
+        <include layout="@layout/main_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonCurrentLocation"
-            android:src="@drawable/ic_my_location_24dp"
-            android:layout_above="@+id/buttonAddPoint"
-            android:layout_alignStart="@+id/buttonAddPoint"
-            android:layout_marginBottom="15dp"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonAddPoint"
-            android:src="@drawable/ic_add_48dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="15dp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_place_36dp"
-            android:id="@+id/imageViewCenterMarker"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:visibility="invisible"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:background="@drawable/dialog_buttons"
-            android:id="@+id/dialogButCancel"
-            android:textColor="@color/white"
-            android:textSize="9pt"
-            android:textStyle="bold"
-            android:visibility="invisible"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/imageViewCenterMarker"
-            android:layout_below="@+id/buttonCurrentLocation"
-            android:layout_alignEnd="@+id/imageViewCenterMarker" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="OK"
-            android:id="@+id/dialogButOk"
-            android:visibility="invisible"
-            android:textColor="@color/white"
-            android:background="@drawable/dialog_buttons"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/buttonAddPoint"
-            android:layout_toEndOf="@+id/dialogButCancel" />
-
     </RelativeLayout>
-
-    </android.support.design.widget.CoordinatorLayout>
 
 </com.flipboard.bottomsheet.BottomSheetLayout>
 
-</RelativeLayout>
 
 

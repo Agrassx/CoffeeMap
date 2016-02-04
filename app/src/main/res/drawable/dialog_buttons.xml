@@ -3,10 +3,10 @@
     <!--<item-->
         <!--android:state_enabled="false"-->
         <!--android:drawable="@drawable/dialog_button_disabled" />-->
-    <!--<item-->
-        <!--android:state_pressed="true"-->
-        <!--android:state_enabled="true"-->
-        <!--android:drawable="@drawable/dialog_button_pressed" />-->
+    <item
+        android:state_pressed="true"
+        android:state_enabled="true"
+        android:drawable="@drawable/dialog_button_pressed" />
     <item
         android:state_enabled="true"
         android:drawable="@drawable/dialog_button_enabled" />
