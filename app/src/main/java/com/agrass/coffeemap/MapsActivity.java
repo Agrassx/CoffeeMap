@@ -1,9 +1,7 @@
 package com.agrass.coffeemap;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -12,8 +10,6 @@ import android.util.Log;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
-
-import layout.AddCafeFragment;
 import layout.MapFragment;
 
 
@@ -35,16 +31,16 @@ public class MapsActivity extends FragmentActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-//        fragmentManager = getFragmentManager();
-//        if (findViewById(R.id.frameLayout) != null) {
-//            if (savedInstanceState != null) {
-//                return;
-//            } else {
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.add(R.id.frameLayout, new MapFragment());
-//                fragmentTransaction.commit();
-//            }
-//        }
+        fragmentManager = getFragmentManager();
+        if (findViewById(R.id.fragment_layout) != null) {
+            if (savedInstanceState != null) {
+                return;
+            } else {
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.fragment_layout, new MapFragment());
+                fragmentTransaction.commit();
+            }
+        }
         Log.wtf("Activity on Create", "was onCreate method");
     }
 
@@ -98,7 +94,16 @@ public class MapsActivity extends FragmentActivity {
         client.disconnect();
     }
 
-//    @Override
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        // Inflate the menu; this adds items to the action bar if it is present.
 //        getMenuInflater().inflate(R.menu.main, menu);
