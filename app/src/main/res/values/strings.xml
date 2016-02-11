@@ -71,4 +71,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="dialog_button_ok">OK</string>
     <string name="dialog_button_cancel">Cancel</string>
+    <string name="text_help_add_button">Переместите маркер для того, \n что бы указать точное местоположение</string>
 </resources>

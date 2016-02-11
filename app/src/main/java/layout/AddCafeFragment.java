@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckedTextView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.agrass.coffeemap.R;
@@ -27,14 +29,18 @@ public class AddCafeFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-//        TextView textView = (TextView) getActivity().findViewById(R.id.exampleText);
-//        textView.setText(
-//                String.format("Latitude: %f \n Longitude: %f ",
-//                        getArguments().getDouble("Latitude"),
-//                        getArguments().getDouble("Longitude")
-//                )
-//        );
+        final RadioButton radioButtonAnother = (RadioButton) getView().findViewById(R.id.radioButAnother);
 
+        radioButtonAnother.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startTimePicker();
+            }
+        });
+    }
+
+    private void startTimePicker() {
+        //TODO: two time picker in custom fragment or dialog
     }
 
 }
