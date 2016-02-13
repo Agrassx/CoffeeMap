@@ -51,7 +51,8 @@
         android:src="@drawable/ic_my_location_24dp"
         android:layout_above="@+id/buttonAddPoint"
         android:layout_alignStart="@+id/buttonAddPoint"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="20dp"
+        android:visibility="invisible"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -71,7 +72,8 @@
         android:background="@drawable/background_text_view_help"
         android:visibility="invisible"
         android:textColor="@color/white"
-        android:layout_marginTop="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:gravity="center" />
