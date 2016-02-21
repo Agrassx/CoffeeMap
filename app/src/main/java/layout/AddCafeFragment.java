@@ -2,6 +2,8 @@ package layout;
 
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -12,7 +14,14 @@ import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
+import com.agrass.coffeemap.ClientIntentRequest;
+import com.agrass.coffeemap.PostNewPoint;
 import com.agrass.coffeemap.R;
+import com.agrass.coffeemap.TaskPostNewPointHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.osmdroid.util.BoundingBoxE6;
 
 import layout.openHourDialog.SetOpenHoursFragment;
 
@@ -22,6 +31,8 @@ public class AddCafeFragment extends Fragment {
     private String openHours;
     private float userRating;
     private String comment;
+    private double latitude;
+    private double longitude;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +47,9 @@ public class AddCafeFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        latitude = getArguments().getDouble("Latitude");
+        longitude = getArguments().getDouble("Longitude");
 
         final FloatingActionButton saveButton = (FloatingActionButton) getView().findViewById(R.id.buttonSavePoint);
         final RatingBar ratingBar = (RatingBar) getView().findViewById(R.id.ratingBar);
@@ -70,8 +84,12 @@ public class AddCafeFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postNewPlace(editCafeName.getText().toString(), openHours, userRating, editComment.getText().toString());
-                Toast.makeText(getActivity(), "Saved", Toast.LENGTH_LONG).show();
+                try {
+                    postNewPlace(editCafeName.getText().toString(), latitude, longitude);
+//                    Toast.makeText(getActivity(), "Saved", Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 getActivity().onBackPressed();
 
             }
@@ -85,9 +103,31 @@ public class AddCafeFragment extends Fragment {
 //        TODO: get data from dialog
     }
 
-    private void postNewPlace(String cafeName, String openHours, float rating, String comment) {
+    private void postNewPlace(String cafeName, double latitude, double longitude) throws JSONException {
         checkFields();
-//        TODO: post data about new place to server
+        JSONObject newPoint = new JSONObject();
+        JSONObject location = new JSONObject();
+        location.put("lat",latitude);
+        location.put("lon",longitude);
+        newPoint.put("name", cafeName);
+        newPoint.put("location", location);
+
+        Intent intent = new Intent(getActivity(), PostNewPoint.class);
+        PostNewPoint request = new PostNewPoint(getActivity(), newPoint);
+
+        request.setTaskPostNewPointHandler(new TaskPostNewPointHandler() {
+            @Override
+            public void taskSuccessful() {
+
+            }
+
+            @Override
+            public void taskFailed() {
+
+            }
+        });
+        request.onHandleIntent(intent);
+        Toast.makeText(getActivity(), newPoint.toString(), Toast.LENGTH_LONG).show();
     }
 
     private void checkFields() {

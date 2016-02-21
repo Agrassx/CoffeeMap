@@ -23,16 +23,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 
-public class ClientIntentRequest extends IntentService implements MarkerColors {
+public class ClientIntentRequest extends IntentService implements Response.Listener<JSONObject>, Response.ErrorListener, MarkerColors {
 
-    private static final String TAG_URL_MAIN = "http://78.47.49.234:9000/api/v2/";
+    private static final String TAG_URL_MAIN = BuildConfig.ServerAdress;
     private static String TAG_JSON_ARRAY_NAME = "points";
     private ThreadLocal<Double> north = new ThreadLocal<>();
     private ThreadLocal<Double> south = new ThreadLocal<>();
     private ThreadLocal<Double> west = new ThreadLocal<>();
     private ThreadLocal<Double> east = new ThreadLocal<>();
     private ArrayList<CafeItem> coffeeList;
-    private JsonTaskHandler taskHandler;
+    private TaskGetPointsHandler taskGetPointsHandler;
     private BoundingBoxE6 boundingBox;
     private Context context;
     private Drawable greenMarker;
@@ -56,38 +56,7 @@ public class ClientIntentRequest extends IntentService implements MarkerColors {
     @Override
     public void onHandleIntent(Intent intent) {
         RequestQueue queue = Volley.newRequestQueue(context);
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET,
-                getFinaleUrl(boundingBox), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    coffeeList.clear();
-                    JSONArray JsonCoffeeArray = response.getJSONArray("points");
-                    int length = JsonCoffeeArray.length();
-                    for (int i = 0; i < length; i++) {
-                        CafeItem cafeItem = new CafeItem(JsonCoffeeArray.getJSONObject(i).getString("name"),
-                                new OpenHourParser().getOpenHours(JsonCoffeeArray.getJSONObject(i).getString("opening_hours"),
-                                        Calendar.getInstance().get(Calendar.DAY_OF_WEEK)),
-                                JsonCoffeeArray.getJSONObject(i).getString("opening_hours"),
-                                new GeoPoint(JsonCoffeeArray.getJSONObject(i).getDouble("lat"),
-                                        JsonCoffeeArray.getJSONObject(i).getDouble("lon")),
-                                getMarkerColor(new OpenHourParser().getMarkerColor(JsonCoffeeArray.getJSONObject(i).getString("opening_hours"),
-                                        Calendar.getInstance().get(Calendar.DAY_OF_WEEK)))
-                        );
-                        coffeeList.add(cafeItem);
-                    }
-                    taskHandler.taskSuccessful(coffeeList);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.wtf("Error!", error);
-            }
-        });
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, getFinaleUrl(boundingBox), this, this);
         queue.add(jsObjRequest);
     }
 
@@ -100,8 +69,8 @@ public class ClientIntentRequest extends IntentService implements MarkerColors {
         }
     }
 
-    public void setJsonTaskHandler(JsonTaskHandler taskHandler) {
-        this.taskHandler = taskHandler;
+    public void setJsonTaskHandler(TaskGetPointsHandler taskHandler) {
+        this.taskGetPointsHandler = taskHandler;
     }
 
     public void setBoundingBox(BoundingBoxE6 boundingBox) {
@@ -113,7 +82,7 @@ public class ClientIntentRequest extends IntentService implements MarkerColors {
         this.south.set(boundingBox.getLatSouthE6() / 1E6);
         this.west.set(boundingBox.getLonWestE6() / 1E6);
         this.east.set(boundingBox.getLonEastE6() / 1E6);
-        return TAG_URL_MAIN + TAG_JSON_ARRAY_NAME + "?" + "n=" + north.get().toString() + "&s=" +
+        return TAG_URL_MAIN + "points?" + "n=" + north.get().toString() + "&s=" +
                 south.get().toString() + "&w=" + west.get().toString() + "&e=" + east.get().toString();
     }
 
@@ -122,5 +91,32 @@ public class ClientIntentRequest extends IntentService implements MarkerColors {
     }
 
 
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        Log.wtf("Error!", error);
+    }
 
+    @Override
+    public void onResponse(JSONObject response) {
+        try {
+            coffeeList.clear();
+            JSONArray jsonCoffeeArray = response.getJSONArray(TAG_JSON_ARRAY_NAME);
+            int length = jsonCoffeeArray.length();
+            for (int i = 0; i < length; i++) {
+                CafeItem cafeItem = new CafeItem(jsonCoffeeArray.getJSONObject(i).getString("name"),
+                        new OpenHourParser().getOpenHours(jsonCoffeeArray.getJSONObject(i).getString("opening_hours"),
+                                Calendar.getInstance().get(Calendar.DAY_OF_WEEK)),
+                        jsonCoffeeArray.getJSONObject(i).getString("opening_hours"),
+                        new GeoPoint(jsonCoffeeArray.getJSONObject(i).getJSONObject("location").getDouble("lat"),
+                                jsonCoffeeArray.getJSONObject(i).getJSONObject("location").getDouble("lon")),
+                        getMarkerColor(new OpenHourParser().getMarkerColor(jsonCoffeeArray.getJSONObject(i).getString("opening_hours"),
+                                Calendar.getInstance().get(Calendar.DAY_OF_WEEK)))
+                );
+                coffeeList.add(cafeItem);
+            }
+            taskGetPointsHandler.taskSuccessful(coffeeList);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }
