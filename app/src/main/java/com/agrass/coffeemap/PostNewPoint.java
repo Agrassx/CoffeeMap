@@ -3,6 +3,7 @@ package com.agrass.coffeemap;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -42,12 +43,12 @@ public class PostNewPoint extends IntentService implements Response.Listener<JSO
 
     @Override
     public void onErrorResponse(VolleyError error) {
-
+        Log.wtf("Post New Point Error", error.getMessage());
     }
 
     @Override
     public void onResponse(JSONObject response) {
-
+        Log.wtf("Post New Point Answer", response.toString());
     }
 
     public void setTaskPostNewPointHandler(TaskPostNewPointHandler taskPostNewPointHandler) {

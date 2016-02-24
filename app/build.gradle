@@ -25,7 +25,7 @@ android {
         }
 
         localServer {
-            buildConfigField 'String', 'ServerAdress', '"http://192.168.2.98:9000/api/"'
+            buildConfigField 'String', 'ServerAdress', '"http://192.168.1.2:9000/api/"'
         }
 
     }
@@ -41,7 +41,7 @@ dependencies {
     //    testCompile 'org.hamcrest:hamcrest-library:1.1'
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.google.android.gms:play-services:8.3.0'
-    compile 'org.osmdroid:osmdroid-android:4.3'
+    compile 'org.osmdroid:osmdroid-android:5.1@aar'
     compile 'org.slf4j:slf4j-simple:1.6.1'
     compile 'com.googlecode.json-simple:json-simple:1.1'
     compile 'com.mcxiaoke.volley:library:1.0.17'

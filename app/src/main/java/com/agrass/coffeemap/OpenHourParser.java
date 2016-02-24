@@ -35,6 +35,9 @@ public class OpenHourParser implements MarkerColors {
         if (dayNumber == 0) {
             dayNumber = 7;
         }
+        if (openHours.equals("")) {
+            return noData;
+        }
         if (!Objects.equals(openHours, "24/7")) {
             try {
                 if (isOpen(parseOpenHours(openHours, dayNumber))) {
@@ -43,12 +46,12 @@ public class OpenHourParser implements MarkerColors {
                     return closed;
                 }
             } catch (Exception e){
-                Log.e("Open Hour",e.toString());
+                Log.e("OpenHour.getOpenHours()", e.toString());
             }
         } else {
             return always;
         }
-        return "";
+        return noData;
     }
     /*
      * TODO: Add rule: "Su-Mo 08:00-23:00"
@@ -154,6 +157,11 @@ public class OpenHourParser implements MarkerColors {
     }
 
     public int getMarkerColor(String openHours, int dayNumber) {
+
+        if (getOpenHours(openHours, dayNumber).equals(noData)) {
+            return MARKER_COLOR_BLUE;
+        }
+
         if (openHours.equals("24/7")) {
             return MARKER_COLOR_GREEN;
         } else if (!getOpenHours(openHours, dayNumber).equals(closed)) {
@@ -161,6 +169,7 @@ public class OpenHourParser implements MarkerColors {
         } else if (getOpenHours(openHours, dayNumber).equals(closed)) {
             return MARKER_COLOR_RED;
         }
+
         return MARKER_COLOR_BLUE;
     }
 
@@ -235,6 +244,10 @@ public class OpenHourParser implements MarkerColors {
     private boolean isOpen(String cafeHoursOfOpen) {
 
         if (cafeHoursOfOpen.contains(dayOff)) {
+            return false;
+        }
+
+        if (cafeHoursOfOpen.equals(noData)) {
             return false;
         }
 

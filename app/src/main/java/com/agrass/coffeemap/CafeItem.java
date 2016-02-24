@@ -63,4 +63,5 @@ public class CafeItem extends OverlayItem {
     public void setName(String name) {
         this.name = name;
     }
+
 }

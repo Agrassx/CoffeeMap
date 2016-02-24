@@ -1,16 +1,12 @@
 package com.agrass.coffeemap;
 
-
-import org.osmdroid.ResourceProxy;
 import org.osmdroid.tileprovider.MapTile;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
 
 public class RetinaTileSource extends XYTileSource {
-    public RetinaTileSource(final String aName, final ResourceProxy.string aResourceId, final int aZoomMinLevel,
-                        final int aZoomMaxLevel, final int aTileSizePixels, final String aImageFilenameEnding,
-                        final String[] aBaseUrl) {
-        super(aName, aResourceId, aZoomMinLevel, aZoomMaxLevel, aTileSizePixels,
-                aImageFilenameEnding, aBaseUrl);
+    public RetinaTileSource(final String aName, final int aZoomMinLevel, final int aZoomMaxLevel,
+                            final int aTileSizePixels, final String aImageFilenameEnding, final String[] aBaseUrl) {
+        super(aName, aZoomMinLevel, aZoomMaxLevel, aTileSizePixels, aImageFilenameEnding, aBaseUrl);
     }
 
     @Override
