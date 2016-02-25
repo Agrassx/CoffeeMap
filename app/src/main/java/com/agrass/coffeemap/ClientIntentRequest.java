@@ -55,8 +55,8 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
 
     @Override
     public void onHandleIntent(Intent intent) {
-        RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, getFinaleUrl(boundingBox), this, this);
+        RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(jsObjRequest);
     }
 
