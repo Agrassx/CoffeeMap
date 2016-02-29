@@ -38,6 +38,7 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
     private Drawable greenMarker;
     private Drawable blueMarker;
     private Drawable redMarker;
+    private RequestQueue queue;
 
     @Override
     public void onCreate() {
@@ -53,11 +54,15 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
         blueMarker = context.getResources().getDrawable(R.drawable.ic_place_36dp, null);
     }
 
+
     @Override
     public void onHandleIntent(Intent intent) {
+
+    }
+
+    public void refresh(BoundingBoxE6 boundingBox) {
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, getFinaleUrl(boundingBox), this, this);
-        RequestQueue queue = Volley.newRequestQueue(context);
-        queue.add(jsObjRequest);
+        getQueue().add(jsObjRequest);
     }
 
     private Drawable getMarkerColor(int color) {
@@ -66,6 +71,14 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
             case MARKER_COLOR_BLUE: return blueMarker;
             case MARKER_COLOR_RED: return redMarker;
             default: return blueMarker;
+        }
+    }
+
+    public RequestQueue getQueue() {
+        if (queue == null) {
+            return  queue = Volley.newRequestQueue(context);
+        } else {
+            return queue;
         }
     }
 
