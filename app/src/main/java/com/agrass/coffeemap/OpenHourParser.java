@@ -177,21 +177,16 @@ public class OpenHourParser implements MarkerColors {
         //kk - Hour in day (1-24)
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("kk", Locale.US);
         String currentHours = simpleDateFormat.format(mCalendar.getTime());
-        if (currentHours.contains("0")){
-            return Integer.valueOf(currentHours.replace("0",""));
-        } else {
-            return Integer.valueOf(currentHours);
-        }
+        currentHours = currentHours.startsWith("0") ? currentHours.substring(1) : currentHours;
+        return Integer.valueOf(currentHours);
+
     }
 
     private int getCurrentMin() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm", Locale.US);
         String currentHours = simpleDateFormat.format(mCalendar.getTime());
-        if (currentHours.contains("0")){
-            return Integer.valueOf(currentHours.replace("0",""));
-        } else {
-            return Integer.valueOf(currentHours);
-        }
+        currentHours = currentHours.startsWith("0") ? currentHours.substring(1) : currentHours;
+        return Integer.valueOf(currentHours);
     }
 
     private int getCafeCloseHours(String cafeHoursOfOpen) {
@@ -200,8 +195,8 @@ public class OpenHourParser implements MarkerColors {
         if (hours.equals("00")) {
             return 24;
         } else {
-            hours = hours.startsWith("0") ? hours.substring(1) : hours; //see getCafeOpendHours()
-                return Integer.valueOf(hours);
+            hours = hours.startsWith("0") ? hours.substring(1) : hours; //see getCafeOpenedHours()
+            return Integer.valueOf(hours);
         }
     }
 
@@ -250,7 +245,6 @@ public class OpenHourParser implements MarkerColors {
         if (cafeHoursOfOpen.equals(noData)) {
             return false;
         }
-
         if (getCurrentHour() < getCafeCloseHours(cafeHoursOfOpen) && getCurrentHour() > getCafeOpenHours(cafeHoursOfOpen)) {
             return true; // interval 08:00-20:00, current 10:00
         } else if (getCurrentHour() == getCafeCloseHours(cafeHoursOfOpen) && getCurrentMin() < getCafeCloseMins(cafeHoursOfOpen)) {

@@ -27,7 +27,7 @@ public class DaysOfWeekAdapter extends ArrayAdapter<Day> implements AdapterView.
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         convertView = inflater.inflate(R.layout.row_days_of_the_week, parent, false);
         CheckBox row = (CheckBox) convertView.findViewById(R.id.rowDayCheckBox);
         TextView name = (TextView) convertView.findViewById(R.id.dayName);
