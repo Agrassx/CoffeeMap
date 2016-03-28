@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -26,6 +27,7 @@ import java.util.Calendar;
 public class ClientIntentRequest extends IntentService implements Response.Listener<JSONObject>, Response.ErrorListener, MarkerColors {
 
     private static final String TAG_URL_MAIN = BuildConfig.ServerAdress;
+    private static final String TAG_URL_ADD_POINT = BuildConfig.ServerAdress + "addPoint";
     private static String TAG_JSON_ARRAY_NAME = "points";
     private ThreadLocal<Double> north = new ThreadLocal<>();
     private ThreadLocal<Double> south = new ThreadLocal<>();
@@ -33,7 +35,6 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
     private ThreadLocal<Double> east = new ThreadLocal<>();
     private ArrayList<CafeItem> coffeeList;
     private TaskGetPointsHandler taskGetPointsHandler;
-    private BoundingBoxE6 boundingBox;
     private Context context;
     private Drawable greenMarker;
     private Drawable blueMarker;
@@ -45,24 +46,29 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
         super.onCreate();
     }
 
+    public ClientIntentRequest() {
+        super("");
+    }
+
     public ClientIntentRequest(Context context) {
         super("ClientIntentRequest");
         this.context = context;
         coffeeList = new ArrayList<>();
-        greenMarker = context.getResources().getDrawable(R.drawable.ic_place_green_36dp, null);
-        redMarker = context.getResources().getDrawable(R.drawable.ic_place_red_36dp, null);
-        blueMarker = context.getResources().getDrawable(R.drawable.ic_place_36dp, null);
-    }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            greenMarker = context.getResources().getDrawable(R.drawable.ic_place_green_36dp, null);
+            redMarker = context.getResources().getDrawable(R.drawable.ic_place_red_36dp, null);
+            blueMarker = context.getResources().getDrawable(R.drawable.ic_place_36dp, null);
+        } else {
+            greenMarker = context.getResources().getDrawable(R.drawable.ic_place_green_36dp);
+            redMarker = context.getResources().getDrawable(R.drawable.ic_place_red_36dp);
+            blueMarker = context.getResources().getDrawable(R.drawable.ic_place_36dp);
+        }
 
+    }
 
     @Override
     public void onHandleIntent(Intent intent) {
 
-    }
-
-    public void refresh(BoundingBoxE6 boundingBox) {
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, getFinaleUrl(boundingBox), this, this);
-        getQueue().add(jsObjRequest);
     }
 
     private Drawable getMarkerColor(int color) {
@@ -76,18 +82,35 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
 
     public RequestQueue getQueue() {
         if (queue == null) {
-            return  queue = Volley.newRequestQueue(context);
+            return queue = Volley.newRequestQueue(context);
         } else {
             return queue;
         }
     }
 
-    public void setJsonTaskHandler(TaskGetPointsHandler taskHandler) {
-        this.taskGetPointsHandler = taskHandler;
+    public void refreshPoints(BoundingBoxE6 boundingBox) {
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, getFinaleUrl(boundingBox), this, this);
+        getQueue().add(jsObjRequest);
     }
 
-    public void setBoundingBox(BoundingBoxE6 boundingBox) {
-        this.boundingBox = boundingBox;
+    public void addPoint(JSONObject jsonNewPoint) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, TAG_URL_ADD_POINT,
+                jsonNewPoint, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.wtf("Post New Point Answer", response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.wtf("Post New Point Error", error.getMessage());
+            }
+        });
+        getQueue().add(jsonObjectRequest);
+    }
+
+    public void setJsonTaskHandler(TaskGetPointsHandler taskHandler) {
+        this.taskGetPointsHandler = taskHandler;
     }
 
     private String getFinaleUrl(BoundingBoxE6 boundingBox) {
@@ -102,7 +125,6 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
     public void setArrayName(String NameJsonArray) {
         TAG_JSON_ARRAY_NAME = NameJsonArray;
     }
-
 
     @Override
     public void onErrorResponse(VolleyError error) {

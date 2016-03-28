@@ -10,4 +10,6 @@
     <color name="pink_pressed">#ec407a</color>
     <color name="blue_semi_transparent">#bd2651fc</color>
     <color name="blue_semi_transparent_pressed">#803a62ff</color>
+    <color name="accent_material_light">#269600</color>
+    <color name="primary_material_dark">#212121</color>
 </resources>

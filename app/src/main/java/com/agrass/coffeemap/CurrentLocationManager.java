@@ -15,7 +15,7 @@ public class CurrentLocationManager extends Service implements LocationListener 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
     protected LocationManager locationManager;
-    Context context;
+    private Context context;
 
     public CurrentLocationManager(Context context) {
         this.context = context;
@@ -25,7 +25,7 @@ public class CurrentLocationManager extends Service implements LocationListener 
         Location location = null;
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         if (!isGPSEnabled(locationManager) && !isNetworkEnabled(locationManager)) {
-            return location;
+            return null;
         } else {
 
             if (isNetworkEnabled(locationManager)) {

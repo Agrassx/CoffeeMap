@@ -2,8 +2,6 @@ package layout;
 
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -14,14 +12,10 @@ import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
-import com.agrass.coffeemap.ClientIntentRequest;
-import com.agrass.coffeemap.PostNewPoint;
 import com.agrass.coffeemap.R;
-import com.agrass.coffeemap.TaskPostNewPointHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.osmdroid.util.BoundingBoxE6;
 
 import layout.openHourDialog.SetOpenHoursFragment;
 
@@ -111,23 +105,7 @@ public class AddCafeFragment extends Fragment {
         location.put("lon",longitude);
         newPoint.put("name", cafeName);
         newPoint.put("location", location);
-
-        Intent intent = new Intent(getActivity(), PostNewPoint.class);
-        PostNewPoint request = new PostNewPoint(getActivity(), newPoint);
-
-        request.setTaskPostNewPointHandler(new TaskPostNewPointHandler() {
-            @Override
-            public void taskSuccessful() {
-
-            }
-
-            @Override
-            public void taskFailed() {
-
-            }
-        });
-        request.onHandleIntent(intent);
-        Toast.makeText(getActivity(), newPoint.toString(), Toast.LENGTH_LONG).show();
+        MapFragment.request.addPoint(newPoint);
     }
 
     private void checkFields() {

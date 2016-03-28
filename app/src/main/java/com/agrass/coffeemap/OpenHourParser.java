@@ -65,8 +65,7 @@ public class OpenHourParser implements MarkerColors {
                 if (numOfTimePart != 0) {
                     timeParts[numOfTimePart] = new StringBuilder(timeParts[numOfTimePart]).deleteCharAt(0).toString();
                 }
-                String time = timeParts[numOfTimePart].split(" ")[1];
-                return time;
+                return timeParts[numOfTimePart].split(" ")[1];
             }
 
             for (int k = 0; k < timeParts.length; k++) {

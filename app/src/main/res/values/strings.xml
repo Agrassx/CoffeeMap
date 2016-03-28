@@ -1,7 +1,7 @@
 <resources>
+    <!-- Main values-->
     <string name="app_name">Кофеёк</string>
     <string name="title_activity_maps">Кофеёк</string>
-    <string name="google_maps_key">1</string>
     <string name="title_activity_settings">Settings</string>
 
     <string name="cafe_closed">закрыто</string>
@@ -69,7 +69,24 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="dialog_button_ok">OK</string>
-    <string name="dialog_button_cancel">Cancel</string>
-    <string name="text_help_add_button">Переместите маркер для того, \n что бы указать точное местоположение</string>
+    <string name="dialog_button_ok">Поделиться!</string>
+    <string name="dialog_button_cancel">Отмена</string>
+    <string name="text_help_add_button">Маркер можно переместить для того, что бы указать местоположение точнее</string>
+
+    <!-- AddCafeFragment values (ACF)-->
+    <!-- TextView - (TV)-->
+    <string name="ACF_TV_New_Place">Новое место</string>
+    <string name="ACF_Input_Opening">Открытие</string>
+    <string name="ACF_TV_Name">Название</string>
+    <string name="ACF_TV_Splitter"> : </string>
+    <string name="ACF_Input_CafeName">Введите название кафе</string>
+    <string name="ACF_TV_WorkTime">Часы работы</string>
+    <string name="ACF_Input_ClosingTime">Закртие</string>
+    <string name="ACF_TV_WorkTime_Always">24/7</string>
+    <string name="ACF_TV_WorkTime_9_20">09:00 – 20:00</string>
+    <string name="ACF_TV_WorkTime_Another">Другое</string>
+    <string name="ACF_TV_Comment">Комментарий</string>
+    <string name="ACF_Input_Comment">Оставьте свой комментарий</string>
+    <string name="ACF_TV_Mark">Оценка</string>
+
 </resources>

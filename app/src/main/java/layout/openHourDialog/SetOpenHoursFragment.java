@@ -1,6 +1,6 @@
 package layout.openHourDialog;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -58,7 +57,7 @@ public class SetOpenHoursFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.fragment_set_open_hours, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.fragment_set_open_hours, null);
 
         final ListView weekDaysList = (ListView) view.findViewById(R.id.listView);
 
