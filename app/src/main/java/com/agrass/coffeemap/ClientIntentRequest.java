@@ -26,15 +26,17 @@ import java.util.Calendar;
 
 public class ClientIntentRequest extends IntentService implements Response.Listener<JSONObject>, Response.ErrorListener, MarkerColors {
 
-    private static final String TAG_URL_MAIN = BuildConfig.ServerAdress;
-    private static final String TAG_URL_ADD_POINT = BuildConfig.ServerAdress + "addPoint";
-    private static String TAG_JSON_ARRAY_NAME = "points";
+    private static final String URL_MAIN = BuildConfig.ServerAdress;
+    private static final String URL_ADD_POINT = BuildConfig.ServerAdress + "addPoint";
+    private static final String URL_STATUS = BuildConfig.ServerAdress + "status";
+    private static String JSON_ARRAY_NAME = "points";
     private ThreadLocal<Double> north = new ThreadLocal<>();
     private ThreadLocal<Double> south = new ThreadLocal<>();
     private ThreadLocal<Double> west = new ThreadLocal<>();
     private ThreadLocal<Double> east = new ThreadLocal<>();
     private ArrayList<CafeItem> coffeeList;
     private TaskGetPointsHandler taskGetPointsHandler;
+    private TaskStatusHandler taskStatusHandler;
     private Context context;
     private Drawable greenMarker;
     private Drawable blueMarker;
@@ -94,7 +96,7 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
     }
 
     public void addPoint(JSONObject jsonNewPoint) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, TAG_URL_ADD_POINT,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, URL_ADD_POINT,
                 jsonNewPoint, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -109,8 +111,34 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
         getQueue().add(jsonObjectRequest);
     }
 
-    public void setJsonTaskHandler(TaskGetPointsHandler taskHandler) {
+    public void getApiVersion() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_STATUS,
+                new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    taskStatusHandler.taskSuccessful(response.getString("version"));
+                } catch (JSONException e) {
+                    taskStatusHandler.taskFailed();
+                }
+                Log.wtf("Status Answer", response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                taskStatusHandler.taskFailed();
+                Log.wtf("Status Error", error.getMessage());
+            }
+        });
+        getQueue().add(jsonObjectRequest);
+    }
+
+    public void setTaskGetPointsHandler(TaskGetPointsHandler taskHandler) {
         this.taskGetPointsHandler = taskHandler;
+    }
+
+    public void setTaskStatusHandler(TaskStatusHandler taskStatusHandler) {
+        this.taskStatusHandler = taskStatusHandler;
     }
 
     private String getFinaleUrl(BoundingBoxE6 boundingBox) {
@@ -118,12 +146,12 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
         this.south.set(boundingBox.getLatSouthE6() / 1E6);
         this.west.set(boundingBox.getLonWestE6() / 1E6);
         this.east.set(boundingBox.getLonEastE6() / 1E6);
-        return TAG_URL_MAIN + "points?" + "n=" + north.get().toString() + "&s=" +
+        return URL_MAIN + "points?" + "n=" + north.get().toString() + "&s=" +
                 south.get().toString() + "&w=" + west.get().toString() + "&e=" + east.get().toString();
     }
 
     public void setArrayName(String NameJsonArray) {
-        TAG_JSON_ARRAY_NAME = NameJsonArray;
+        JSON_ARRAY_NAME = NameJsonArray;
     }
 
     @Override
@@ -135,7 +163,7 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
     public void onResponse(JSONObject response) {
         try {
             coffeeList.clear();
-            JSONArray jsonCoffeeArray = response.getJSONArray(TAG_JSON_ARRAY_NAME);
+            JSONArray jsonCoffeeArray = response.getJSONArray(JSON_ARRAY_NAME);
             int length = jsonCoffeeArray.length();
             for (int i = 0; i < length; i++) {
                 CafeItem cafeItem = new CafeItem(jsonCoffeeArray.getJSONObject(i).getString("name"),
