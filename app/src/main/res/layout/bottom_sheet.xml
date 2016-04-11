@@ -40,7 +40,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="15dp"
         android:id="@+id/imageClock"
-        android:src="@drawable/clock_of_work"
+        android:src="@drawable/ic_access_time_black_48dp"
         android:layout_column="1" />
 
     <TextView

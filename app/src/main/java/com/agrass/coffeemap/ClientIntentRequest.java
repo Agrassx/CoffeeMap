@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -130,6 +131,7 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
                 Log.wtf("Status Error", error.getMessage());
             }
         });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(500, 0, 0));
         getQueue().add(jsonObjectRequest);
     }
 
