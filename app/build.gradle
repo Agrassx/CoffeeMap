@@ -1,12 +1,17 @@
 apply plugin: 'com.android.application'
 
+//File with signing setting
+Properties properties = new Properties()
+File propsFile = new File('app/key.gradle')
+properties.load(propsFile.newDataInputStream())
+
 android {
     signingConfigs {
         Singing {
-            keyAlias 'CoffeeMap'
-            keyPassword 'Spirit12101204'
-            storeFile file('/Users/Agrass-/AndroidStudioProjects/CoffeeMap/keystore.jks')
-            storePassword 'Aspirin'
+            keyAlias properties.getProperty('alias')
+            keyPassword properties.getProperty('password')
+            storeFile file(properties.getProperty('storeFile'))
+            storePassword properties.getProperty('storePassword')
         }
     }
     compileSdkVersion 22
