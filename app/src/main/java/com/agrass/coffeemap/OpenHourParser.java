@@ -158,7 +158,7 @@ public class OpenHourParser implements MarkerColors {
     public int getMarkerColor(String openHours, int dayNumber) {
 
         if (getOpenHours(openHours, dayNumber).equals(noData)) {
-            return MARKER_COLOR_BLUE;
+            return MARKER_COLOR_GREY;
         }
 
         if (openHours.equals("24/7")) {
@@ -169,7 +169,7 @@ public class OpenHourParser implements MarkerColors {
             return MARKER_COLOR_RED;
         }
 
-        return MARKER_COLOR_BLUE;
+        return MARKER_COLOR_GREY;
     }
 
     private int getCurrentHour() {

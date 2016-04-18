@@ -1,17 +1,18 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
-//File with signing setting
-Properties properties = new Properties()
-File propsFile = new File('app/key.gradle')
-properties.load(propsFile.newDataInputStream())
+//File with signing settings
+//Properties properties = new Properties()
+//File propsFile = new File('app/key.gradle')
+//properties.load(propsFile.newDataInputStream())
 
 android {
     signingConfigs {
         Singing {
-            keyAlias properties.getProperty('alias')
-            keyPassword properties.getProperty('password')
-            storeFile file(properties.getProperty('storeFile'))
-            storePassword properties.getProperty('storePassword')
+            keyAlias 'CoffeeMap'
+            keyPassword 'Spirit12101204'
+            storeFile file('/Users/Agrass-/AndroidStudioProjects/CoffeeMap/app/keystore.jks')
+            storePassword 'Aspirin'
         }
     }
     compileSdkVersion 22
@@ -19,10 +20,12 @@ android {
     defaultConfig {
         applicationId "com.agrass.coffeemap"
         buildConfigField 'String', 'ServerAdress', '"http://78.47.49.234:9000/api/v2/"'
+        buildConfigField 'boolean', 'isAdminVer', 'false'
         minSdkVersion 19
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -34,6 +37,7 @@ android {
     productFlavors {
         externalServer {
             buildConfigField 'String', 'ServerAdress', '"http://78.47.49.234:9000/api/v2/"'
+            buildConfigField 'boolean', 'isAdminVer', 'false'
             minSdkVersion 19
             applicationId 'com.agrass.coffeemap'
             signingConfig signingConfigs.Singing
@@ -42,9 +46,18 @@ android {
             versionName '1.0'
         }
         localServer {
-            buildConfigField 'String', 'ServerAdress', '"http://192.168.2.122:9000/api/"'
+            buildConfigField 'String', 'ServerAdress', '"http://192.168.2.122:9000/api/v3/"'
+            buildConfigField 'boolean', 'isAdminVer', 'false'
             applicationId 'com.agrass.coffeemap'
             signingConfig signingConfigs.Singing
+            targetSdkVersion 22
+            versionCode 1
+            versionName '1.0'
+        }
+        adminApp {
+            buildConfigField 'String', 'ServerAdress', '"http://78.47.49.234:9000/api/v2/"'
+            buildConfigField 'boolean', 'isAdminVer', 'true'
+            applicationId 'com.agrass.coffeemap'
             targetSdkVersion 22
             versionCode 1
             versionName '1.0'
@@ -65,4 +78,7 @@ dependencies {
     compile 'com.android.support:design:22.2.1'
     compile 'com.flipboard:bottomsheet-core:1.5.0'
     compile 'com.flipboard:bottomsheet-commons:1.5.0'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.google.api-client:google-api-client:1.20.0'
+    compile 'com.google.android.gms:play-services-auth:8.3.0'
 }

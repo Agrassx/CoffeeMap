@@ -89,6 +89,10 @@
     <string name="ACF_Input_Comment">Оставьте свой комментарий</string>
     <string name="ACF_TV_Mark">Оценка</string>
 
-
+    <!--Google plus Login-->
+    <string name="sign_out">Sign Out</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="loading">Загрузка…</string>
+    <string name="SignIn">Авторизуйтесь</string>
 
 </resources>

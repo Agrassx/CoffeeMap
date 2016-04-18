@@ -40,7 +40,7 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
     private TaskStatusHandler taskStatusHandler;
     private Context context;
     private Drawable greenMarker;
-    private Drawable blueMarker;
+    private Drawable greyMarker;
     private Drawable redMarker;
     private RequestQueue queue;
 
@@ -60,11 +60,11 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             greenMarker = context.getResources().getDrawable(R.drawable.ic_place_green_36dp, null);
             redMarker = context.getResources().getDrawable(R.drawable.ic_place_red_36dp, null);
-            blueMarker = context.getResources().getDrawable(R.drawable.ic_place_36dp, null);
+            greyMarker = context.getResources().getDrawable(R.drawable.ic_place_grey_36dp, null);
         } else {
             greenMarker = context.getResources().getDrawable(R.drawable.ic_place_green_36dp);
             redMarker = context.getResources().getDrawable(R.drawable.ic_place_red_36dp);
-            blueMarker = context.getResources().getDrawable(R.drawable.ic_place_36dp);
+            greyMarker = context.getResources().getDrawable(R.drawable.ic_place_grey_36dp);
         }
 
     }
@@ -77,9 +77,9 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
     private Drawable getMarkerColor(int color) {
         switch (color) {
             case MARKER_COLOR_GREEN: return greenMarker;
-            case MARKER_COLOR_BLUE: return blueMarker;
+            case MARKER_COLOR_GREY: return greyMarker;
             case MARKER_COLOR_RED: return redMarker;
-            default: return blueMarker;
+            default: return greyMarker;
         }
     }
 
