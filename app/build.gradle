@@ -37,7 +37,6 @@ android {
     productFlavors {
         externalServer {
             buildConfigField 'String', 'ServerAdress', '"http://78.47.49.234:9000/api/v2/"'
-            buildConfigField 'boolean', 'isAdminVer', 'false'
             minSdkVersion 19
             applicationId 'com.agrass.coffeemap'
             signingConfig signingConfigs.Singing
@@ -47,17 +46,8 @@ android {
         }
         localServer {
             buildConfigField 'String', 'ServerAdress', '"http://192.168.2.122:9000/api/v3/"'
-            buildConfigField 'boolean', 'isAdminVer', 'false'
             applicationId 'com.agrass.coffeemap'
             signingConfig signingConfigs.Singing
-            targetSdkVersion 22
-            versionCode 1
-            versionName '1.0'
-        }
-        adminApp {
-            buildConfigField 'String', 'ServerAdress', '"http://78.47.49.234:9000/api/v2/"'
-            buildConfigField 'boolean', 'isAdminVer', 'true'
-            applicationId 'com.agrass.coffeemap'
             targetSdkVersion 22
             versionCode 1
             versionName '1.0'
