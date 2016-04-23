@@ -5,8 +5,6 @@ import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -18,41 +16,39 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
+import com.google.android.gms.common.api.Status;
 
 import layout.MapFragment;
 
 
-public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+public class MapsActivity extends FragmentActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     protected FragmentManager fragmentManager;
     public static GoogleSignInAccount account;
-    private static final String TAG = "SignInActivity";
+    private static final String TAG = "Sign_In";
     private GoogleApiClient mGoogleApiClient;
     private SignInButton signInButton;
     private ProgressDialog mProgressDialog;
-
-    private int mSignInError;
-    private int mSignInProgress;
-    private PendingIntent mSignInIntent;
-
-
-    private static final int STATE_SIGN_IN = 0;
-    private static final int STATE_SIGNED_IN = 1;
-    private static final int STATE_IN_PROGRESS = 2;
-    private static final int RC_SIGN_IN = 9001;
+    private static final int RC_SIGN_IN = 666;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
+        findViewById(R.id.sign_in_button).setOnClickListener(this);
+
+        GoogleSignInOptions gso = buildGoogleSignInOptions();
+        mGoogleApiClient = buildGoogleApiClient(gso);
+        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        signInButton.setScopes(gso.getScopeArray());
+
         fragmentManager = getFragmentManager();
         if (findViewById(R.id.fragment_layout) != null) {
             if (savedInstanceState != null) {
@@ -63,134 +59,29 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                 fragmentTransaction.commit();
             }
         }
-        mGoogleApiClient = buildGoogleApiClient();
-        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setOnClickListener(this);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
-        signInButton.setColorScheme(SignInButton.COLOR_LIGHT);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setOnClickListener(this);
-    }
-
-    @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
-        Log.wtf(TAG,"OnStart()");
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = buildGoogleApiClient();
-            silentSignIn(mGoogleApiClient);
-            Log.wtf(TAG,"mGoogleApiClient is null");
-        } else {
-            silentSignIn(mGoogleApiClient);
-            Log.wtf(TAG,"mGoogleApiClient not null");
-        }
+        silentSignIn();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.wtf(TAG,"OnStop()");
-//        if (mGoogleApiClient != null) {
-//            if (mGoogleApiClient.isConnected()) {
-//                mGoogleApiClient.disconnect();
-//            }
-//            Log.wtf(TAG,"mGoogleApiClient not null");
-//        } else {
-//            Log.wtf(TAG,"mGoogleApiClient is null");
-//        }
-    }
-
-    private GoogleApiClient buildGoogleApiClient() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+    private GoogleSignInOptions buildGoogleSignInOptions(){
+        return new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
+    }
+
+    private GoogleApiClient buildGoogleApiClient(GoogleSignInOptions gso) {
         return new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.wtf(TAG,"onConnected()");
-        mSignInProgress = STATE_SIGN_IN;
-//        Person person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-        Toast.makeText(getApplication(), account.getDisplayName(), Toast.LENGTH_LONG ).show();
-    }
-
-    @Override
-    public void onConnectionSuspended(int cause) {
-        Log.wtf(TAG,"onConnectionSuspended()" + cause);
-//        mGoogleApiClient.connect();
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.wtf(TAG,"onConnectionFailed" + connectionResult);
-//        if (mSignInError != STATE_IN_PROGRESS) {
-//            mSignInIntent = connectionResult.getResolution();
-//            mSignInError = connectionResult.getErrorCode();
-//            if (mSignInError == STATE_SIGN_IN) {
-//                resolveSignInError();
-//            }
-//        }
-    }
-
-    private void resolveSignInError() {
-        Log.wtf(TAG,"resolveSignInError()");
-//        if (mSignInIntent != null) {
-//            try {
-//                mSignInProgress = STATE_IN_PROGRESS;
-//                startIntentSenderForResult(mSignInIntent.getIntentSender(), RC_SIGN_IN, null, 0, 0, 0);
-//            } catch (IntentSender.SendIntentException e) {
-//                mSignInProgress = STATE_SIGN_IN;
-//                mGoogleApiClient.connect();
-//            }
-//        } else {
-//            Log.wtf(TAG,"resolveSignInError() Something wrong!");
-//        }
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.wtf(TAG,"onActivityResult()");
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
-//        switch (requestCode) {
-//            case RC_SIGN_IN:
-//                if (resultCode == RESULT_OK) {
-//                    mSignInProgress = STATE_SIGN_IN;
-//                } else {
-//                    mSignInProgress = STATE_SIGNED_IN;
-//                }
-//
-//                if (!mGoogleApiClient.isConnecting()) {
-//                    mGoogleApiClient.connect();
-//                }
-//                break;
-//        }
-    }
-
-    public void silentSignIn(GoogleApiClient googleApiClient) {
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+    private void silentSignIn() {
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
         if (opr.isDone()) {
             Log.d(TAG, "Got cached sign-in");
             GoogleSignInResult result = opr.get();
@@ -207,16 +98,52 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
+    }
+
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
-            Toast.makeText(getApplication(), acct.getDisplayName(), Toast.LENGTH_LONG ).show();
+            account = result.getSignInAccount();
             signInButton.setVisibility(View.GONE);
         } else {
             signInButton.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.sign_in_button:
+                signIn();
+                break;
+        }
+    }
+
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 
     private void showProgressDialog() {
@@ -232,16 +159,6 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     private void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.hide();
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.sign_in_button:
-                resolveSignInError();
-                Log.wtf(TAG, "Sign in button was clicked");
-                break;
         }
     }
 }
