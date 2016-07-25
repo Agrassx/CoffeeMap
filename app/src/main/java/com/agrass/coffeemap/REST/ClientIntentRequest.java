@@ -1,4 +1,4 @@
-package com.agrass.coffeemap;
+package com.agrass.coffeemap.REST;
 
 import android.app.IntentService;
 import android.content.Context;
@@ -7,11 +7,17 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 
+import com.agrass.coffeemap.BuildConfig;
+import com.agrass.coffeemap.CafeItem;
+import com.agrass.coffeemap.MarkerColors;
+import com.agrass.coffeemap.OpenHourParser;
+import com.agrass.coffeemap.R;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -21,8 +27,21 @@ import org.json.JSONObject;
 import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
 
 
 public class ClientIntentRequest extends IntentService implements Response.Listener<JSONObject>, Response.ErrorListener, MarkerColors {
@@ -30,6 +49,7 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
     private static final String URL_MAIN = BuildConfig.ServerAdress;
     private static final String URL_ADD_POINT = BuildConfig.ServerAdress + "addPoint";
     private static final String URL_STATUS = BuildConfig.ServerAdress + "status";
+    private static final String URL_TOKEN = BuildConfig.ServerAdress + "testValidate?token=";
     private static String JSON_ARRAY_NAME = "points";
     private ThreadLocal<Double> north = new ThreadLocal<>();
     private ThreadLocal<Double> south = new ThreadLocal<>();
@@ -112,6 +132,22 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
         getQueue().add(jsonObjectRequest);
     }
 
+    public void validateToken(String token) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_TOKEN + token,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.wtf("Token Answer", response.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.wtf("Status Error", error.getMessage());
+            }
+        });
+        getQueue().add(jsonObjectRequest);
+    }
+
     public void getApiVersion() {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_STATUS,
                 new Response.Listener<JSONObject>() {
@@ -184,4 +220,6 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
             e.printStackTrace();
         }
     }
+
+
 }

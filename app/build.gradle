@@ -1,18 +1,12 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-
-//File with signing settings
-//Properties properties = new Properties()
-//File propsFile = new File('app/key.gradle')
-//properties.load(propsFile.newDataInputStream())
 
 android {
     signingConfigs {
         Singing {
             keyAlias 'CoffeeMap'
-            keyPassword 'Spirit12101204'
+            keyPassword 'ItsCoffeeTime'
             storeFile file('/Users/Agrass-/AndroidStudioProjects/CoffeeMap/app/keystore.jks')
-            storePassword 'Aspirin'
+            storePassword 'CoffeTime'
         }
     }
     compileSdkVersion 22
@@ -33,6 +27,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.Singing
         }
+        debug {
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.Singing
+        }
     }
     productFlavors {
         externalServer {
@@ -45,7 +43,7 @@ android {
             versionName '1.0'
         }
         localServer {
-            buildConfigField 'String', 'ServerAdress', '"http://192.168.2.122:9000/api/v3/"'
+            buildConfigField 'String', 'ServerAdress', '"http://192.168.2.146:9000/api/v3/"'
             applicationId 'com.agrass.coffeemap'
             signingConfig signingConfigs.Singing
             targetSdkVersion 22

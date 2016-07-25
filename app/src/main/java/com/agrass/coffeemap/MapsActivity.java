@@ -4,8 +4,10 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.multidex.MultiDex;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -33,7 +35,7 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
     private GoogleApiClient mGoogleApiClient;
     private SignInButton signInButton;
     private ProgressDialog mProgressDialog;
-    private static final int RC_SIGN_IN = 666;
+    private static final int RC_SIGN_IN = 112;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,7 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
 
     private GoogleSignInOptions buildGoogleSignInOptions(){
         return new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.server_client_id))
                 .requestEmail()
                 .build();
     }
@@ -161,4 +164,10 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
             mProgressDialog.hide();
         }
     }
+
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
 }

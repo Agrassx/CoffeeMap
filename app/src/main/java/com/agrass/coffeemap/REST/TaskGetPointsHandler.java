@@ -1,4 +1,6 @@
-package com.agrass.coffeemap;
+package com.agrass.coffeemap.REST;
+
+import com.agrass.coffeemap.CafeItem;
 
 import java.util.ArrayList;
 

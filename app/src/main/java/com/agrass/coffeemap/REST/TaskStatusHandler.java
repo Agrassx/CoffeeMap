@@ -1,4 +1,4 @@
-package com.agrass.coffeemap;
+package com.agrass.coffeemap.REST;
 
 public interface TaskStatusHandler {
     void taskSuccessful(String response);
