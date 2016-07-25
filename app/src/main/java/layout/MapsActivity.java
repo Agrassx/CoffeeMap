@@ -1,4 +1,4 @@
-package com.agrass.coffeemap;
+package layout;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.agrass.coffeemap.R;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
