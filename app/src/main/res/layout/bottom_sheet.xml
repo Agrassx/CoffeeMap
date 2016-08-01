@@ -1,72 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="#50000000"
-    android:columnCount="9"
-    android:rowCount="9">
+    android:orientation="vertical">
 
-    <ImageView
-        android:layout_columnSpan="2"
-        android:layout_row="0"
-        android:layout_column="0"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="15dp"
-        android:layout_gravity="center_vertical"
-        android:id="@+id/imageCoffee"
-        android:src="@drawable/cafe_coffee"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp">
 
-    <TextView
-        android:layout_row="0"
-        android:layout_columnSpan="7"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_gravity="start|center_vertical"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text=""
-        android:id="@+id/name"
-        android:textColor="#ffffff"
-        android:autoLink="none"
-        android:layout_column="2" />
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/imageCoffee"
+            android:src="@drawable/cafe_coffee"
+            android:layout_gravity="center_vertical" />
 
-    <ImageView
-        android:layout_row="1"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="15dp"
-        android:id="@+id/imageClock"
-        android:src="@drawable/ic_access_time_black_48dp"
-        android:layout_column="1" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Here Cafe Name"
+            android:id="@+id/name"
+            android:textColor="#ffffff"
+            android:autoLink="none"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
 
-    <TextView
-        android:layout_columnSpan="7"
-        android:layout_row="1"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_gravity="start|center_vertical"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
-        android:text=""
-        android:id="@+id/open_hour"
-        android:textColor="#ffffff"
-        android:autoLink="none"
-        android:layout_column="2" />
-    <TextView
-        android:layout_row="3"
-        android:layout_columnSpan="9"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="15dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/FullOH"
-        android:textColor="#ffffff"
-        android:autoLink="none"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_column="0"/>
 
-</GridLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/imageClock"
+            android:src="@drawable/ic_access_time_black_48dp"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Here open houres"
+            android:id="@+id/open_hour"
+            android:textColor="#ffffff"
+            android:autoLink="none"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/imageOpenCloseCafe"
+            android:src="@drawable/ic_open_close_cafe_24dp"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Here text open/close"
+            android:id="@+id/FullOH"
+            android:textColor="#ffffff"
+            android:autoLink="none"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp">
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/imageRatingCafe"
+            android:src="@drawable/ic_rating_mood__24dp"
+            android:layout_gravity="center_vertical"/>
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:isIndicator="true"
+            android:id="@+id/ratingCafeBS" />
+
+    </LinearLayout>
+
+</LinearLayout>

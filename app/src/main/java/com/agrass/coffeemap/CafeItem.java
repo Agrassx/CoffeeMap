@@ -9,20 +9,32 @@ public class CafeItem extends OverlayItem {
     private Drawable aMarker;
     private String name;
     private String endTimeWork;
-    private String schedule;
+    private String scheduleWork;
+    private float rating;
 
-    public CafeItem(String aName, String aEndTimeWork, String aSchedule, IGeoPoint aGeoPoint, Drawable marker) {
-        super(aName, aEndTimeWork, aSchedule, aGeoPoint);
-        setMarker(marker);
-        setName(aName);
-        setEndTimeWork(aEndTimeWork);
-        setSchedule(aSchedule);
+    public CafeItem(String aName, String aEndTimeWork, String aScheduleWork, IGeoPoint aGeoPoint, Drawable marker) {
+        super(aName, aEndTimeWork, aScheduleWork, aGeoPoint);
+        this.aMarker = marker;
+        this.endTimeWork = aEndTimeWork;
+        this.scheduleWork = aScheduleWork;
+        this.name = aName;
+    }
+
+    public CafeItem(String aName, String aEndTimeWork, String aScheduleWork, float rating, IGeoPoint aGeoPoint, Drawable marker) {
+        super(aName, aEndTimeWork, aScheduleWork, aGeoPoint);
+        this.aMarker = marker;
+        this.endTimeWork = aEndTimeWork;
+        this.scheduleWork = aScheduleWork;
+        this.name = aName;
+        this.rating = rating;
     }
 
     @Override
     public void setMarker(Drawable marker) {
         this.aMarker = marker;
     }
+
+
 
     @Override
     public Drawable getMarker(int stateBitset) {
@@ -40,28 +52,20 @@ public class CafeItem extends OverlayItem {
         return aMarker;
     }
 
-    public String getSchedule() {
-        return schedule;
-    }
-
-    public void setSchedule(String schedule) {
-        this.schedule = schedule;
+    public String getScheduleWork() {
+        return scheduleWork;
     }
 
     public String getEndTimeWork() {
         return endTimeWork;
     }
 
-    public void setEndTimeWork(String endTimeWork) {
-        this.endTimeWork = endTimeWork;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public float getRating() {
+        return rating;
     }
 
 }
