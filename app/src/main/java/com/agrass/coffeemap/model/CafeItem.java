@@ -1,4 +1,4 @@
-package com.agrass.coffeemap;
+package com.agrass.coffeemap.model;
 
 import android.graphics.drawable.Drawable;
 
@@ -7,6 +7,7 @@ import org.osmdroid.views.overlay.OverlayItem;
 
 public class CafeItem extends OverlayItem {
     private Drawable aMarker;
+    private String id;
     private String name;
     private String endTimeWork;
     private String scheduleWork;
@@ -27,6 +28,15 @@ public class CafeItem extends OverlayItem {
         this.scheduleWork = aScheduleWork;
         this.name = aName;
         this.rating = rating;
+    }
+
+    public CafeItem(String id, String aName, String aEndTimeWork, String aScheduleWork, IGeoPoint aGeoPoint, Drawable marker) {
+        super(aName, aEndTimeWork, aScheduleWork, aGeoPoint);
+        this.id = id;
+        this.aMarker = marker;
+        this.endTimeWork = aEndTimeWork;
+        this.scheduleWork = aScheduleWork;
+        this.name = aName;
     }
 
     @Override
@@ -68,4 +78,7 @@ public class CafeItem extends OverlayItem {
         return rating;
     }
 
+    public String getId() {
+        return id;
+    }
 }

@@ -150,7 +150,7 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
 
     }
 
-    private void showProgressDialog() {
+    public void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage(getString(R.string.loading));
@@ -160,7 +160,7 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
         mProgressDialog.show();
     }
 
-    private void hideProgressDialog() {
+    public void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.hide();
         }

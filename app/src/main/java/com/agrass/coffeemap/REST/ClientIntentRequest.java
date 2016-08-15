@@ -3,21 +3,17 @@ package com.agrass.coffeemap.REST;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.Log;
 
 import com.agrass.coffeemap.BuildConfig;
-import com.agrass.coffeemap.CafeItem;
-import com.agrass.coffeemap.MarkerColors;
-import com.agrass.coffeemap.OpenHourParser;
-import com.agrass.coffeemap.R;
+import com.agrass.coffeemap.JsonParser.JsonCafeInfoParser;
+import com.agrass.coffeemap.model.CafeItem;
+import com.agrass.coffeemap.JsonParser.JsonCafeItemParser;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -25,31 +21,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.util.BoundingBoxE6;
-import org.osmdroid.util.GeoPoint;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
-import java.util.Calendar;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManagerFactory;
 
 
-public class ClientIntentRequest extends IntentService implements Response.Listener<JSONObject>, Response.ErrorListener, MarkerColors {
+public class ClientIntentRequest extends IntentService implements Response.Listener<JSONObject>,
+        Response.ErrorListener {
 
     private static final String URL_MAIN = BuildConfig.ServerAdress;
     private static final String URL_ADD_POINT = BuildConfig.ServerAdress + "addPoint";
     private static final String URL_STATUS = BuildConfig.ServerAdress + "status";
     private static final String URL_TOKEN = BuildConfig.ServerAdress + "testValidate?token=";
+    private static final String URL_CAFE_INFO = BuildConfig.ServerAdress + "cafeinfo?id=";
     private static String JSON_ARRAY_NAME = "points";
     private ThreadLocal<Double> north = new ThreadLocal<>();
     private ThreadLocal<Double> south = new ThreadLocal<>();
@@ -58,11 +41,10 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
     private ArrayList<CafeItem> coffeeList;
     private TaskGetPointsHandler taskGetPointsHandler;
     private TaskStatusHandler taskStatusHandler;
+    private TaskGetCafeInfoHandler getCafeInfoHandler;
     private Context context;
-    private Drawable greenMarker;
-    private Drawable greyMarker;
-    private Drawable redMarker;
     private RequestQueue queue;
+    private JsonCafeInfoParser jsonCafeInfoParser;
 
     @Override
     public void onCreate() {
@@ -77,16 +59,7 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
         super("ClientIntentRequest");
         this.context = context;
         coffeeList = new ArrayList<>();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            greenMarker = context.getResources().getDrawable(R.drawable.ic_place_green_36dp, null);
-            redMarker = context.getResources().getDrawable(R.drawable.ic_place_red_36dp, null);
-            greyMarker = context.getResources().getDrawable(R.drawable.ic_place_grey_36dp, null);
-        } else {
-            greenMarker = context.getResources().getDrawable(R.drawable.ic_place_green_36dp);
-            redMarker = context.getResources().getDrawable(R.drawable.ic_place_red_36dp);
-            greyMarker = context.getResources().getDrawable(R.drawable.ic_place_grey_36dp);
-        }
-
+        jsonCafeInfoParser = new JsonCafeInfoParser();
     }
 
     @Override
@@ -94,14 +67,7 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
 
     }
 
-    private Drawable getMarkerColor(int color) {
-        switch (color) {
-            case MARKER_COLOR_GREEN: return greenMarker;
-            case MARKER_COLOR_GREY: return greyMarker;
-            case MARKER_COLOR_RED: return redMarker;
-            default: return greyMarker;
-        }
-    }
+
 
     public RequestQueue getQueue() {
         if (queue == null) {
@@ -121,12 +87,12 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
                 jsonNewPoint, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.wtf("Post New Point Answer", response.toString());
+                Log.wtf("ClientIntentRequest.PostNewPoint", response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.wtf("Post New Point Error", error.getMessage());
+                Log.wtf("ClientIntentRequest.PostNewPoint.Error", error.getMessage());
             }
         });
         getQueue().add(jsonObjectRequest);
@@ -167,7 +133,29 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
                 Log.wtf("Status Error", error.getMessage());
             }
         });
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(500, 0, 0));
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(3000, 0, 0));
+        getQueue().add(jsonObjectRequest);
+    }
+
+    public void getCafeInfo(String id) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_CAFE_INFO+id,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            getCafeInfoHandler.taskSuccessful(jsonCafeInfoParser.getCafeInfo(response));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Log.wtf("Status Answer", response.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                getCafeInfoHandler.taskFailed();
+                Log.wtf("Status Error", error.getMessage());
+            }
+        });
         getQueue().add(jsonObjectRequest);
     }
 
@@ -177,6 +165,10 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
 
     public void setTaskStatusHandler(TaskStatusHandler taskStatusHandler) {
         this.taskStatusHandler = taskStatusHandler;
+    }
+
+    public void setTaskGetCafeInfoHandler(TaskGetCafeInfoHandler getCafeInfoHandler) {
+        this.getCafeInfoHandler = getCafeInfoHandler;
     }
 
     private String getFinaleUrl(BoundingBoxE6 boundingBox) {
@@ -201,19 +193,15 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
     public void onResponse(JSONObject response) {
         try {
             coffeeList.clear();
+            JsonCafeItemParser cafeItemParser = new JsonCafeItemParser(context);
             JSONArray jsonCoffeeArray = response.getJSONArray(JSON_ARRAY_NAME);
             int length = jsonCoffeeArray.length();
             for (int i = 0; i < length; i++) {
-                CafeItem cafeItem = new CafeItem(jsonCoffeeArray.getJSONObject(i).getString("name"),
-                        new OpenHourParser().getOpenHours(jsonCoffeeArray.getJSONObject(i).getString("opening_hours"),
-                                Calendar.getInstance().get(Calendar.DAY_OF_WEEK)),
-                        jsonCoffeeArray.getJSONObject(i).getString("opening_hours"),
-                        new GeoPoint(jsonCoffeeArray.getJSONObject(i).getJSONObject("location").getDouble("lat"),
-                                jsonCoffeeArray.getJSONObject(i).getJSONObject("location").getDouble("lon")),
-                        getMarkerColor(new OpenHourParser().getMarkerColor(jsonCoffeeArray.getJSONObject(i).getString("opening_hours"),
-                                Calendar.getInstance().get(Calendar.DAY_OF_WEEK)))
+                coffeeList.add(
+                        cafeItemParser.getCafeItem(
+                                jsonCoffeeArray.getJSONObject(i)
+                        )
                 );
-                coffeeList.add(cafeItem);
             }
             taskGetPointsHandler.taskSuccessful(coffeeList);
         } catch (JSONException e) {

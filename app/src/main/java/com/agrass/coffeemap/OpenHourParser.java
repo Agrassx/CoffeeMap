@@ -1,5 +1,6 @@
 package com.agrass.coffeemap;
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -253,5 +254,10 @@ public class OpenHourParser implements MarkerColors {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public Drawable getMarkerColor(int color) {
+        return null;
     }
 }

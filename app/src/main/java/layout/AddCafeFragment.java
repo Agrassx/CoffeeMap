@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,9 +106,13 @@ public class AddCafeFragment extends Fragment {
         newPoint.put("name", cafeName);
         newPoint.put("location", location);
         newPoint.put("rating", userRating);
+        newPoint.put("user_id", MapsActivity.account.getId());
+        newPoint.put("user_name", MapsActivity.account.getDisplayName());
         newPoint.put("access_token", MapsActivity.account.getIdToken());
+
+        Log.e("AddPoint (JSON): ", newPoint.toString());
         MapFragment.request.addPoint(newPoint);
-//        MapFragment.request.validateToken(MapsActivity.account.getIdToken());
+
     }
 
     private void checkFields() {
