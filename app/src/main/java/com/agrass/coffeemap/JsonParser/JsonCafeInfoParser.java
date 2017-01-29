@@ -1,6 +1,6 @@
 package com.agrass.coffeemap.JsonParser;
 
-import com.agrass.coffeemap.model.CafeInfo;
+import com.agrass.coffeemap.model.cafe.CafeInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;

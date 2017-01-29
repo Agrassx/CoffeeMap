@@ -1,8 +1,8 @@
-package com.agrass.coffeemap;
+package com.agrass.coffeemap.model.map;
 
 import android.graphics.drawable.Drawable;
 
-import com.agrass.coffeemap.model.CafeItem;
+import com.agrass.coffeemap.model.cafe.CafeItem;
 
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;

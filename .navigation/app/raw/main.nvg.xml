@@ -6,7 +6,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "layout.MapsActivity"/>
+        className = "com.agrass.coffeemap.view.MapsActivity"/>
       <point      
         x = "560"      
         y = "4"/>

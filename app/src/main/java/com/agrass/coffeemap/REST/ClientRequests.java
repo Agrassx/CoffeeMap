@@ -1,13 +1,12 @@
-package com.agrass.coffeemap.REST;
+package com.agrass.coffeemap.rest;
 
-import android.app.IntentService;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 import com.agrass.coffeemap.BuildConfig;
 import com.agrass.coffeemap.JsonParser.JsonCafeInfoParser;
-import com.agrass.coffeemap.model.CafeItem;
+import com.agrass.coffeemap.app.CoffeeApplication;
+import com.agrass.coffeemap.model.cafe.CafeItem;
 import com.agrass.coffeemap.JsonParser.JsonCafeItemParser;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -15,7 +14,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,9 +22,8 @@ import org.osmdroid.util.BoundingBoxE6;
 
 import java.util.ArrayList;
 
-
-public class ClientIntentRequest extends IntentService implements Response.Listener<JSONObject>,
-        Response.ErrorListener {
+@Deprecated
+public class ClientRequests implements Response.Listener<JSONObject>, Response.ErrorListener {
 
     private static final String URL_MAIN = BuildConfig.ServerAdress;
     private static final String URL_ADD_POINT = BuildConfig.ServerAdress + "addPoint";
@@ -46,40 +43,18 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
     private RequestQueue queue;
     private JsonCafeInfoParser jsonCafeInfoParser;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-    }
 
-    public ClientIntentRequest() {
-        super("");
-    }
 
-    public ClientIntentRequest(Context context) {
-        super("ClientIntentRequest");
+    public ClientRequests(Context context) {
         this.context = context;
         coffeeList = new ArrayList<>();
         jsonCafeInfoParser = new JsonCafeInfoParser();
     }
 
-    @Override
-    public void onHandleIntent(Intent intent) {
-
-    }
-
-
-
-    public RequestQueue getQueue() {
-        if (queue == null) {
-            return queue = Volley.newRequestQueue(context);
-        } else {
-            return queue;
-        }
-    }
 
     public void refreshPoints(BoundingBoxE6 boundingBox) {
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, getFinaleUrl(boundingBox), this, this);
-        getQueue().add(jsObjRequest);
+        CoffeeApplication.getInstance().addToRequestQueue(jsObjRequest);
     }
 
     public void addPoint(JSONObject jsonNewPoint) {
@@ -87,15 +62,15 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
                 jsonNewPoint, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.wtf("ClientIntentRequest.PostNewPoint", response.toString());
+                Log.wtf("ClientRequests.PostNewPoint", response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.wtf("ClientIntentRequest.PostNewPoint.Error", error.getMessage());
+                Log.wtf("ClientRequests.PostNewPoint.Error", error.getMessage());
             }
         });
-        getQueue().add(jsonObjectRequest);
+        CoffeeApplication.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
     public void validateToken(String token) {
@@ -111,7 +86,7 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
                 Log.wtf("Status Error", error.getMessage());
             }
         });
-        getQueue().add(jsonObjectRequest);
+        CoffeeApplication.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
     public void getApiVersion() {
@@ -134,7 +109,7 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
             }
         });
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(3000, 0, 0));
-        getQueue().add(jsonObjectRequest);
+        CoffeeApplication.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
     public void getCafeInfo(String id) {
@@ -156,7 +131,7 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
                 Log.wtf("Status Error", error.getMessage());
             }
         });
-        getQueue().add(jsonObjectRequest);
+        CoffeeApplication.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
     public void setTaskGetPointsHandler(TaskGetPointsHandler taskHandler) {
@@ -198,9 +173,7 @@ public class ClientIntentRequest extends IntentService implements Response.Liste
             int length = jsonCoffeeArray.length();
             for (int i = 0; i < length; i++) {
                 coffeeList.add(
-                        cafeItemParser.getCafeItem(
-                                jsonCoffeeArray.getJSONObject(i)
-                        )
+                        cafeItemParser.getCafeItem(jsonCoffeeArray.getJSONObject(i))
                 );
             }
             taskGetPointsHandler.taskSuccessful(coffeeList);

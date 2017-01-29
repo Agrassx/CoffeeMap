@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
-import com.agrass.coffeemap.model.CafeItem;
+import com.agrass.coffeemap.model.cafe.CafeItem;
 import com.agrass.coffeemap.MarkerColors;
 import com.agrass.coffeemap.OpenHourParser;
 import com.agrass.coffeemap.R;
@@ -35,20 +35,20 @@ public class JsonCafeItemParser implements MarkerColors {
 
     public CafeItem getCafeItem(JSONObject jsonItem) throws JSONException {
         return new CafeItem(
-                jsonItem.getString("_id"),
-                jsonItem.getJSONObject("_source").getString("name"),
+                jsonItem.getString("id"),
+                jsonItem.getString("name"),
                 new OpenHourParser().getOpenHours(
-                        jsonItem.getJSONObject("_source").getString("opening_hours"),
+                        jsonItem.getString("opening_hours"),
                         Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
                 ),
-                jsonItem.getJSONObject("_source").getString("opening_hours"),
+                jsonItem.getString("opening_hours"),
                 new GeoPoint(
-                        jsonItem.getJSONObject("_source").getJSONObject("location").getDouble("lat"),
-                        jsonItem.getJSONObject("_source").getJSONObject("location").getDouble("lon")
+                        jsonItem.getJSONObject("location").getDouble("lat"),
+                        jsonItem.getJSONObject("location").getDouble("lon")
                 ),
                 getMarkerColor(
                         new OpenHourParser().getMarkerColor(
-                                jsonItem.getJSONObject("_source").getString("opening_hours"),
+                                jsonItem.getString("opening_hours"),
                                 Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
                         )
                 )

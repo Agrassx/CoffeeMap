@@ -1,4 +1,4 @@
-package com.agrass.coffeemap;
+package com.agrass.coffeemap.model.map;
 
 import org.osmdroid.tileprovider.MapTile;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;

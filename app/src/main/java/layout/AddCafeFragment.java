@@ -13,6 +13,8 @@ import android.widget.RadioGroup;
 import android.widget.RatingBar;
 
 import com.agrass.coffeemap.R;
+import com.agrass.coffeemap.view.map.MapFragment;
+import com.agrass.coffeemap.view.MapsActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;

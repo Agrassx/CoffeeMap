@@ -37,7 +37,7 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#dcdcdc" />
+        android:background="@color/half_black" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -78,7 +78,7 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#dcdcdc" />
+        android:background="@color/half_black" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -112,7 +112,7 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#dcdcdc" />
+        android:background="@color/half_black" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -161,7 +161,7 @@
 
         <TextView
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Будь первым, кто оценит!"
+            android:text="@string/bs_voite_first"
             android:textColor="#ffffff"
             android:autoLink="none"
             android:textColorLink="@color/white"
@@ -176,7 +176,7 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#dcdcdc" />
+        android:background="@color/half_black" />
 
     </LinearLayout>
 

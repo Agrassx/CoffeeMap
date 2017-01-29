@@ -89,6 +89,11 @@
     <string name="ACF_Input_Comment">Оставьте свой комментарий</string>
     <string name="ACF_TV_Mark">Оценка</string>
 
+    <!--BottomSheet-->
+    <string name="bs_voite_first">
+        <u>Будь первым, кто оценит!</u>
+    </string>
+
     <!--Google plus Login-->
     <string name="sign_out">Sign Out</string>
     <string name="disconnect">Disconnect</string>
@@ -96,4 +101,5 @@
     <string name="SignIn">Авторизуйтесь</string>
 
     <string name="server_client_id">954534495444-9e8r96u45rq4ld9vhha01u9cj64aliso.apps.googleusercontent.com</string>
+
 </resources>

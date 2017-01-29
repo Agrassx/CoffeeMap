@@ -1,4 +1,4 @@
-package com.agrass.coffeemap.model;
+package com.agrass.coffeemap.model.cafe;
 
 
 public class CafeInfo {
