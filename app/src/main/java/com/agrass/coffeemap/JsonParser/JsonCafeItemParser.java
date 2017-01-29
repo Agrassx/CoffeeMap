@@ -15,6 +15,8 @@ import org.osmdroid.util.GeoPoint;
 
 import java.util.Calendar;
 
+
+@Deprecated
 public class JsonCafeItemParser implements MarkerColors {
 
     private Drawable greenMarker;

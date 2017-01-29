@@ -5,6 +5,7 @@ import com.agrass.coffeemap.model.cafe.CafeInfo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@Deprecated
 public class JsonCafeInfoParser {
 
     public JsonCafeInfoParser() {

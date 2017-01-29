@@ -24,6 +24,7 @@ public class CoffeeApplication extends Application {
         return mInstance;
     }
 
+    @Deprecated
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -31,16 +32,19 @@ public class CoffeeApplication extends Application {
         return mRequestQueue;
     }
 
+    @Deprecated
     public <T> void addToRequestQueue(Request<T> req, String tag) {
         req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
         getRequestQueue().add(req);
     }
 
+    @Deprecated
     public <T> void addToRequestQueue(Request<T> req) {
         req.setTag(TAG);
         getRequestQueue().add(req);
     }
 
+    @Deprecated
     public void cancelPendingRequests(Object tag) {
         if (mRequestQueue != null) {
             mRequestQueue.cancelAll(tag);

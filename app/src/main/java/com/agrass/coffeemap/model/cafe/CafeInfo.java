@@ -1,6 +1,7 @@
 package com.agrass.coffeemap.model.cafe;
 
 
+@Deprecated
 public class CafeInfo {
     private String id;
     private float rating;

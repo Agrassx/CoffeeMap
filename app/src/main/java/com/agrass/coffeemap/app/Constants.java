@@ -2,6 +2,7 @@ package com.agrass.coffeemap.app;
 
 import com.agrass.coffeemap.BuildConfig;
 
+@Deprecated
 public class Constants {
     public static final String URL_MAIN = BuildConfig.ServerAdress;
     public static final String URL_ADD_POINT = BuildConfig.ServerAdress + "addPoint";

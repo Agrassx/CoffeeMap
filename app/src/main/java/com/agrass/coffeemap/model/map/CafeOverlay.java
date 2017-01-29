@@ -10,6 +10,7 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class CafeOverlay extends ItemizedIconOverlay<CafeItem> {
 
     protected List<CafeItem> itemList;

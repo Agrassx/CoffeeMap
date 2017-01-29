@@ -6,6 +6,7 @@ import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.OverlayItem;
 
+@Deprecated
 public class CafeItem extends OverlayItem {
     private Drawable aMarker;
     private String id;

@@ -3,12 +3,10 @@ package com.agrass.coffeemap.model;
 import com.agrass.coffeemap.model.api.ApiInterface;
 import com.agrass.coffeemap.model.api.ApiModule;
 import com.agrass.coffeemap.model.api.response.PointsResponse;
-import com.agrass.coffeemap.model.cafe.CafeItem;
 import com.agrass.coffeemap.model.cafe.Status;
 
 import org.osmdroid.util.BoundingBoxE6;
 
-import java.util.List;
 
 
 import rx.Observable;
