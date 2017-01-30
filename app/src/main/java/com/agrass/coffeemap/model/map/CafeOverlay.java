@@ -4,7 +4,6 @@ import android.graphics.drawable.Drawable;
 
 import com.agrass.coffeemap.model.cafe.CafeItem;
 
-import org.osmdroid.ResourceProxy;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 
 import java.util.ArrayList;
@@ -16,8 +15,8 @@ public class CafeOverlay extends ItemizedIconOverlay<CafeItem> {
     protected List<CafeItem> itemList;
     protected Drawable defaultMarker;
 
-    public CafeOverlay(ArrayList<CafeItem> pList, Drawable pDefaultMarker, OnItemGestureListener<CafeItem> pOnItemGestureListener, ResourceProxy pResourceProxy) {
-        super(pList, pDefaultMarker, pOnItemGestureListener, pResourceProxy);
+    public CafeOverlay(ArrayList<CafeItem> pList, Drawable pDefaultMarker, OnItemGestureListener<CafeItem> pOnItemGestureListener) {
+        super(pList, pDefaultMarker, pOnItemGestureListener, null);
         this.itemList = pList;
         this.defaultMarker = pDefaultMarker;
         populate();

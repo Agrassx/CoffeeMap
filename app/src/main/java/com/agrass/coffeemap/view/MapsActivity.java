@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.view.map.MapFragment;
+import com.agrass.coffeemap.view.map.MapFragment2;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -54,7 +55,7 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
                 return;
             } else {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.fragment_layout, new MapFragment());
+                fragmentTransaction.add(R.id.fragment_layout, new MapFragment2());
                 fragmentTransaction.commit();
             }
         }

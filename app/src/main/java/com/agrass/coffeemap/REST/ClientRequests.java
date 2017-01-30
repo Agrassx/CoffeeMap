@@ -18,6 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.BoundingBoxE6;
 
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class ClientRequests implements Response.Listener<JSONObject>, Response.E
     }
 
 
-    public void refreshPoints(BoundingBoxE6 boundingBox) {
+    public void refreshPoints(BoundingBox boundingBox) {
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, getFinaleUrl(boundingBox), this, this);
         CoffeeApplication.getInstance().addToRequestQueue(jsObjRequest);
     }
@@ -146,11 +147,11 @@ public class ClientRequests implements Response.Listener<JSONObject>, Response.E
         this.getCafeInfoHandler = getCafeInfoHandler;
     }
 
-    private String getFinaleUrl(BoundingBoxE6 boundingBox) {
-        this.north.set(boundingBox.getLatNorthE6() / 1E6);
-        this.south.set(boundingBox.getLatSouthE6() / 1E6);
-        this.west.set(boundingBox.getLonWestE6() / 1E6);
-        this.east.set(boundingBox.getLonEastE6() / 1E6);
+    private String getFinaleUrl(BoundingBox boundingBox) {
+        this.north.set(boundingBox.getLatNorth());
+        this.south.set(boundingBox.getLatSouth());
+        this.west.set(boundingBox.getLonWest() );
+        this.east.set(boundingBox.getLonEast() );
         return URL_MAIN + "points?" + "n=" + north.get().toString() + "&s=" +
                 south.get().toString() + "&w=" + west.get().toString() + "&e=" + east.get().toString();
     }

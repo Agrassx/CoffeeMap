@@ -3,15 +3,13 @@ package com.agrass.coffeemap.presenter.map;
 import android.util.Log;
 
 import com.agrass.coffeemap.model.api.response.PointsResponse;
-import com.agrass.coffeemap.model.cafe.CafeItem;
 import com.agrass.coffeemap.model.cafe.Status;
 import com.agrass.coffeemap.presenter.base.BasePresenter;
 import com.agrass.coffeemap.view.map.MapView;
 import com.google.gson.Gson;
 
+import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.BoundingBoxE6;
-
-import java.util.List;
 
 import rx.Subscriber;
 import rx.Subscription;
@@ -26,7 +24,7 @@ public class MapPresenter extends BasePresenter {
     }
 
 
-    public void getPoints(BoundingBoxE6 boundingBox) {
+    public void getPoints(BoundingBox boundingBox) {
         Subscription subscription = (Subscription) model.getCafeItemList(boundingBox)
                 .subscribe(new Subscriber<PointsResponse>() {
                     @Override
