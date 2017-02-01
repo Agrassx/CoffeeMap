@@ -1,7 +1,6 @@
 package com.agrass.coffeemap.view.map;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -10,36 +9,38 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.model.cafe.CafeItem;
-import com.agrass.coffeemap.model.map.RetinaTileSource;
 import com.agrass.coffeemap.presenter.map.MapPresenter;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
-import org.osmdroid.events.DelayedMapListener;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
-import org.osmdroid.tileprovider.MapTileProviderBasic;
-import org.osmdroid.tileprovider.tilesource.ITileSource;
-import org.osmdroid.tileprovider.tilesource.XYTileSource;
-import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.TilesOverlay;
 
 import java.util.List;
 
-public class MapFragment2 extends Fragment implements MapView, MapListener {
+public class MapFragment2 extends Fragment implements MapView, MapListener, OnMapReadyCallback, GoogleMap.OnCameraMoveListener {
 
+    private static final String LOG = MapFragment2.class.getName();
     private static final String BASE_URLS[] = {
             "http://a.tilessputnik.ru/tiles/kmt2/",
             "http://b.tilessputnik.ru/tiles/kmt2/",
             "http://c.tilessputnik.ru/tiles/kmt2/",
             "http://d.tilessputnik.ru/tiles/kmt2/"};
 
+    String url[] = {"http://tiles.maps.sputnik.ru/"};
+
     private MapPresenter presenter;
     protected org.osmdroid.views.MapView mapView;
+    private GoogleMap map;
     private final GeoPoint Moscow = new GeoPoint(55751556, 37624482);
     protected TilesOverlay mTilesOverlay;
     private Drawable drawable;
@@ -53,11 +54,11 @@ public class MapFragment2 extends Fragment implements MapView, MapListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mapView.getController().setCenter(new GeoPoint(
-                (float) Moscow.getLatitude(),
-                (float) Moscow.getLongitude()
-        ));
-        mapView.getController().setZoom(11);
+//        mapView.getController().setCenter(new GeoPoint(
+//                (float) Moscow.getLatitude(),
+//                (float) Moscow.getLongitude()
+//        ));
+//        mapView.getController().setZoom(11);
 
 
     }
@@ -74,22 +75,30 @@ public class MapFragment2 extends Fragment implements MapView, MapListener {
             drawable = getResources().getDrawable(R.drawable.ic_place_36dp);
         }
 
-        mapView = (org.osmdroid.views.MapView) view.findViewById(R.id.openMapView);
+        com.google.android.gms.maps.MapView mMapView
+                = (com.google.android.gms.maps.MapView) view.findViewById(R.id.mapView);
+        mMapView.onCreate(savedInstanceState);
 
-        float scale = mapView.getResources().getDisplayMetrics().density;
-        int imageSize = (int) (256 * scale);
-        ITileSource tileSource = new RetinaTileSource("Sputnik", 2, 18, imageSize, ".png", BASE_URLS);
+        mMapView.onResume();
+        mMapView.getMapAsync(this);
 
-        mapView.setTileSource(tileSource);
+//        mapView = (org.osmdroid.views.MapView) view.findViewById(R.id.openMapView);
+//
+//        float scale = mapView.getResources().getDisplayMetrics().density;
+//        int imageSize = (int) (256 * scale);
+//        ITileSource tileSource = new RetinaTileSource("Sputnik", 2, 18, imageSize, ".png", BASE_URLS);
+//        mapView.setTileSource(tileSource);
+//
 //        MapTileProviderBasic mProvider = new MapTileProviderBasic(getActivity(), tileSource);
-//        mTilesOverlay = new TilesOverlay(mProvider, context);
+//        mTilesOverlay = new TilesOverlay(mProvider, getActivity());
 //        mTilesOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
-
-        mapView.getOverlays().clear();
+//        mapView.getOverlays().clear();
 //        mapView.getOverlays().add(mTilesOverlay);
-        mapView.setMultiTouchControls(true);
-//        mapView.setMapListener(this);
-        mapView.setMapListener(new DelayedMapListener(this, 250));
+//
+////        mapView.getTileProvider().setTileSource(tileSource);
+//
+//        mapView.setMultiTouchControls(true);
+//        mapView.setMapListener(new DelayedMapListener(this, 250));
         return view;
     }
 
@@ -118,5 +127,22 @@ public class MapFragment2 extends Fragment implements MapView, MapListener {
     public boolean onZoom(ZoomEvent event) {
         presenter.getPoints(mapView.getBoundingBox());
         return true;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.map = googleMap;
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+                Moscow.getLatitude(),
+                Moscow.getLongitude()
+        ), 8));
+        map.setOnCameraMoveListener(this);
+    }
+
+    @Override
+    public void onCameraMove() {
+        LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+        Log.e(LOG, "Camera move: " + bounds.toString());
+
     }
 }

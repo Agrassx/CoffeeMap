@@ -24,8 +24,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 
-
-public class MapsActivity extends FragmentActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+@Deprecated
+public class MapsActivity extends FragmentActivity { //implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     protected FragmentManager fragmentManager;
     public static GoogleSignInAccount account;
@@ -41,131 +41,128 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
 
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
+//        findViewById(R.id.sign_in_button).setOnClickListener(this);
 
-        GoogleSignInOptions gso = buildGoogleSignInOptions();
-        mGoogleApiClient = buildGoogleApiClient(gso);
-        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
-        signInButton.setScopes(gso.getScopeArray());
+//        GoogleSignInOptions gso = buildGoogleSignInOptions();
+//        mGoogleApiClient = buildGoogleApiClient(gso);
+//        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+//        signInButton.setSize(SignInButton.SIZE_STANDARD);
+//        signInButton.setScopes(gso.getScopeArray());
 
-        fragmentManager = getFragmentManager();
-        if (findViewById(R.id.fragment_layout) != null) {
-            if (savedInstanceState != null) {
-                return;
-            } else {
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.fragment_layout, new MapFragment2());
-                fragmentTransaction.commit();
-            }
-        }
+//        if (findViewById(R.id.fragment_layout) != null) {
+//            if (savedInstanceState != null) {
+//                return;
+//            } else {
+//
+//            }
+//        }
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        silentSignIn();
+//        silentSignIn();
     }
 
-    private GoogleSignInOptions buildGoogleSignInOptions(){
-        return new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.server_client_id))
-                .requestEmail()
-                .build();
-    }
-
-    private GoogleApiClient buildGoogleApiClient(GoogleSignInOptions gso) {
-        return new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-    }
-
-    private void silentSignIn() {
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-        if (opr.isDone()) {
-            Log.d(TAG, "Got cached sign-in");
-            GoogleSignInResult result = opr.get();
-            handleSignInResult(result);
-        } else {
-            showProgressDialog();
-            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(GoogleSignInResult googleSignInResult) {
-                    hideProgressDialog();
-                    handleSignInResult(googleSignInResult);
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
-        if (result.isSuccess()) {
-            account = result.getSignInAccount();
-            signInButton.setVisibility(View.GONE);
-        } else {
-            signInButton.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.sign_in_button:
-                signIn();
-                break;
-        }
-    }
-
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
-
-    public void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.loading));
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        mProgressDialog.show();
-    }
-
-    public void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.hide();
-        }
-    }
-
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
+//    private GoogleSignInOptions buildGoogleSignInOptions(){
+//        return new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(getString(R.string.server_client_id))
+//                .requestEmail()
+//                .build();
+//    }
+//
+//    private GoogleApiClient buildGoogleApiClient(GoogleSignInOptions gso) {
+//        return new GoogleApiClient.Builder(this)
+//                .enableAutoManage(this, this)
+//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+//                .build();
+//    }
+//
+//    private void silentSignIn() {
+//        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+//        if (opr.isDone()) {
+//            Log.d(TAG, "Got cached sign-in");
+//            GoogleSignInResult result = opr.get();
+//            handleSignInResult(result);
+//        } else {
+//            showProgressDialog();
+//            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+//                @Override
+//                public void onResult(GoogleSignInResult googleSignInResult) {
+//                    hideProgressDialog();
+//                    handleSignInResult(googleSignInResult);
+//                }
+//            });
+//        }
+//    }
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == RC_SIGN_IN) {
+//            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+//            handleSignInResult(result);
+//        }
+//    }
+//
+//    private void handleSignInResult(GoogleSignInResult result) {
+//        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+//        if (result.isSuccess()) {
+//            account = result.getSignInAccount();
+//            signInButton.setVisibility(View.GONE);
+//        } else {
+//            signInButton.setVisibility(View.VISIBLE);
+//        }
+//    }
+//
+//    @Override
+//    public void onBackPressed() {
+//        if (getFragmentManager().getBackStackEntryCount() > 0) {
+//            getFragmentManager().popBackStack();
+//        } else {
+//            super.onBackPressed();
+//        }
+//    }
+//
+//
+//    @Override
+//    public void onClick(View v) {
+//        switch (v.getId()) {
+//            case R.id.sign_in_button:
+//                signIn();
+//                break;
+//        }
+//    }
+//
+//    private void signIn() {
+//        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+//        startActivityForResult(signInIntent, RC_SIGN_IN);
+//    }
+//
+//    @Override
+//    public void onConnectionFailed(ConnectionResult connectionResult) {
+//
+//    }
+//
+//    public void showProgressDialog() {
+//        if (mProgressDialog == null) {
+//            mProgressDialog = new ProgressDialog(this);
+//            mProgressDialog.setMessage(getString(R.string.loading));
+//            mProgressDialog.setIndeterminate(true);
+//        }
+//
+//        mProgressDialog.show();
+//    }
+//
+//    public void hideProgressDialog() {
+//        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+//            mProgressDialog.hide();
+//        }
+//    }
+//
+//    protected void attachBaseContext(Context base) {
+//        super.attachBaseContext(base);
+////        MultiDex.install(this);
+//    }
 
 }

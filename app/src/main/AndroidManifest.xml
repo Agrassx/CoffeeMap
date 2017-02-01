@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.agrass.coffeemap" >
+    package="com.agrass.coffeemap">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,23 +12,38 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
+        android:name=".app.CoffeeApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name=".app.CoffeeApplication">
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCxL6DP-bjlr5O8Bhb2vlJRAEvoHD71V8M" />
+
         <activity
             android:name=".view.MapsActivity"
+            android:allowBackup="true"
             android:label="@string/title_activity_maps"
-            android:windowSoftInputMode="adjustResize"
-            android:allowBackup="true">
+            android:windowSoftInputMode="adjustResize">
+
+        </activity>
+        <activity
+            android:name=".view.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:allowBackup="true"
+            android:label="@string/title_activity_maps"
+            android:windowSoftInputMode="adjustResize">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 

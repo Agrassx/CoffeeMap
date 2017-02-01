@@ -5,9 +5,14 @@
     android:layout_height="match_parent"
     android:id="@+id/fragment_container_rl">
 
-    <org.osmdroid.views.MapView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/openMapView"
+    <!--<org.osmdroid.views.MapView-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:id="@+id/openMapView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
