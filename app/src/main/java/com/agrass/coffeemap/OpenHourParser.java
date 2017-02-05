@@ -1,7 +1,10 @@
 package com.agrass.coffeemap;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+
+import com.google.android.gms.maps.model.BitmapDescriptor;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -258,6 +261,11 @@ public class OpenHourParser implements MarkerColors {
 
     @Override
     public Drawable getMarkerColor(int color) {
+        return null;
+    }
+
+    @Override
+    public Bitmap getMarker(int color) {
         return null;
     }
 }

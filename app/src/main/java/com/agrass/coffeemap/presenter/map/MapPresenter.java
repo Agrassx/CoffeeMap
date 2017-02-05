@@ -6,6 +6,7 @@ import com.agrass.coffeemap.model.api.response.PointsResponse;
 import com.agrass.coffeemap.model.cafe.Status;
 import com.agrass.coffeemap.presenter.base.BasePresenter;
 import com.agrass.coffeemap.view.map.MapView;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.Gson;
 
 import org.osmdroid.util.BoundingBox;
@@ -24,8 +25,8 @@ public class MapPresenter extends BasePresenter {
     }
 
 
-    public void getPoints(BoundingBox boundingBox) {
-        Subscription subscription = (Subscription) model.getCafeItemList(boundingBox)
+    public void getPoints(LatLngBounds bounds) {
+        Subscription subscription = (Subscription) model.getCafeItemList(bounds)
                 .subscribe(new Subscriber<PointsResponse>() {
                     @Override
                     public void onCompleted() {
@@ -41,7 +42,7 @@ public class MapPresenter extends BasePresenter {
                     @Override
                     public void onNext(PointsResponse response) {
                         Log.e(LOG, new Gson().toJson(response));
-//                        view.showMarkers(response.getList());
+                        view.showMarkers(response.getList());
                     }
                 });
         addSubscription(subscription);

@@ -1,6 +1,7 @@
 package com.agrass.coffeemap.JsonParser;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
@@ -8,6 +9,7 @@ import com.agrass.coffeemap.model.cafe.CafeItem;
 import com.agrass.coffeemap.MarkerColors;
 import com.agrass.coffeemap.OpenHourParser;
 import com.agrass.coffeemap.R;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,5 +67,10 @@ public class JsonCafeItemParser implements MarkerColors {
             case MARKER_COLOR_RED: return redMarker;
             default: return greyMarker;
         }
+    }
+
+    @Override
+    public Bitmap getMarker(int color) {
+        return null;
     }
 }
