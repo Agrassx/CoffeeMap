@@ -4,14 +4,18 @@ import android.app.Fragment;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.agrass.coffeemap.R;
+import com.agrass.coffeemap.R2;
 import com.agrass.coffeemap.model.cafe.Cafe;
 import com.agrass.coffeemap.model.map.ClusterItemCafeRender;
 import com.agrass.coffeemap.presenter.map.MapPresenter;
+import com.agrass.coffeemap.view.MainActivityView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,6 +31,9 @@ import org.osmdroid.views.overlay.TilesOverlay;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MapFragment2 extends Fragment implements MapView, MapListener, OnMapReadyCallback,
         GoogleMap.OnCameraMoveListener {
 
@@ -40,13 +47,27 @@ public class MapFragment2 extends Fragment implements MapView, MapListener, OnMa
     String url[] = {"http://tiles.maps.sputnik.ru/"};
 
     private ClusterManager<Cafe> clusterManager;
+
     private ClusterItemCafeRender clusterRender;
     private MapPresenter presenter;
+    private MainActivityView activityView;
     private GoogleMap map;
     private final GeoPoint Moscow = new GeoPoint(55751556, 37624482);
     protected TilesOverlay mTilesOverlay;
     private Drawable drawable;
 
+
+    @BindView(R2.id.buttonAddPoint) FloatingActionButton buttonAddPoint;
+
+    public static MapFragment2 newInstance(MainActivityView activityView) {
+        MapFragment2 fragment = new MapFragment2();
+        fragment.setActivityView(activityView);
+        return fragment;
+    }
+
+    private void setActivityView(MainActivityView activityView) {
+        this.activityView = activityView;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +87,12 @@ public class MapFragment2 extends Fragment implements MapView, MapListener, OnMa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
+        ButterKnife.setDebug(true);
+        ButterKnife.bind(this, view);
+//        ButterKnife.bind(getActivity());
+
         presenter = new MapPresenter(this);
+        buttonAddPoint.setOnClickListener(v -> presenter.addPointClick());
 //        mResourceProxy = new ResourceProxyImpl(context);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             drawable = getResources().getDrawable(R.drawable.ic_place_36dp, null);
@@ -122,6 +148,13 @@ public class MapFragment2 extends Fragment implements MapView, MapListener, OnMa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
+
+        this.map.getUiSettings().setAllGesturesEnabled(true);
+//        this.map.getUiSettings().setZoomControlsEnabled(true);
+        this.map.getUiSettings().setCompassEnabled(true);
+        this.map.getUiSettings().setMyLocationButtonEnabled(true);
+
+
         this.clusterManager = new ClusterManager<>(getActivity(), googleMap);
         this.clusterRender = new ClusterItemCafeRender(getActivity(), googleMap, clusterManager);
         this.clusterManager.setRenderer(clusterRender);
@@ -154,4 +187,24 @@ public class MapFragment2 extends Fragment implements MapView, MapListener, OnMa
         clusterManager.addItems(list);
         clusterManager.cluster();
     }
+
+    @Override
+    public void showAddCafeLayout() {
+        buttonAddPoint.animate();
+        buttonAddPoint.hide();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (buttonAddPoint.isShown()) {
+            activityView.callBackButton(true);
+            return;
+        }
+        buttonAddPoint.show();
+    }
+
+    public MapView getIView() {
+        return this;
+    }
+
 }

@@ -71,4 +71,7 @@ public class MapPresenter extends BasePresenter {
     }
 
 
+    public void addPointClick() {
+        view.showAddCafeLayout();
+    }
 }
