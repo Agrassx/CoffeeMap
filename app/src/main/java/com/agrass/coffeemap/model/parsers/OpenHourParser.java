@@ -1,9 +1,10 @@
-package com.agrass.coffeemap;
+package com.agrass.coffeemap.model.parsers;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import com.agrass.coffeemap.MarkerColors;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 
 import java.text.SimpleDateFormat;
@@ -42,18 +43,17 @@ public class OpenHourParser implements MarkerColors {
         if (openHours.equals("")) {
             return noData;
         }
-        if (!Objects.equals(openHours, "24/7")) {
-            try {
-                if (isOpen(parseOpenHours(openHours, dayNumber))) {
-                    return getEndTimeWork(parseOpenHours(openHours, dayNumber));
-                } else {
-                    return closed;
-                }
-            } catch (Exception e){
-                Log.e("OpenHour.getOpenHours()", e.toString());
-            }
-        } else {
+        if (Objects.equals(openHours, "24/7")) {
             return always;
+        }
+        try {
+            if (isOpen(parseOpenHours(openHours, dayNumber))) {
+                return getEndTimeWork(parseOpenHours(openHours, dayNumber));
+            } else {
+                return closed;
+            }
+        } catch (Exception e){
+            Log.e("OpenHour.getOpenHours()", e.getMessage());
         }
         return noData;
     }
@@ -117,22 +117,18 @@ public class OpenHourParser implements MarkerColors {
                     return true;
                 }
             }
-        } else {
-            if(dayNumber == weekDays.get(interval)) {
-                return true;
-            }
         }
-        return false;
+        return dayNumber == weekDays.get(interval);
     }
 
     private String getEndTimeWork(String time) {
         if (time.contains("-")) {
             return String.format(workingTo, time.split("-")[1]);
-        } else if(time.contains(dayOff)) {
-            return closed;
-        } else {
-            return noData;
         }
+        if (time.contains(dayOff)) {
+            return closed;
+        }
+        return noData;
     }
 
     private boolean isConsistDays(String openHours) {

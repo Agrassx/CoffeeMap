@@ -4,11 +4,12 @@ import android.app.Fragment;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.R2;
@@ -58,6 +59,9 @@ public class MapFragment2 extends Fragment implements MapView, MapListener, OnMa
 
 
     @BindView(R2.id.buttonAddPoint) FloatingActionButton buttonAddPoint;
+    @BindView(R2.id.layoutAddCafeHelp) RelativeLayout layoutAddCafeHelp;
+    @BindView(R2.id.dialogButtonOk) Button dialogButtonOk;
+    @BindView(R2.id.dialogButtonCancel) Button dialogButtonCancel;
 
     public static MapFragment2 newInstance(MainActivityView activityView) {
         MapFragment2 fragment = new MapFragment2();
@@ -93,6 +97,8 @@ public class MapFragment2 extends Fragment implements MapView, MapListener, OnMa
 
         presenter = new MapPresenter(this);
         buttonAddPoint.setOnClickListener(v -> presenter.addPointClick());
+        dialogButtonCancel.setOnClickListener(v -> presenter.cancelButtonClick());
+        dialogButtonOk.setOnClickListener(v -> presenter.okButtonClick(activityView));
 //        mResourceProxy = new ResourceProxyImpl(context);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             drawable = getResources().getDrawable(R.drawable.ic_place_36dp, null);
@@ -192,6 +198,7 @@ public class MapFragment2 extends Fragment implements MapView, MapListener, OnMa
     public void showAddCafeLayout() {
         buttonAddPoint.animate();
         buttonAddPoint.hide();
+        layoutAddCafeHelp.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -200,6 +207,7 @@ public class MapFragment2 extends Fragment implements MapView, MapListener, OnMa
             activityView.callBackButton(true);
             return;
         }
+        layoutAddCafeHelp.setVisibility(View.GONE);
         buttonAddPoint.show();
     }
 

@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
 
-
+@Deprecated
 public class BaseActivity extends AppCompatActivity {
 
     @Override

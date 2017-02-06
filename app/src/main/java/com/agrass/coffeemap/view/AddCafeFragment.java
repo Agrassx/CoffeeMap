@@ -1,4 +1,4 @@
-package layout;
+package com.agrass.coffeemap.view;
 
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -13,22 +13,41 @@ import android.widget.RadioGroup;
 import android.widget.RatingBar;
 
 import com.agrass.coffeemap.R;
+import com.agrass.coffeemap.view.base.ActivityView;
+import com.agrass.coffeemap.view.base.BaseFragment;
 import com.agrass.coffeemap.view.map.MapFragment;
-import com.agrass.coffeemap.view.MapsActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import layout.openHourDialog.SetOpenHoursFragment;
 
-public class AddCafeFragment extends Fragment {
+public class AddCafeFragment extends BaseFragment implements AddCafeView {
 
+    private MainActivityView activityView;
     private String cafeName;
     private String openHours;
     private float userRating;
     private String comment;
     private double latitude;
     private double longitude;
+
+    public static AddCafeFragment newInstance(MainActivityView activityView) {
+        Bundle args = new Bundle();
+        AddCafeFragment fragment = new AddCafeFragment();
+        fragment.setActivityView(activityView);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void setActivityView(ActivityView activityView) {
+        this.activityView = (MainActivityView) activityView;
+    }
+
+    public AddCafeView getIView() {
+        return this;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +59,7 @@ public class AddCafeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_add_cafe, container, false);
     }
 
+    @Deprecated
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -93,12 +113,14 @@ public class AddCafeFragment extends Fragment {
 
     }
 
+    @Deprecated
     private void getOpenHours() {
         DialogFragment dialog = new SetOpenHoursFragment();
         dialog.show(getFragmentManager(), "openHours");
 //        TODO: get data from dialog
     }
 
+    @Deprecated
     private void postNewPlace(String cafeName, double latitude, double longitude) throws JSONException {
         checkFields();
         JSONObject newPoint = new JSONObject();
@@ -117,9 +139,19 @@ public class AddCafeFragment extends Fragment {
 
     }
 
+    @Deprecated
     private void checkFields() {
 //        TODO: check fields cafeName, rating bar and comment
     }
 
 
+    @Override
+    public void onBackPressed() {
+        activityView.callBackButton(true);
+    }
+
+    @Override
+    public void showMessage(String error) {
+
+    }
 }

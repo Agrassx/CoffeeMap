@@ -1,5 +1,7 @@
 package com.agrass.coffeemap;
 
+import com.agrass.coffeemap.model.parsers.OpenHourParser;
+
 import junit.framework.TestCase;
 
 public class OpenHourParserTest extends TestCase {

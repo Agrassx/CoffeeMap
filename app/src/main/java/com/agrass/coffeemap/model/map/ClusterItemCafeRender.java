@@ -2,17 +2,14 @@ package com.agrass.coffeemap.model.map;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 
 import com.agrass.coffeemap.MarkerColors;
-import com.agrass.coffeemap.OpenHourParser;
+import com.agrass.coffeemap.model.parsers.OpenHourParser;
 import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.model.ImageUtil;
 import com.agrass.coffeemap.model.cafe.Cafe;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;

@@ -1,10 +1,16 @@
 package com.agrass.coffeemap.presenter.map;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.util.Log;
 
+import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.model.api.response.PointsResponse;
 import com.agrass.coffeemap.model.cafe.Status;
+import com.agrass.coffeemap.presenter.MainActivityPresenter;
 import com.agrass.coffeemap.presenter.base.BasePresenter;
+import com.agrass.coffeemap.view.AddCafeFragment;
+import com.agrass.coffeemap.view.MainActivityView;
 import com.agrass.coffeemap.view.map.MapView;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.Gson;
@@ -70,8 +76,15 @@ public class MapPresenter extends BasePresenter {
         addSubscription(subscription);
     }
 
-
     public void addPointClick() {
         view.showAddCafeLayout();
+    }
+
+    public void okButtonClick(MainActivityView view) {
+        view.redirectTo(AddCafeFragment.newInstance(view));
+    }
+
+    public void cancelButtonClick() {
+        this.view.onBackPressed();
     }
 }

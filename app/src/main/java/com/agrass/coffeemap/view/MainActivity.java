@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.presenter.MainActivityPresenter;
 import com.agrass.coffeemap.view.base.ActivityView;
+import com.agrass.coffeemap.view.base.BaseFragment;
 import com.agrass.coffeemap.view.map.MapFragment2;
 
 import butterknife.ButterKnife;
@@ -41,21 +42,20 @@ public class MainActivity extends AppCompatActivity
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                .setAction("Action", null).show());
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this,
-                drawer,
-                toolbar,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close
-        );
-
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this,
+//                drawer,
+//                toolbar,
+//                R.string.navigation_drawer_open,
+//                R.string.navigation_drawer_close
+//        );
+//
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
+//
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
         presenter.redirectToMapFragment(getFragmentManager());
     }
 
@@ -127,5 +127,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void showMessage(String error) {
 
+    }
+
+    @Override
+    public void redirectTo(BaseFragment fragment) {
+        presenter.redirectTo(getFragmentManager(), fragment, true);
     }
 }

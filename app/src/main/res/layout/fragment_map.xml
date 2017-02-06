@@ -9,9 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <include
-        layout="@layout/map_add_cafe_menu"
-        android:visibility="gone"/>
+    <include layout="@layout/map_add_cafe_menu" />
 
     <android.support.design.widget.FloatingActionButton
         android:layout_height="wrap_content"
