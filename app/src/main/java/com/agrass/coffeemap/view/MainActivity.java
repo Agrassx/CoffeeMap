@@ -133,4 +133,9 @@ public class MainActivity extends AppCompatActivity
     public void redirectTo(BaseFragment fragment) {
         presenter.redirectTo(getFragmentManager(), fragment, true);
     }
+
+    @Override
+    public void redirectTo(BaseFragment fragment, Bundle args) {
+        presenter.redirectTo(getFragmentManager(), fragment, args, true);
+    }
 }

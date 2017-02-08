@@ -98,7 +98,10 @@ public class MapFragment2 extends Fragment implements MapView, MapListener, OnMa
         presenter = new MapPresenter(this);
         buttonAddPoint.setOnClickListener(v -> presenter.addPointClick());
         dialogButtonCancel.setOnClickListener(v -> presenter.cancelButtonClick());
-        dialogButtonOk.setOnClickListener(v -> presenter.okButtonClick(activityView));
+        dialogButtonOk.setOnClickListener(v -> presenter.okButtonClick(
+                activityView,
+                this.map.getCameraPosition().target
+        ));
 //        mResourceProxy = new ResourceProxyImpl(context);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             drawable = getResources().getDrawable(R.drawable.ic_place_36dp, null);
@@ -159,8 +162,6 @@ public class MapFragment2 extends Fragment implements MapView, MapListener, OnMa
 //        this.map.getUiSettings().setZoomControlsEnabled(true);
         this.map.getUiSettings().setCompassEnabled(true);
         this.map.getUiSettings().setMyLocationButtonEnabled(true);
-
-
         this.clusterManager = new ClusterManager<>(getActivity(), googleMap);
         this.clusterRender = new ClusterItemCafeRender(getActivity(), googleMap, clusterManager);
         this.clusterManager.setRenderer(clusterRender);

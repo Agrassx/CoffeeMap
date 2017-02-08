@@ -13,5 +13,6 @@
     <color name="blue_semi_transparent_pressed">#803a62ff</color>
     <color name="accent_material_light">#269600</color>
     <color name="primary_material_dark">#212121</color>
+    <color name="background_material_dark">#2d2d2d</color>
     <color name="indigo">#350699</color>
 </resources>

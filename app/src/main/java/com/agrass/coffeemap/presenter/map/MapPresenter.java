@@ -2,6 +2,7 @@ package com.agrass.coffeemap.presenter.map;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.agrass.coffeemap.R;
@@ -12,6 +13,7 @@ import com.agrass.coffeemap.presenter.base.BasePresenter;
 import com.agrass.coffeemap.view.AddCafeFragment;
 import com.agrass.coffeemap.view.MainActivityView;
 import com.agrass.coffeemap.view.map.MapView;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.Gson;
 
@@ -20,6 +22,8 @@ import org.osmdroid.util.BoundingBoxE6;
 
 import rx.Subscriber;
 import rx.Subscription;
+
+import static com.agrass.coffeemap.app.Constants.LOCATION;
 
 public class MapPresenter extends BasePresenter {
     private static final String LOG = MapPresenter.class.getName();
@@ -80,8 +84,10 @@ public class MapPresenter extends BasePresenter {
         view.showAddCafeLayout();
     }
 
-    public void okButtonClick(MainActivityView view) {
-        view.redirectTo(AddCafeFragment.newInstance(view));
+    public void okButtonClick(MainActivityView view, LatLng point) {
+        Bundle args = new Bundle();
+        args.putString(LOCATION, new Gson().toJson(point));
+        view.redirectTo(AddCafeFragment.newInstance(view), args);
     }
 
     public void cancelButtonClick() {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.os.Bundle;
 
 import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.presenter.base.BasePresenter;
@@ -49,6 +50,16 @@ public class MainActivityPresenter extends BasePresenter {
     public void redirectTo(FragmentManager fragmentManager, BaseFragment fragment, boolean isBackStack) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentView = fragment.getIView();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        if (isBackStack) fragmentTransaction.addToBackStack(fragment.getTag());
+        fragmentTransaction.commit();
+    }
+
+    public void redirectTo(FragmentManager fragmentManager,
+                           BaseFragment fragment, Bundle args, boolean isBackStack) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentView = fragment.getIView();
+        fragment.setArguments(args);
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         if (isBackStack) fragmentTransaction.addToBackStack(fragment.getTag());
         fragmentTransaction.commit();

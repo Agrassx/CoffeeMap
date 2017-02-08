@@ -13,6 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.RatingBar;
 
 import com.agrass.coffeemap.R;
+import com.agrass.coffeemap.model.cafe.LocationCafe;
 import com.agrass.coffeemap.view.base.ActivityView;
 import com.agrass.coffeemap.view.base.BaseFragment;
 import com.agrass.coffeemap.view.map.MapFragment;
@@ -22,8 +23,12 @@ import org.json.JSONObject;
 
 import layout.openHourDialog.SetOpenHoursFragment;
 
-public class AddCafeFragment extends BaseFragment implements AddCafeView {
+import static com.agrass.coffeemap.app.Constants.LOCATION;
 
+
+//    TODO: Layout, Import ButterKnife, Send to Server new place
+public class AddCafeFragment extends BaseFragment implements AddCafeView {
+    private static final String LOG = AddCafeFragment.class.getName();
     private MainActivityView activityView;
     private String cafeName;
     private String openHours;
@@ -31,6 +36,9 @@ public class AddCafeFragment extends BaseFragment implements AddCafeView {
     private String comment;
     private double latitude;
     private double longitude;
+
+    private Bundle args;
+    private LocationCafe location;
 
     public static AddCafeFragment newInstance(MainActivityView activityView) {
         Bundle args = new Bundle();
@@ -52,6 +60,13 @@ public class AddCafeFragment extends BaseFragment implements AddCafeView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.args = getArguments();
+        if (args == null) {
+            activityView.callBackButton(true);
+            return;
+        }
+        Log.e(LOG, args.getString(LOCATION));
+        location = new LocationCafe(args.getString(LOCATION));
     }
 
     @Override
@@ -70,45 +85,34 @@ public class AddCafeFragment extends BaseFragment implements AddCafeView {
         final FloatingActionButton saveButton = (FloatingActionButton) getView().findViewById(R.id.buttonSavePoint);
         final RatingBar ratingBar = (RatingBar) getView().findViewById(R.id.ratingBar);
         final RadioGroup radioGroupOpenHours = (RadioGroup) getView().findViewById(R.id.radioGroupOpenHours);
-        final EditText editCafeName = (EditText) getView().findViewById(R.id.editTextCafeName);
+//        final EditText editCafeName = (EditText) getView().findViewById(R.id.editTextCafeName);
         final EditText editComment = (EditText) getView().findViewById(R.id.editTextComment);
 
-        radioGroupOpenHours.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.radioButAlwaysOpen:
-                        openHours = "24/7";
-                        break;
-                    case R.id.radioButSecond:
-                        openHours = "09:00-20:00";
-                        break;
-                    case R.id.radioButAnother:
-                        getOpenHours();
-                        break;
-                }
+        radioGroupOpenHours.setOnCheckedChangeListener((group, checkedId) -> {
+            switch (checkedId) {
+                case R.id.radioButAlwaysOpen:
+                    openHours = "24/7";
+                    break;
+                case R.id.radioButSecond:
+                    openHours = "09:00-20:00";
+                    break;
+                case R.id.radioButAnother:
+                    getOpenHours();
+                    break;
             }
         });
 
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                userRating = rating;
-            }
-        });
+        ratingBar.setOnRatingBarChangeListener((ratingBar1, rating, fromUser) -> userRating = rating);
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    postNewPlace(editCafeName.getText().toString(), latitude, longitude);
+        saveButton.setOnClickListener(v -> {
+//            try {
+//                postNewPlace(editCafeName.getText().toString(), latitude, longitude);
 //                    Toast.makeText(getActivity(), "Saved", Toast.LENGTH_LONG).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                getActivity().onBackPressed();
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+            getActivity().onBackPressed();
 
-            }
         });
 
     }
@@ -123,8 +127,10 @@ public class AddCafeFragment extends BaseFragment implements AddCafeView {
     @Deprecated
     private void postNewPlace(String cafeName, double latitude, double longitude) throws JSONException {
         checkFields();
+
         JSONObject newPoint = new JSONObject();
         JSONObject location = new JSONObject();
+
         location.put("lat",latitude);
         location.put("lon",longitude);
         newPoint.put("name", cafeName);

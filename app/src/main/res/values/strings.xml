@@ -75,11 +75,11 @@
 
     <!-- AddCafeFragment values (ACF)-->
     <!-- TextView - (TV)-->
-    <string name="ACF_TV_New_Place">Новое место</string>
+    <string name="ACF_TV_New_Place">Новое место?</string>
     <string name="ACF_Input_Opening">Открытие</string>
-    <string name="ACF_TV_Name">Название</string>
+    <string name="ACF_TV_Name">Как называется?</string>
     <string name="ACF_TV_Splitter"> : </string>
-    <string name="ACF_Input_CafeName">Введите название кафе</string>
+    <string name="ACF_Input_CafeName">Введи название кафе</string>
     <string name="ACF_TV_WorkTime">Часы работы</string>
     <string name="ACF_Input_ClosingTime">Закртие</string>
     <string name="ACF_TV_WorkTime_Always">24/7</string>
