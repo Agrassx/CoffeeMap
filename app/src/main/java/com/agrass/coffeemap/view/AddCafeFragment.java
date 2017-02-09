@@ -120,7 +120,7 @@ public class AddCafeFragment extends BaseFragment implements AddCafeView {
     @Deprecated
     private void getOpenHours() {
         DialogFragment dialog = new SetOpenHoursFragment();
-        dialog.show(getFragmentManager(), "openHours");
+//        dialog.show(, "openHours");
 //        TODO: get data from dialog
     }
 

@@ -1,15 +1,13 @@
 package com.agrass.coffeemap.view;
 
-import android.app.FragmentTransaction;
+
+import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.view.View;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,9 +15,10 @@ import android.view.MenuItem;
 
 import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.presenter.MainActivityPresenter;
-import com.agrass.coffeemap.view.base.ActivityView;
 import com.agrass.coffeemap.view.base.BaseFragment;
-import com.agrass.coffeemap.view.map.MapFragment2;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import butterknife.ButterKnife;
 
@@ -28,11 +27,20 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainActivityView {
 
     private MainActivityPresenter presenter;
+    private GoogleSignInAccount account;
+    private GoogleApiClient mGoogleApiClient;
+    private ProgressDialog mProgressDialog;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        GoogleSignInOptions googleSignInOptions = presenter.buildGoogleSignInOptions();
+//        mGoogleApiClient = presenter.buildGoogleApiClient(this);
+
         presenter = new MainActivityPresenter(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -56,7 +64,7 @@ public class MainActivity extends AppCompatActivity
 //
 //        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 //        navigationView.setNavigationItemSelectedListener(this);
-        presenter.redirectToMapFragment(getFragmentManager());
+        presenter.redirectToMapFragment(getSupportFragmentManager());
     }
 
     @Override
@@ -131,11 +139,38 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void redirectTo(BaseFragment fragment) {
-        presenter.redirectTo(getFragmentManager(), fragment, true);
+        presenter.redirectTo(getSupportFragmentManager(), fragment, true);
     }
 
     @Override
     public void redirectTo(BaseFragment fragment, Bundle args) {
-        presenter.redirectTo(getFragmentManager(), fragment, args, true);
+        presenter.redirectTo(getSupportFragmentManager(), fragment, args, true);
+    }
+
+    @Override
+    public void showBottomSheet(BottomSheetDialogFragment fragment) {
+        presenter.showBottomSheetDialogFragment(getSupportFragmentManager(), fragment);
+    }
+
+    @Override
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+        }
+        mProgressDialog.show();
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.hide();
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

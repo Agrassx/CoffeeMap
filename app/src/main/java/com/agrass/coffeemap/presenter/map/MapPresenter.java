@@ -11,7 +11,9 @@ import com.agrass.coffeemap.model.cafe.Status;
 import com.agrass.coffeemap.presenter.MainActivityPresenter;
 import com.agrass.coffeemap.presenter.base.BasePresenter;
 import com.agrass.coffeemap.view.AddCafeFragment;
+import com.agrass.coffeemap.view.BottomSheetSignOnFragment;
 import com.agrass.coffeemap.view.MainActivityView;
+import com.agrass.coffeemap.view.base.ActivityView;
 import com.agrass.coffeemap.view.map.MapView;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -80,8 +82,9 @@ public class MapPresenter extends BasePresenter {
         addSubscription(subscription);
     }
 
-    public void addPointClick() {
-        view.showAddCafeLayout();
+    public void addPointClick(MainActivityView activityView) {
+//        view.showAddCafeLayout();
+        activityView.showBottomSheet(new BottomSheetSignOnFragment());
     }
 
     public void okButtonClick(MainActivityView view, LatLng point) {

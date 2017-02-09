@@ -29,8 +29,8 @@ public class MapsActivity extends FragmentActivity { //implements View.OnClickLi
 
     protected FragmentManager fragmentManager;
     public static GoogleSignInAccount account;
-    private static final String TAG = "Sign_In";
     private GoogleApiClient mGoogleApiClient;
+    private static final String TAG = "Sign_In";
     private SignInButton signInButton;
     private ProgressDialog mProgressDialog;
     private static final int RC_SIGN_IN = 112;

@@ -1,6 +1,5 @@
 package com.agrass.coffeemap.view.map;
 
-import android.app.Fragment;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +15,10 @@ import com.agrass.coffeemap.R2;
 import com.agrass.coffeemap.model.cafe.Cafe;
 import com.agrass.coffeemap.model.map.ClusterItemCafeRender;
 import com.agrass.coffeemap.presenter.map.MapPresenter;
+import com.agrass.coffeemap.view.MainActivity;
 import com.agrass.coffeemap.view.MainActivityView;
+import com.agrass.coffeemap.view.base.ActivityView;
+import com.agrass.coffeemap.view.base.BaseFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,7 +37,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MapFragment2 extends Fragment implements MapView, MapListener, OnMapReadyCallback,
+public class MapFragment2 extends BaseFragment implements MapView, MapListener, OnMapReadyCallback,
         GoogleMap.OnCameraMoveListener {
 
     private static final String LOG = MapFragment2.class.getName();
@@ -96,7 +98,7 @@ public class MapFragment2 extends Fragment implements MapView, MapListener, OnMa
 //        ButterKnife.bind(getActivity());
 
         presenter = new MapPresenter(this);
-        buttonAddPoint.setOnClickListener(v -> presenter.addPointClick());
+        buttonAddPoint.setOnClickListener(v -> presenter.addPointClick(activityView));
         dialogButtonCancel.setOnClickListener(v -> presenter.cancelButtonClick());
         dialogButtonOk.setOnClickListener(v -> presenter.okButtonClick(
                 activityView,
@@ -210,6 +212,11 @@ public class MapFragment2 extends Fragment implements MapView, MapListener, OnMa
         }
         layoutAddCafeHelp.setVisibility(View.GONE);
         buttonAddPoint.show();
+    }
+
+    @Override
+    public void setActivityView(ActivityView activityView) {
+
     }
 
     public MapView getIView() {

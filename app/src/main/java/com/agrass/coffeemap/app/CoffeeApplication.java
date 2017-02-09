@@ -8,10 +8,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 public class CoffeeApplication extends Application {
-
     public static final String TAG = CoffeeApplication.class.getName();
-
     private static CoffeeApplication mInstance;
+
     private RequestQueue mRequestQueue;
 
     @Override
