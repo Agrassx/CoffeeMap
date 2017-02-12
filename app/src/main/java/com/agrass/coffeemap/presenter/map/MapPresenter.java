@@ -1,27 +1,22 @@
 package com.agrass.coffeemap.presenter.map;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.app.CoffeeApplication;
 import com.agrass.coffeemap.model.api.response.PointsResponse;
 import com.agrass.coffeemap.model.cafe.Status;
-import com.agrass.coffeemap.presenter.MainActivityPresenter;
 import com.agrass.coffeemap.presenter.base.BasePresenter;
 import com.agrass.coffeemap.view.AddCafeFragment;
 import com.agrass.coffeemap.view.BottomSheetSignOnFragment;
 import com.agrass.coffeemap.view.MainActivityView;
-import com.agrass.coffeemap.view.base.ActivityView;
 import com.agrass.coffeemap.view.map.MapView;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.Gson;
 
-import org.osmdroid.util.BoundingBox;
-import org.osmdroid.util.BoundingBoxE6;
 
 import rx.Subscriber;
 import rx.Subscription;
@@ -37,6 +32,22 @@ public class MapPresenter extends BasePresenter {
         this.view = view;
     }
 
+
+    public void animateCamera(GoogleMap map, LatLng point) {
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 8),
+                new GoogleMap.CancelableCallback() {
+            @Override
+            public void onFinish() {
+                LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+                getPoints(bounds);
+            }
+
+            @Override
+            public void onCancel() {
+                getPoints(map.getProjection().getVisibleRegion().latLngBounds);
+            }
+        });
+    }
 
     public void getPoints(LatLngBounds bounds) {
         Subscription subscription = (Subscription) model.getCafeItemList(bounds)

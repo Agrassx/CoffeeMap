@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
-import com.agrass.coffeemap.MarkerColors;
+import com.agrass.coffeemap.model.MarkerColors;
 import com.agrass.coffeemap.model.parsers.OpenHourParser;
 import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.model.ImageUtil;

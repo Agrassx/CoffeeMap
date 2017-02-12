@@ -136,12 +136,12 @@ public class AddCafeFragment extends BaseFragment implements AddCafeView {
         newPoint.put("name", cafeName);
         newPoint.put("location", location);
         newPoint.put("rating", userRating);
-        newPoint.put("user_id", MapsActivity.account.getId());
-        newPoint.put("user_name", MapsActivity.account.getDisplayName());
-        newPoint.put("access_token", MapsActivity.account.getIdToken());
-
+//        newPoint.put("user_id", MapsActivity.account.getId());
+//        newPoint.put("user_name", MapsActivity.account.getDisplayName());
+//        newPoint.put("access_token", MapsActivity.account.getIdToken());
+//
         Log.e("AddPoint (JSON): ", newPoint.toString());
-        MapFragment.request.addPoint(newPoint);
+//        MapFragment.request.addPoint(newPoint);
 
     }
 

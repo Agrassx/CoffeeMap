@@ -40,6 +40,7 @@ import butterknife.ButterKnife;
 public class MapFragment2 extends BaseFragment implements MapView, MapListener, OnMapReadyCallback,
         GoogleMap.OnCameraMoveListener {
 
+//    TODO onMarkerClickListener;
     private static final String LOG = MapFragment2.class.getName();
     private static final String BASE_URLS[] = {
             "http://a.tilessputnik.ru/tiles/kmt2/",
@@ -83,11 +84,6 @@ public class MapFragment2 extends BaseFragment implements MapView, MapListener, 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        mapView.getController().setCenter(new GeoPoint(
-//                (float) Moscow.getLatitude(),
-//                (float) Moscow.getLongitude()
-//        ));
-//        mapView.getController().setZoom(11);
     }
 
     @Override
@@ -135,11 +131,6 @@ public class MapFragment2 extends BaseFragment implements MapView, MapListener, 
         return view;
     }
 
-
-    public void getBbox() {
-
-    }
-
     @Override
     public void showMessage(String message) {
 
@@ -167,21 +158,10 @@ public class MapFragment2 extends BaseFragment implements MapView, MapListener, 
         this.clusterManager = new ClusterManager<>(getActivity(), googleMap);
         this.clusterRender = new ClusterItemCafeRender(getActivity(), googleMap, clusterManager);
         this.clusterManager.setRenderer(clusterRender);
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+        presenter.animateCamera(googleMap, new LatLng(
                 Moscow.getLatitude(),
                 Moscow.getLongitude()
-        ), 8), new GoogleMap.CancelableCallback() {
-            @Override
-            public void onFinish() {
-                LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-                presenter.getPoints(bounds);
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
+        ));
         map.setOnCameraMoveListener(this);
     }
 
