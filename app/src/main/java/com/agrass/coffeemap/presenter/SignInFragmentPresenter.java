@@ -1,12 +1,10 @@
 package com.agrass.coffeemap.presenter;
 
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 
-import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.app.CoffeeApplication;
 import com.agrass.coffeemap.presenter.base.BasePresenter;
-import com.agrass.coffeemap.view.MainActivityView;
+import com.agrass.coffeemap.view.activity.MainActivityView;
 import com.agrass.coffeemap.view.SignInView;
 
 

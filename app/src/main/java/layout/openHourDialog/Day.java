@@ -1,5 +1,6 @@
 package layout.openHourDialog;
 
+@Deprecated
 public class Day {
 
     private String name;

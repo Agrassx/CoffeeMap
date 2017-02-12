@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
-import com.agrass.coffeemap.model.MarkerColors;
+import com.agrass.coffeemap.model.map.MarkerColors;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

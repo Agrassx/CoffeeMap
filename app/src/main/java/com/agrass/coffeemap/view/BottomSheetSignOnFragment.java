@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.R2;
 import com.agrass.coffeemap.presenter.SignInFragmentPresenter;
+import com.agrass.coffeemap.view.activity.MainActivityView;
 import com.google.android.gms.common.SignInButton;
 
 import butterknife.BindView;

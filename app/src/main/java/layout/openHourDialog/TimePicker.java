@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 
 import java.util.Calendar;
-
+@Deprecated
 public class TimePicker extends DialogFragment implements android.app.TimePickerDialog.OnTimeSetListener {
 
     private TimePickedListener onTimePickedListener;

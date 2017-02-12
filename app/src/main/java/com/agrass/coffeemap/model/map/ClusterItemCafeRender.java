@@ -4,10 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
-import com.agrass.coffeemap.model.MarkerColors;
 import com.agrass.coffeemap.model.parsers.OpenHourParser;
 import com.agrass.coffeemap.R;
-import com.agrass.coffeemap.model.ImageUtil;
+import com.agrass.coffeemap.model.util.ImageUtil;
 import com.agrass.coffeemap.model.cafe.Cafe;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;

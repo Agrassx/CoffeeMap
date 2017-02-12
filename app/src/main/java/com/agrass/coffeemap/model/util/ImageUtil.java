@@ -1,4 +1,4 @@
-package com.agrass.coffeemap.model;
+package com.agrass.coffeemap.model.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;

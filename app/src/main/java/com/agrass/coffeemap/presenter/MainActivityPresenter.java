@@ -10,7 +10,7 @@ import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.app.CoffeeApplication;
 import com.agrass.coffeemap.presenter.base.BasePresenter;
 import com.agrass.coffeemap.view.AddCafeFragment;
-import com.agrass.coffeemap.view.MainActivityView;
+import com.agrass.coffeemap.view.activity.MainActivityView;
 import com.agrass.coffeemap.view.base.BaseFragment;
 import com.agrass.coffeemap.view.base.FragmentView;
 import com.agrass.coffeemap.view.map.MapFragment2;

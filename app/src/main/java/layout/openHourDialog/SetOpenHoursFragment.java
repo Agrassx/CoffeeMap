@@ -16,7 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.agrass.coffeemap.R;
-
+@Deprecated
 public class SetOpenHoursFragment extends DialogFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

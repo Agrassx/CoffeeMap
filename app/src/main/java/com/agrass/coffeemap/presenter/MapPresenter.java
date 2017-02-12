@@ -1,4 +1,4 @@
-package com.agrass.coffeemap.presenter.map;
+package com.agrass.coffeemap.presenter;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,7 +9,7 @@ import com.agrass.coffeemap.model.cafe.Status;
 import com.agrass.coffeemap.presenter.base.BasePresenter;
 import com.agrass.coffeemap.view.AddCafeFragment;
 import com.agrass.coffeemap.view.BottomSheetSignOnFragment;
-import com.agrass.coffeemap.view.MainActivityView;
+import com.agrass.coffeemap.view.activity.MainActivityView;
 import com.agrass.coffeemap.view.map.MapView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

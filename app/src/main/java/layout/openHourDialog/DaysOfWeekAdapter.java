@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.agrass.coffeemap.R;
-
+@Deprecated
 public class DaysOfWeekAdapter extends ArrayAdapter<Day> implements AdapterView.OnItemClickListener {
 
     Day[] weekDays = null;

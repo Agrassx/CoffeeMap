@@ -14,16 +14,13 @@ import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.R2;
 import com.agrass.coffeemap.model.cafe.Cafe;
 import com.agrass.coffeemap.model.map.ClusterItemCafeRender;
-import com.agrass.coffeemap.presenter.map.MapPresenter;
-import com.agrass.coffeemap.view.MainActivity;
-import com.agrass.coffeemap.view.MainActivityView;
+import com.agrass.coffeemap.presenter.MapPresenter;
+import com.agrass.coffeemap.view.activity.MainActivityView;
 import com.agrass.coffeemap.view.base.ActivityView;
 import com.agrass.coffeemap.view.base.BaseFragment;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.maps.android.clustering.ClusterManager;
 
 import org.osmdroid.events.MapListener;

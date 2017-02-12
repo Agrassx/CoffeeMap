@@ -1,7 +1,6 @@
 package com.agrass.coffeemap.view;
 
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
@@ -14,9 +13,9 @@ import android.widget.RatingBar;
 
 import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.model.cafe.LocationCafe;
+import com.agrass.coffeemap.view.activity.MainActivityView;
 import com.agrass.coffeemap.view.base.ActivityView;
 import com.agrass.coffeemap.view.base.BaseFragment;
-import com.agrass.coffeemap.view.map.MapFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;

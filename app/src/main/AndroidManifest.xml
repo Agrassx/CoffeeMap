@@ -25,7 +25,7 @@
             android:value="AIzaSyCxL6DP-bjlr5O8Bhb2vlJRAEvoHD71V8M" />
 
         <activity
-            android:name=".view.MainActivity"
+            android:name=".view.activity.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:allowBackup="true"

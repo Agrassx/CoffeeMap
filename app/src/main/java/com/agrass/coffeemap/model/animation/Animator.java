@@ -1,4 +1,4 @@
-package com.agrass.coffeemap.animation;
+package com.agrass.coffeemap.model.animation;
 
 import android.view.View;
 import android.view.animation.TranslateAnimation;
