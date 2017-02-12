@@ -1,11 +1,10 @@
 package com.agrass.coffeemap.presenter;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.app.CoffeeApplication;
@@ -15,12 +14,12 @@ import com.agrass.coffeemap.view.MainActivityView;
 import com.agrass.coffeemap.view.base.BaseFragment;
 import com.agrass.coffeemap.view.base.FragmentView;
 import com.agrass.coffeemap.view.map.MapFragment2;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
 public class MainActivityPresenter extends BasePresenter {
 
+    private static final String TAG = MainActivityPresenter.class.getName();
     private MainActivityView view;
     private FragmentView fragmentView;
 //    private FragmentManager fragmentManager;
@@ -72,23 +71,20 @@ public class MainActivityPresenter extends BasePresenter {
 
     public void showBottomSheetDialogFragment(FragmentManager fragmentManager,
                                               BottomSheetDialogFragment bottomSheetDialogFragment) {
-
         bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.getTag());
     }
 
-
-    public GoogleApiClient buildGoogleApiClient(Context context) {
-        return new GoogleApiClient.Builder(context)
-                .enableAutoManage((FragmentActivity) context, view)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, buildGoogleSignInOptions())
-                .build();
+    public void handleSignInResult(GoogleSignInResult result) {
+        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            CoffeeApplication.getInstance().updateAccount(result.getSignInAccount());
+            view.afterSignIn(result.getSignInAccount());
+            view.showMessage("Сделано! :)");
+        }
     }
 
-    private GoogleSignInOptions buildGoogleSignInOptions() {
-        return new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(CoffeeApplication.getInstance().getString(R.string.server_client_id))
-                .requestEmail()
-                .build();
+    public void updateUserInfo(GoogleSignInAccount account) {
+
     }
 
     public void onBackPressed() {

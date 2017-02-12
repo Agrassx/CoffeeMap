@@ -2,44 +2,46 @@ package com.agrass.coffeemap.view;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.presenter.MainActivityPresenter;
 import com.agrass.coffeemap.view.base.BaseFragment;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import butterknife.ButterKnife;
 
+import static com.agrass.coffeemap.app.Constants.RC_SIGN_IN;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainActivityView {
 
+    private static final String TAG = MainActivity.class.getName();
     private MainActivityPresenter presenter;
-    private GoogleSignInAccount account;
-    private GoogleApiClient mGoogleApiClient;
     private ProgressDialog mProgressDialog;
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        GoogleSignInOptions googleSignInOptions = presenter.buildGoogleSignInOptions();
-//        mGoogleApiClient = presenter.buildGoogleApiClient(this);
 
         presenter = new MainActivityPresenter(this);
 
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main2, menu);
+//        getMenuInflater().inflate(R.menu.main2, menu);
         return true;
     }
 
@@ -133,8 +135,8 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void showMessage(String error) {
-
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -153,6 +155,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onSignIn(GoogleApiClient mGoogleApiClient) {
+        showProgressDialog();
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void afterSignIn(GoogleSignInAccount account) {
+//      TODO: Update Navigation Drawer
+    }
+
+    @Override
     public void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
@@ -166,6 +180,16 @@ public class MainActivity extends AppCompatActivity
     public void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.hide();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        hideProgressDialog();
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            presenter.handleSignInResult(result);
         }
     }
 

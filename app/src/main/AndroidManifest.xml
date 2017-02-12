@@ -33,6 +33,7 @@
         </activity>
         <activity
             android:name=".view.MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:allowBackup="true"
             android:label="@string/title_activity_maps"

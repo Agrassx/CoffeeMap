@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.agrass.coffeemap.R;
+import com.agrass.coffeemap.app.CoffeeApplication;
 import com.agrass.coffeemap.model.api.response.PointsResponse;
 import com.agrass.coffeemap.model.cafe.Status;
 import com.agrass.coffeemap.presenter.MainActivityPresenter;
@@ -83,8 +84,11 @@ public class MapPresenter extends BasePresenter {
     }
 
     public void addPointClick(MainActivityView activityView) {
-//        view.showAddCafeLayout();
-        activityView.showBottomSheet(new BottomSheetSignOnFragment());
+        if (CoffeeApplication.getInstance().getAccount() == null) {
+            activityView.showBottomSheet(BottomSheetSignOnFragment.newInstance(activityView));
+            return;
+        }
+        view.showAddCafeLayout();
     }
 
     public void okButtonClick(MainActivityView view, LatLng point) {

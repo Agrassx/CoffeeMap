@@ -141,7 +141,7 @@ public class MapFragment2 extends BaseFragment implements MapView, MapListener, 
     }
 
     @Override
-    public void showMessage(String error) {
+    public void showMessage(String message) {
 
     }
 

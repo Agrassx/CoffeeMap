@@ -104,5 +104,6 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="for_add_cafe_need_sign_in">Для того, что бы ты мог добавить новое место, авторизуйся в несколько кликов!</string>
     <string name="hi_friend">Привет, друг!</string>
+    <string name="cat">cat</string>
 
 </resources>

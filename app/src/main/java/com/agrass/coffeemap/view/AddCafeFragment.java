@@ -157,7 +157,7 @@ public class AddCafeFragment extends BaseFragment implements AddCafeView {
     }
 
     @Override
-    public void showMessage(String error) {
+    public void showMessage(String message) {
 
     }
 }
