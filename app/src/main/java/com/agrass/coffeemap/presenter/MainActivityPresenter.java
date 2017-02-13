@@ -21,58 +21,12 @@ public class MainActivityPresenter extends BasePresenter {
 
     private static final String TAG = MainActivityPresenter.class.getName();
     private MainActivityView view;
-    private FragmentView fragmentView;
 //    private FragmentManager fragmentManager;
 
     public MainActivityPresenter(MainActivityView view) {
         this.view = view;
     }
 
-    public void redirectToMapFragment(FragmentManager fragmentManager) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        MapFragment2 mapFragment = MapFragment2.newInstance(view);
-        fragmentView = mapFragment.getIView();
-        fragmentTransaction.replace(R.id.fragment_container, mapFragment);
-        fragmentTransaction.commit();
-    }
-
-    public void redirectToAddCafeFragment(FragmentManager fragmentManager) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        AddCafeFragment addCafeFragment = AddCafeFragment.newInstance(view);
-        fragmentView = addCafeFragment.getIView();
-        fragmentTransaction.replace(R.id.fragment_container, addCafeFragment);
-        fragmentTransaction.commit();
-    }
-
-    public void redirectTo(FragmentManager fragmentManager, BaseFragment fragment) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentView = fragment.getIView();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.commit();
-    }
-
-    public void redirectTo(FragmentManager fragmentManager, BaseFragment fragment, boolean isBackStack) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentView = fragment.getIView();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        if (isBackStack) fragmentTransaction.addToBackStack(fragment.getTag());
-        fragmentTransaction.commit();
-    }
-
-    public void redirectTo(FragmentManager fragmentManager,
-                           BaseFragment fragment, Bundle args, boolean isBackStack) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentView = fragment.getIView();
-        fragment.setArguments(args);
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        if (isBackStack) fragmentTransaction.addToBackStack(fragment.getTag());
-        fragmentTransaction.commit();
-    }
-
-    public void showBottomSheetDialogFragment(FragmentManager fragmentManager,
-                                              BottomSheetDialogFragment bottomSheetDialogFragment) {
-        bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.getTag());
-    }
 
     public void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
@@ -85,10 +39,6 @@ public class MainActivityPresenter extends BasePresenter {
 
     public void updateUserInfo(GoogleSignInAccount account) {
 
-    }
-
-    public void onBackPressed() {
-        fragmentView.onBackPressed();
     }
 
 }

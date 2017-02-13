@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.presenter.MainActivityPresenter;
 import com.agrass.coffeemap.view.base.BaseFragment;
+import com.agrass.coffeemap.view.map.MapFragment2;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity
 //
 //        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 //        navigationView.setNavigationItemSelectedListener(this);
-        presenter.redirectToMapFragment(getSupportFragmentManager());
+        presenter.redirectTo(getSupportFragmentManager(), MapFragment2.newInstance(this));
     }
 
     @Override

@@ -27,6 +27,7 @@ public class ClusterItemCafeRender extends DefaultClusterRenderer<Cafe> implemen
     private Bitmap greenMarker;
     private Bitmap greyMarker;
     private Bitmap redMarker;
+    private Bitmap blueMarker;
 
     public ClusterItemCafeRender(Context context, GoogleMap map, ClusterManager<Cafe> clusterManager) {
         super(context, map, clusterManager);
@@ -38,7 +39,19 @@ public class ClusterItemCafeRender extends DefaultClusterRenderer<Cafe> implemen
         this.greenMarker = ImageUtil.getBitmapFromSVG(context, R.drawable.ic_place_green_36dp);
         this.greyMarker = ImageUtil.getBitmapFromSVG(context, R.drawable.ic_place_grey_36dp);
         this.redMarker = ImageUtil.getBitmapFromSVG(context, R.drawable.ic_place_red_36dp);
+        this.blueMarker = ImageUtil.getBitmapFromSVG(context, R.drawable.ic_place_36dp);
 
+    }
+
+
+    @Override
+    public void setOnClusterClickListener(ClusterManager.OnClusterClickListener<Cafe> listener) {
+        super.setOnClusterClickListener(listener);
+    }
+
+    @Override
+    public void setOnClusterItemClickListener(ClusterManager.OnClusterItemClickListener<Cafe> listener) {
+        super.setOnClusterItemClickListener(listener);
     }
 
     @Override

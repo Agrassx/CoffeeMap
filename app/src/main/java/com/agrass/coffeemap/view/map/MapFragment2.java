@@ -15,12 +15,14 @@ import com.agrass.coffeemap.R2;
 import com.agrass.coffeemap.model.cafe.Cafe;
 import com.agrass.coffeemap.model.map.ClusterItemCafeRender;
 import com.agrass.coffeemap.presenter.MapPresenter;
+import com.agrass.coffeemap.view.BottomSheetCafeInfo;
 import com.agrass.coffeemap.view.activity.MainActivityView;
 import com.agrass.coffeemap.view.base.ActivityView;
 import com.agrass.coffeemap.view.base.BaseFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
 import org.osmdroid.events.MapListener;
@@ -34,8 +36,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MapFragment2 extends BaseFragment implements MapView, MapListener, OnMapReadyCallback,
-        GoogleMap.OnCameraMoveListener {
+public class MapFragment2 extends BaseFragment implements MapView {
 
 //    TODO onMarkerClickListener;
     private static final String LOG = MapFragment2.class.getName();
@@ -91,7 +92,9 @@ public class MapFragment2 extends BaseFragment implements MapView, MapListener, 
 //        ButterKnife.bind(getActivity());
 
         presenter = new MapPresenter(this);
-        buttonAddPoint.setOnClickListener(v -> presenter.addPointClick(activityView));
+        buttonAddPoint.setOnClickListener(v ->
+                presenter.addPointClick(getFragmentManager(), activityView)
+        );
         dialogButtonCancel.setOnClickListener(v -> presenter.cancelButtonClick());
         dialogButtonOk.setOnClickListener(v -> presenter.okButtonClick(
                 activityView,
@@ -147,31 +150,23 @@ public class MapFragment2 extends BaseFragment implements MapView, MapListener, 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
-
-        this.map.getUiSettings().setAllGesturesEnabled(true);
-//        this.map.getUiSettings().setZoomControlsEnabled(true);
-        this.map.getUiSettings().setCompassEnabled(true);
-        this.map.getUiSettings().setMyLocationButtonEnabled(true);
-        this.clusterManager = new ClusterManager<>(getActivity(), googleMap);
-        this.clusterRender = new ClusterItemCafeRender(getActivity(), googleMap, clusterManager);
-        this.clusterManager.setRenderer(clusterRender);
+        presenter.init(googleMap, getActivity());
         presenter.animateCamera(googleMap, new LatLng(
                 Moscow.getLatitude(),
                 Moscow.getLongitude()
         ));
-        map.setOnCameraMoveListener(this);
     }
 
     @Override
     public void onCameraMove() {
-        clusterManager.cluster();
+        presenter.cluster();
     }
 
     @Override
     public void showMarkers(List<Cafe> list) {
-        clusterManager.clearItems();
-        clusterManager.addItems(list);
-        clusterManager.cluster();
+//        clusterManager.clearItems();
+//        clusterManager.addItems(list);
+//        clusterManager.cluster();
     }
 
     @Override
@@ -200,4 +195,18 @@ public class MapFragment2 extends BaseFragment implements MapView, MapListener, 
         return this;
     }
 
+    @Override
+    public boolean onClusterClick(Cluster<Cafe> cluster) {
+        return true;
+    }
+
+    @Override
+    public boolean onClusterItemClick(Cafe cafe) {
+        presenter.changeMarkerColor(cafe);
+        presenter.showBottomSheetDialogFragment(
+                getFragmentManager(),
+                BottomSheetCafeInfo.newInstance(cafe)
+        );
+        return true;
+    }
 }
