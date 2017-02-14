@@ -38,7 +38,6 @@ import butterknife.ButterKnife;
 
 public class MapFragment2 extends BaseFragment implements MapView {
 
-//    TODO onMarkerClickListener;
     private static final String LOG = MapFragment2.class.getName();
     private static final String BASE_URLS[] = {
             "http://a.tilessputnik.ru/tiles/kmt2/",
@@ -48,9 +47,6 @@ public class MapFragment2 extends BaseFragment implements MapView {
 
     String url[] = {"http://tiles.maps.sputnik.ru/"};
 
-    private ClusterManager<Cafe> clusterManager;
-
-    private ClusterItemCafeRender clusterRender;
     private MapPresenter presenter;
     private MainActivityView activityView;
     private GoogleMap map;
@@ -197,7 +193,7 @@ public class MapFragment2 extends BaseFragment implements MapView {
 
     @Override
     public boolean onClusterClick(Cluster<Cafe> cluster) {
-        return true;
+        return false;
     }
 
     @Override
@@ -205,8 +201,13 @@ public class MapFragment2 extends BaseFragment implements MapView {
         presenter.changeMarkerColor(cafe);
         presenter.showBottomSheetDialogFragment(
                 getFragmentManager(),
-                BottomSheetCafeInfo.newInstance(cafe)
+                BottomSheetCafeInfo.newInstance(cafe, this)
         );
-        return true;
+        return false;
+    }
+
+    @Override
+    public void clearSelection(Cafe cafe) {
+        presenter.clearSelection(cafe);
     }
 }

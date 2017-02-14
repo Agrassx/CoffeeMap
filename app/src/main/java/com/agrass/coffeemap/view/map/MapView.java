@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface MapView extends FragmentView, MapListener, OnMapReadyCallback,
         GoogleMap.OnCameraMoveListener, ClusterManager.OnClusterClickListener<Cafe>,
-        ClusterManager.OnClusterItemClickListener<Cafe> {
+        ClusterManager.OnClusterItemClickListener<Cafe>, ClearSelectionView {
     void showMarkers(List<Cafe> list);
     void showAddCafeLayout();
 }

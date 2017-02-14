@@ -22,8 +22,6 @@ import java.util.Calendar;
 public class ClusterItemCafeRender extends DefaultClusterRenderer<Cafe> implements MarkerColors {
 
     private OpenHourParser parser;
-    private Calendar calendar;
-    private Context context;
     private Bitmap greenMarker;
     private Bitmap greyMarker;
     private Bitmap redMarker;
@@ -32,9 +30,7 @@ public class ClusterItemCafeRender extends DefaultClusterRenderer<Cafe> implemen
     public ClusterItemCafeRender(Context context, GoogleMap map, ClusterManager<Cafe> clusterManager) {
         super(context, map, clusterManager);
 
-        this.context = context;
         this.parser = new OpenHourParser();
-        this.calendar = Calendar.getInstance();
 
         this.greenMarker = ImageUtil.getBitmapFromSVG(context, R.drawable.ic_place_green_36dp);
         this.greyMarker = ImageUtil.getBitmapFromSVG(context, R.drawable.ic_place_grey_36dp);
@@ -90,5 +86,15 @@ public class ClusterItemCafeRender extends DefaultClusterRenderer<Cafe> implemen
             case MARKER_COLOR_RED: return redMarker;
             default: return greyMarker;
         }
+    }
+
+    public void setMarkerSelect(Cafe cafe) {
+        getMarker(cafe).setIcon(BitmapDescriptorFactory.fromBitmap(blueMarker));
+    }
+
+    public void cancelSelection(Cafe cafe) {
+        getMarker(cafe).setIcon(BitmapDescriptorFactory.fromBitmap(getMarker(
+                parser.getMarkerColor(cafe.getOpeningHours(), Calendar.DAY_OF_WEEK)
+        )));
     }
 }

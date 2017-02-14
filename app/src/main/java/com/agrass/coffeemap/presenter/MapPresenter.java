@@ -19,7 +19,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.gson.Gson;
 import com.google.maps.android.clustering.ClusterManager;
 
@@ -141,8 +140,11 @@ public class MapPresenter extends BasePresenter {
     }
 
     public void changeMarkerColor(Cafe cafe) {
-//        TODO change marker color
-        clusterRender.getMarker(cafe);
+        clusterRender.setMarkerSelect(cafe);
+    }
+
+    public void clearSelection(Cafe cafe) {
+        clusterRender.cancelSelection(cafe);
     }
 
     public void cluster() {

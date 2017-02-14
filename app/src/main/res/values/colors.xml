@@ -16,4 +16,5 @@
     <color name="primary_material_dark">#212121</color>
     <color name="background_material_dark">#2d2d2d</color>
     <color name="indigo">#350699</color>
+    <color name="transparent">#19ffffff</color>
 </resources>
