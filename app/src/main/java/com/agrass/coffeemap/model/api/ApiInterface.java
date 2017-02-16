@@ -1,5 +1,6 @@
 package com.agrass.coffeemap.model.api;
 
+import com.agrass.coffeemap.model.api.response.CafeInfoResponse;
 import com.agrass.coffeemap.model.api.response.PointsResponse;
 import com.agrass.coffeemap.model.cafe.Status;
 
@@ -20,6 +21,9 @@ public interface ApiInterface {
 
     @GET("status")
     Observable<Status> getVersion();
+
+    @GET("cafeinfo")
+    Observable<CafeInfoResponse> getCafeInfo(@Query("id") String id);
 
 
 }

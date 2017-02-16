@@ -52,7 +52,6 @@ public class MapFragment2 extends BaseFragment implements MapView {
     private GoogleMap map;
     private final GeoPoint Moscow = new GeoPoint(55751556, 37624482);
     protected TilesOverlay mTilesOverlay;
-    private Drawable drawable;
 
 
     @BindView(R2.id.buttonAddPoint) FloatingActionButton buttonAddPoint;
@@ -97,13 +96,9 @@ public class MapFragment2 extends BaseFragment implements MapView {
                 this.map.getCameraPosition().target
         ));
 //        mResourceProxy = new ResourceProxyImpl(context);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            drawable = getResources().getDrawable(R.drawable.ic_place_36dp, null);
-        } else {
-            drawable = getResources().getDrawable(R.drawable.ic_place_36dp);
-        }
         com.google.android.gms.maps.MapView mMapView
                 = (com.google.android.gms.maps.MapView) view.findViewById(R.id.mapView);
+//      FIXME:  mMapView.onCreate(); mMapView.onResume();
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
         mMapView.getMapAsync(this);

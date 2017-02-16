@@ -2,6 +2,7 @@ package com.agrass.coffeemap.model;
 
 import com.agrass.coffeemap.model.api.ApiInterface;
 import com.agrass.coffeemap.model.api.ApiModule;
+import com.agrass.coffeemap.model.api.response.CafeInfoResponse;
 import com.agrass.coffeemap.model.api.response.PointsResponse;
 import com.agrass.coffeemap.model.cafe.Status;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -39,6 +40,11 @@ public class ModelImpl implements Model {
     @Override
     public Observable<Status> getStatus() {
         return apiInterface.getVersion().compose(applySchedulers());
+    }
+
+    @Override
+    public Observable<CafeInfoResponse> getCafeInfo(String id) {
+        return apiInterface.getCafeInfo(id).compose(applySchedulers());
     }
 
     @SuppressWarnings("unchecked")

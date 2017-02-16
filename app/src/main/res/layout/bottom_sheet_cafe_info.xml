@@ -2,17 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@drawable/shadow_225736"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:behavior_hideable="true"
+    android:background="@color/background"
+    android:padding="5dp"
     app:layout_behavior="@string/bottom_sheet_behavior">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/accent_material_light"
+        android:background="@drawable/layout_back_ground_green"
         android:padding="10dp">
 
         <ImageView
@@ -48,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="@color/white"
+                android:background="@drawable/layout_background_white"
                 android:padding="10dp">
 
                 <ImageView
@@ -67,16 +68,11 @@
                     android:id="@+id/textViewCafeAddress"/>
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/black"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="@color/white"
+                android:background="@drawable/layout_background_white"
                 android:padding="10dp">
 
                 <ImageView
@@ -97,16 +93,11 @@
                     android:id="@+id/textViewCafeTimeWork"/>
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/black"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="@color/white"
+                android:background="@drawable/layout_background_white"
                 android:padding="10dp">
 
                 <ImageView
@@ -127,15 +118,11 @@
                     android:id="@+id/textViewCafeScheduleWork"/>
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/black"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/layout_background_white"
                 android:orientation="horizontal"
                 android:padding="10dp">
 
@@ -153,7 +140,8 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:text="Будь первым кто оценит! :)"
+                        android:id="@+id/textViewBeFirst"
+                        android:text="@string/be_first"
                         android:textColor="@color/black"
                         android:layout_gravity="center"
                         android:gravity="center"
@@ -167,10 +155,12 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/ratingBarCafe"
                         android:numStars="5"
-                        android:rating="4"
+                        android:max="5"
+                        android:rating="5"
                         android:isIndicator="true"/>
 
                     <Button
+                        android:id="@+id/buttonEstimate"
                         android:layout_width="250dp"
                         android:layout_gravity="center"
                         android:layout_height="wrap_content"
