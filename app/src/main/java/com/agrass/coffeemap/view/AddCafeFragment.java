@@ -8,11 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.RatingBar;
 
 import com.agrass.coffeemap.R;
+import com.agrass.coffeemap.R2;
 import com.agrass.coffeemap.model.cafe.LocationCafe;
+import com.agrass.coffeemap.presenter.AddCafePresenter;
 import com.agrass.coffeemap.view.activity.MainActivityView;
 import com.agrass.coffeemap.view.base.ActivityView;
 import com.agrass.coffeemap.view.base.BaseFragment;
@@ -20,21 +21,23 @@ import com.agrass.coffeemap.view.base.BaseFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import layout.openHourDialog.SetOpenHoursFragment;
 
 import static com.agrass.coffeemap.app.Constants.LOCATION;
 
-
-//    TODO: Layout, Import ButterKnife, Send to Server new place
+//  TODO: Layout, Import ButterKnife, Send to Server new place
 public class AddCafeFragment extends BaseFragment implements AddCafeView {
     private static final String LOG = AddCafeFragment.class.getName();
     private MainActivityView activityView;
-    private String cafeName;
-    private String openHours;
-    private float userRating;
-    private String comment;
-    private double latitude;
-    private double longitude;
+    private AddCafePresenter presenter;
+
+    @BindView(R2.id.editTextName) EditText editTextName;
+    @BindView(R2.id.editTextWorkTime) EditText editTextWorkTime;
+    @BindView(R2.id.ratingBarCafe) RatingBar ratingBarCafe;
+    @BindView(R2.id.editTextComment) EditText editTextComment;
+    @BindView(R2.id.buttonSavePoint) FloatingActionButton buttonSavePoint;
 
     private Bundle args;
     private LocationCafe location;
@@ -70,49 +73,18 @@ public class AddCafeFragment extends BaseFragment implements AddCafeView {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_add_cafe, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_cafe, container, false);
+        ButterKnife.setDebug(true);
+        ButterKnife.bind(this, view);
+        presenter = new AddCafePresenter(this);
+        buttonSavePoint.setOnClickListener( v ->  presenter.onSendButtonClick() );
+        return view;
     }
 
     @Deprecated
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        latitude = getArguments().getDouble("Latitude");
-        longitude = getArguments().getDouble("Longitude");
-
-        final FloatingActionButton saveButton = (FloatingActionButton) getView().findViewById(R.id.buttonSavePoint);
-        final RatingBar ratingBar = (RatingBar) getView().findViewById(R.id.ratingBar);
-        final RadioGroup radioGroupOpenHours = (RadioGroup) getView().findViewById(R.id.radioGroupOpenHours);
-//        final EditText editCafeName = (EditText) getView().findViewById(R.id.editTextCafeName);
-        final EditText editComment = (EditText) getView().findViewById(R.id.editTextComment);
-
-        radioGroupOpenHours.setOnCheckedChangeListener((group, checkedId) -> {
-            switch (checkedId) {
-                case R.id.radioButAlwaysOpen:
-                    openHours = "24/7";
-                    break;
-                case R.id.radioButSecond:
-                    openHours = "09:00-20:00";
-                    break;
-                case R.id.radioButAnother:
-                    getOpenHours();
-                    break;
-            }
-        });
-
-        ratingBar.setOnRatingBarChangeListener((ratingBar1, rating, fromUser) -> userRating = rating);
-
-        saveButton.setOnClickListener(v -> {
-//            try {
-//                postNewPlace(editCafeName.getText().toString(), latitude, longitude);
-//                    Toast.makeText(getActivity(), "Saved", Toast.LENGTH_LONG).show();
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-            getActivity().onBackPressed();
-
-        });
 
     }
 
@@ -134,11 +106,10 @@ public class AddCafeFragment extends BaseFragment implements AddCafeView {
         location.put("lon",longitude);
         newPoint.put("name", cafeName);
         newPoint.put("location", location);
-        newPoint.put("rating", userRating);
+//        newPoint.put("rating", userRating);
 //        newPoint.put("user_id", MapsActivity.account.getId());
 //        newPoint.put("user_name", MapsActivity.account.getDisplayName());
 //        newPoint.put("access_token", MapsActivity.account.getIdToken());
-//
         Log.e("AddPoint (JSON): ", newPoint.toString());
 //        MapFragment.request.addPoint(newPoint);
 

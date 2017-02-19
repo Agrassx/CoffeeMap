@@ -1,7 +1,5 @@
 package com.agrass.coffeemap.view.map;
 
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -13,19 +11,15 @@ import android.widget.RelativeLayout;
 import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.R2;
 import com.agrass.coffeemap.model.cafe.Cafe;
-import com.agrass.coffeemap.model.map.ClusterItemCafeRender;
 import com.agrass.coffeemap.presenter.MapPresenter;
 import com.agrass.coffeemap.view.BottomSheetCafeInfo;
 import com.agrass.coffeemap.view.activity.MainActivityView;
 import com.agrass.coffeemap.view.base.ActivityView;
 import com.agrass.coffeemap.view.base.BaseFragment;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.Cluster;
-import com.google.maps.android.clustering.ClusterManager;
 
-import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.util.GeoPoint;
