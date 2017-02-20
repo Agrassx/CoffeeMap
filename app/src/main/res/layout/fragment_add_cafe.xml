@@ -153,7 +153,13 @@
                     android:hint="@string/ACF_Input_Comment" />
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
+        <com.agrass.coffeemap.customview.CheckBoxWeekView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center">
 
+        </com.agrass.coffeemap.customview.CheckBoxWeekView>
     </LinearLayout>
 
     </ScrollView>

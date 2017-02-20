@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.agrass.coffeemap.customview.CheckBoxDayView
+        android:id="@+id/Mo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        custom:dayName="Mo"/>
+
+    <com.agrass.coffeemap.customview.CheckBoxDayView
+        android:id="@+id/Tu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        custom:dayName="Tu"/>
+
+    <com.agrass.coffeemap.customview.CheckBoxDayView
+        android:id="@+id/We"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        custom:dayName="We"/>
+
+    <com.agrass.coffeemap.customview.CheckBoxDayView
+        android:id="@+id/Th"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        custom:dayName="Th"/>
+
+    <com.agrass.coffeemap.customview.CheckBoxDayView
+        android:id="@+id/Fr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        custom:dayName="Fr"/>
+
+    <com.agrass.coffeemap.customview.CheckBoxDayView
+        android:id="@+id/Sa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        custom:dayName="Sa" />
+
+    <com.agrass.coffeemap.customview.CheckBoxDayView
+        android:id="@+id/Su"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        custom:dayName="Su"/>
+
+
+</LinearLayout>
