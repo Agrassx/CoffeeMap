@@ -107,4 +107,11 @@
     <string name="cat">cat</string>
     <string name="be_first">Будь первым кто оценит! :)</string>
 
+    <!--TimePickerDialog-->
+    <string name="tab_from_name">Работает с</string>
+    <string name="tab_to_name">Работает до</string>
+    <string name="positive_button">ок</string>
+    <string name="negative_button">отмена</string>
+
+
 </resources>

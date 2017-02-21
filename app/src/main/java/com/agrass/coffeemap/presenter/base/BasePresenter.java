@@ -2,6 +2,7 @@ package com.agrass.coffeemap.presenter.base;
 
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
@@ -60,6 +61,11 @@ public abstract class BasePresenter implements Presenter {
     public void showBottomSheetDialogFragment(FragmentManager fragmentManager,
                                               BottomSheetDialogFragment bottomSheetDialogFragment) {
         bottomSheetDialogFragment.show(fragmentManager, bottomSheetDialogFragment.getTag());
+    }
+
+    @Override
+    public void showDialog(FragmentManager fragmentManager, DialogFragment dialogFragment) {
+        dialogFragment.show(fragmentManager, dialogFragment.getTag());
     }
 
     public void onBackPressed() {

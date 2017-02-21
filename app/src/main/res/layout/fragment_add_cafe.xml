@@ -15,7 +15,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.AddCafeFragment"
+        tools:context=".view.cafe.AddCafeFragment"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
 
@@ -75,6 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:clickable="true"
             android:padding="10dp"
             android:layout_gravity="center"
             android:visibility="visible">
@@ -90,6 +91,8 @@
                 android:id="@+id/editTextWorkTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="false"
                 android:hint="Доскольки работает?"/>
 
         </LinearLayout>
@@ -153,13 +156,6 @@
                     android:hint="@string/ACF_Input_Comment" />
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
-        <com.agrass.coffeemap.customview.CheckBoxWeekView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center">
-
-        </com.agrass.coffeemap.customview.CheckBoxWeekView>
     </LinearLayout>
 
     </ScrollView>

@@ -1,4 +1,4 @@
-package com.agrass.coffeemap.view;
+package com.agrass.coffeemap.view.cafe;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 
 import com.agrass.coffeemap.R;
@@ -27,7 +28,7 @@ import layout.openHourDialog.SetOpenHoursFragment;
 
 import static com.agrass.coffeemap.app.Constants.LOCATION;
 
-//  TODO: Layout, Import ButterKnife, Send to Server new place
+//  TODO: Send to Server new place
 public class AddCafeFragment extends BaseFragment implements AddCafeView {
     private static final String LOG = AddCafeFragment.class.getName();
     private MainActivityView activityView;
@@ -77,7 +78,8 @@ public class AddCafeFragment extends BaseFragment implements AddCafeView {
         ButterKnife.setDebug(true);
         ButterKnife.bind(this, view);
         presenter = new AddCafePresenter(this);
-        buttonSavePoint.setOnClickListener( v ->  presenter.onSendButtonClick() );
+        buttonSavePoint.setOnClickListener(v ->  presenter.onSendButtonClick());
+        editTextWorkTime.setOnClickListener(v -> presenter.openDialog(getFragmentManager()));
         return view;
     }
 

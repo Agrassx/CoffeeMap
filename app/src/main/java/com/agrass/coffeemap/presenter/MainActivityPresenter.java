@@ -1,19 +1,10 @@
 package com.agrass.coffeemap.presenter;
 
-import android.os.Bundle;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
-import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.app.CoffeeApplication;
 import com.agrass.coffeemap.presenter.base.BasePresenter;
-import com.agrass.coffeemap.view.AddCafeFragment;
 import com.agrass.coffeemap.view.activity.MainActivityView;
-import com.agrass.coffeemap.view.base.BaseFragment;
-import com.agrass.coffeemap.view.base.FragmentView;
-import com.agrass.coffeemap.view.map.MapFragment2;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 

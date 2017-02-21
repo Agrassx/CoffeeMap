@@ -11,7 +11,7 @@ import com.agrass.coffeemap.model.cafe.Cafe;
 import com.agrass.coffeemap.model.cafe.Status;
 import com.agrass.coffeemap.model.map.ClusterItemCafeRender;
 import com.agrass.coffeemap.presenter.base.BasePresenter;
-import com.agrass.coffeemap.view.AddCafeFragment;
+import com.agrass.coffeemap.view.cafe.AddCafeFragment;
 import com.agrass.coffeemap.view.BottomSheetSignOnFragment;
 import com.agrass.coffeemap.view.activity.MainActivityView;
 import com.agrass.coffeemap.view.map.MapView;

@@ -1,7 +1,10 @@
 package com.agrass.coffeemap.presenter;
 
+import android.support.v4.app.FragmentManager;
+
 import com.agrass.coffeemap.presenter.base.BasePresenter;
-import com.agrass.coffeemap.view.AddCafeView;
+import com.agrass.coffeemap.view.cafe.AddCafeView;
+import com.agrass.coffeemap.view.dialog.DialogTimePicker;
 
 
 public class AddCafePresenter extends BasePresenter {
@@ -9,6 +12,10 @@ public class AddCafePresenter extends BasePresenter {
 
     public AddCafePresenter(AddCafeView view) {
         this.view = view;
+    }
+
+    public void openDialog(FragmentManager fragmentManager) {
+        showDialog(fragmentManager, new DialogTimePicker());
     }
 
     public void onSendButtonClick() {

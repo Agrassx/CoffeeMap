@@ -48,5 +48,4 @@
         android:layout_height="wrap_content"
         custom:dayName="Su"/>
 
-
 </LinearLayout>
