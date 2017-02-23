@@ -3,6 +3,7 @@ package com.agrass.coffeemap.view.cafe;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,10 +35,10 @@ public class AddCafeFragment extends BaseFragment implements AddCafeView {
     private MainActivityView activityView;
     private AddCafePresenter presenter;
 
-    @BindView(R2.id.editTextName) EditText editTextName;
+    @BindView(R2.id.editTextName) TextInputEditText editTextName;
     @BindView(R2.id.editTextWorkTime) EditText editTextWorkTime;
     @BindView(R2.id.ratingBarCafe) RatingBar ratingBarCafe;
-    @BindView(R2.id.editTextComment) EditText editTextComment;
+    @BindView(R2.id.editTextComment) TextInputEditText editTextComment;
     @BindView(R2.id.buttonSavePoint) FloatingActionButton buttonSavePoint;
 
     private Bundle args;
@@ -79,7 +80,7 @@ public class AddCafeFragment extends BaseFragment implements AddCafeView {
         ButterKnife.bind(this, view);
         presenter = new AddCafePresenter(this);
         buttonSavePoint.setOnClickListener(v ->  presenter.onSendButtonClick());
-        editTextWorkTime.setOnClickListener(v -> presenter.openDialog(getFragmentManager()));
+        editTextWorkTime.setOnClickListener(v -> presenter.onEditTextWorkTimeClick(getFragmentManager()));
         return view;
     }
 

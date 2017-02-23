@@ -56,7 +56,7 @@ public class OpenHourParser implements MarkerColors {
         }
         return noData;
     }
-    /*
+    /**
      * TODO: Add rule: "Su-Mo 08:00-23:00"
      */
     private String parseOpenHours(String StrOpenHour, int dayNumber) {

@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="CheckBoxDayView">
         <attr name="dayName" format="string" />
+        <attr name="dayID" format="string" />
         <attr name="isChecked" format="boolean"/>
     </declare-styleable>
 

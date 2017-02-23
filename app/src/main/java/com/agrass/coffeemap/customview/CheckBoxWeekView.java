@@ -33,6 +33,34 @@ public class CheckBoxWeekView extends LinearLayout {
         dayViewList.add((CheckBoxDayView) rootView.findViewById(R.id.Su));
     }
 
+    public boolean isAllDaysChecked() {
+        for (CheckBoxDayView day: dayViewList) {
+            if (!day.isChecked()) return day.isChecked();
+        }
+        return true;
+    }
+
+
+    public List<CheckBoxDayView> getDayOff() {
+        List<CheckBoxDayView> list = new ArrayList<>();
+        for (CheckBoxDayView day: dayViewList) {
+            if (!day.isChecked()) {
+                list.add(day);
+            }
+        }
+        return list;
+    }
+
+    public List<CheckBoxDayView> getDayOn() {
+        List<CheckBoxDayView> list = new ArrayList<>();
+        for (CheckBoxDayView day: dayViewList) {
+            if (day.isChecked()) {
+                list.add(day);
+            }
+        }
+        return list;
+    }
+
     public List<CheckBoxDayView> getDayViewList() {
         return dayViewList;
     }

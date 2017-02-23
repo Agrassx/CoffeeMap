@@ -103,9 +103,9 @@ public class SetOpenHoursFragment extends DialogFragment {
         days[5] = new Day("Суббота", false);
         days[6] = new Day("Воскресенье", false);
 
-        final DaysOfWeekAdapter weekAdapter = new DaysOfWeekAdapter(getActivity(), days);
-
-        weekDaysList.setAdapter(weekAdapter);
+//        final DaysOfWeekAdapter weekAdapter = new DaysOfWeekAdapter(getActivity(), days);
+//
+//        weekDaysList.setAdapter(weekAdapter);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);

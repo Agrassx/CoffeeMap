@@ -10,42 +10,49 @@
         android:id="@+id/Mo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        custom:dayID="Mo"
         custom:dayName="Mo"/>
 
     <com.agrass.coffeemap.customview.CheckBoxDayView
         android:id="@+id/Tu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        custom:dayID="Tu"
         custom:dayName="Tu"/>
 
     <com.agrass.coffeemap.customview.CheckBoxDayView
         android:id="@+id/We"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        custom:dayID="We"
         custom:dayName="We"/>
 
     <com.agrass.coffeemap.customview.CheckBoxDayView
         android:id="@+id/Th"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        custom:dayID="Th"
         custom:dayName="Th"/>
 
     <com.agrass.coffeemap.customview.CheckBoxDayView
         android:id="@+id/Fr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        custom:dayID="Sa"
         custom:dayName="Fr"/>
 
     <com.agrass.coffeemap.customview.CheckBoxDayView
         android:id="@+id/Sa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        custom:dayID="Sa"
         custom:dayName="Sa" />
 
     <com.agrass.coffeemap.customview.CheckBoxDayView
         android:id="@+id/Su"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        custom:dayID="Su"
         custom:dayName="Su"/>
 
 </LinearLayout>

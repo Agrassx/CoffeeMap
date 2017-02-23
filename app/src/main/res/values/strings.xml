@@ -112,6 +112,8 @@
     <string name="tab_to_name">Работает до</string>
     <string name="positive_button">ок</string>
     <string name="negative_button">отмена</string>
+    <string name="all_day">Весь день (24 часа)</string>
+    <string name="how_work">Как работает?</string>
 
 
 </resources>
