@@ -17,10 +17,12 @@ import java.util.Map;
 public class ScheduleWorkView extends LinearLayout implements CompoundButton.OnCheckedChangeListener {
 
     private static final String SPLIT = "-";
+    private static final String COMMA = ",";
     private static final String SPACE = " ";
-    private static final String SCHEDULE_SPLIT = "; ";
-
-    private Map<String, Integer> weekDays = new HashMap<>();
+    private static final String OFF = "off";
+    private static final String ALWAYS = "24/7";
+    private static final String ALL_DAY = "00:00-24:00";
+    private static final String SCHEDULE_SPLIT = ";";
 
     private View rootView;
     private Switch switchIsAllDay;
@@ -32,20 +34,14 @@ public class ScheduleWorkView extends LinearLayout implements CompoundButton.OnC
     private CheckBoxWeekView checkBoxWeekView;
 
 
+    public ScheduleWorkView(Context context) {
+        super(context);
+        init(context);
+    }
+
     public ScheduleWorkView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
-        initWeekDays();
-    }
-
-    private void initWeekDays() {
-        weekDays.put("Mo", 1);
-        weekDays.put("Tu", 2);
-        weekDays.put("We", 3);
-        weekDays.put("Th", 4);
-        weekDays.put("Fr", 5);
-        weekDays.put("Sa", 6);
-        weekDays.put("Su", 7);
     }
 
     private void init(Context context) {
@@ -71,7 +67,11 @@ public class ScheduleWorkView extends LinearLayout implements CompoundButton.OnC
     }
 
     public String getScheduleWork() {
-        return null;
+        return getStringSchedule(
+                checkBoxWeekView,
+                textViewOpenAt.getText().toString(),
+                textViewCloseAt.getText().toString()
+        );
     }
 
     public void setTextOpenAt(String text) {
@@ -91,28 +91,81 @@ public class ScheduleWorkView extends LinearLayout implements CompoundButton.OnC
         linearLayoutWorkTime.setVisibility(VISIBLE);
     }
 
-    /**
-    * TODO: Create class for Open Hour Serializing;
-    */
-    public String test(List<CheckBoxDayView> days, String open, String close) {
-        if (switchIsAllDay.isChecked() && checkBoxWeekView.isAllDaysChecked()) {
-            return "24/7";
-        }
+//    TODO: make class-serializer for work schedule
+    private String getStringSchedule(CheckBoxWeekView days, String open, String close) {
 
-        if (checkBoxWeekView.isAllDaysChecked()) {
-            return open + SPLIT + close;
-        }
-
-        if (switchIsAllDay.isChecked()) {
+        if (days.getDayOff().size() == 7) {
             return "";
         }
 
-        getTimeOfWorking(checkBoxWeekView.getDayOn());
+        if (switchIsAllDay.isChecked() && days.isAllDaysChecked()) {
+            return ALWAYS;
+        }
 
-        return "";
+        if (days.isAllDaysChecked()) {
+            return open + SPLIT + close;
+        }
+
+        if (switchIsAllDay.isChecked() && days.getDayOn().size() > 3) {
+            return getScheduleForMoreThen3Days(days, ALL_DAY);
+        }
+
+        if (switchIsAllDay.isChecked() && days.getDayOn().size() < 4) {
+            return getScheduleForLessThen4Days(days, ALL_DAY);
+        }
+
+        if (days.getDayOn().size() > 3) {
+            return getScheduleForMoreThen3Days(days, open, close);
+        }
+
+        if (days.getDayOn().size() < 4) {
+            return getScheduleForLessThen4Days(days, open, close);
+        }
+//        TODO: Add new rules for For x > 2 days in a row
+        return "Something was wrong :(";
     }
 
-    private void getTimeOfWorking(List<CheckBoxDayView> dayViews) {
+    private String getScheduleForMoreThen3Days(CheckBoxWeekView days, String time) {
+        List<CheckBoxDayView> daysOn = days.getDayOn();
+        String schedule = daysOn.get(0).getDayID() + SPLIT + daysOn.get(daysOn.size() - 1).getDayID();
 
+        schedule += SPACE + time + SCHEDULE_SPLIT;
+
+        for (CheckBoxDayView day: days.getDayOff()) {
+            schedule += SPACE + day.getDayID() + SPACE + OFF + SCHEDULE_SPLIT;
+        }
+        schedule = schedule.substring(0, schedule.length() - 1);
+        return schedule;
+    }
+
+    private String getScheduleForLessThen4Days(CheckBoxWeekView days, String time) {
+        String schedule = "";
+        for (CheckBoxDayView day: days.getDayOn()) {
+            schedule += day.getDayID() + SPACE + time + SCHEDULE_SPLIT + SPACE;
+        }
+        schedule = schedule.substring(0, schedule.length() - 2);
+        return schedule;
+    }
+
+    private String getScheduleForMoreThen3Days(CheckBoxWeekView days, String open, String close) {
+        List<CheckBoxDayView> daysOn = days.getDayOn();
+        String schedule = daysOn.get(0).getDayID() + SPLIT + daysOn.get(daysOn.size() - 1).getDayID();
+
+        schedule += SPACE + open + SPLIT + close + SCHEDULE_SPLIT;
+
+        for (CheckBoxDayView day: days.getDayOff()) {
+            schedule += SPACE + day.getDayID() + SPACE + OFF + SCHEDULE_SPLIT;
+        }
+        schedule = schedule.substring(0, schedule.length() - 1);
+        return schedule;
+    }
+
+    private String getScheduleForLessThen4Days(CheckBoxWeekView days, String open, String close) {
+        String schedule = "";
+        for (CheckBoxDayView day: days.getDayOn()) {
+            schedule += day.getDayID() + SPACE + open + SPLIT + close + SCHEDULE_SPLIT + SPACE;
+        }
+        schedule = schedule.substring(0, schedule.length() - 2);
+        return schedule;
     }
 }

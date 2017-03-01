@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.agrass.coffeemap.presenter.base.BasePresenter;
 import com.agrass.coffeemap.view.cafe.AddCafeView;
+import com.agrass.coffeemap.view.cafe.OnScheduleEditComplete;
 import com.agrass.coffeemap.view.cafe.ScheduleCafeWorkFragment;
 import com.agrass.coffeemap.view.dialog.DialogTimePicker;
 
@@ -23,7 +24,8 @@ public class AddCafePresenter extends BasePresenter {
         view.showMessage("Click!");
     }
 
-    public void onEditTextWorkTimeClick(FragmentManager fragmentManager) {
-        redirectTo(fragmentManager, new ScheduleCafeWorkFragment(), true);
+    public void onEditTextWorkTimeClick(FragmentManager fragmentManager,
+                                        OnScheduleEditComplete view) {
+        redirectTo(fragmentManager, ScheduleCafeWorkFragment.newInstance(view), true);
     }
 }

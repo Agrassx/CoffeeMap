@@ -5,7 +5,4 @@ import com.agrass.coffeemap.view.dialog.DialogListener;
 
 public interface ScheduleCafeWorkIView extends FragmentView, DialogListener {
 
-
-
-
 }

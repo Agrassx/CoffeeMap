@@ -80,7 +80,9 @@ public class AddCafeFragment extends BaseFragment implements AddCafeView {
         ButterKnife.bind(this, view);
         presenter = new AddCafePresenter(this);
         buttonSavePoint.setOnClickListener(v ->  presenter.onSendButtonClick());
-        editTextWorkTime.setOnClickListener(v -> presenter.onEditTextWorkTimeClick(getFragmentManager()));
+        editTextWorkTime.setOnClickListener(
+                v -> presenter.onEditTextWorkTimeClick(getFragmentManager(), this)
+        );
         return view;
     }
 
@@ -132,5 +134,10 @@ public class AddCafeFragment extends BaseFragment implements AddCafeView {
     @Override
     public void showMessage(String message) {
 
+    }
+
+    @Override
+    public void onScheduleSelect(String schedule) {
+        editTextWorkTime.setText(schedule);
     }
 }

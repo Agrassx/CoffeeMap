@@ -38,7 +38,7 @@
         android:id="@+id/Fr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        custom:dayID="Sa"
+        custom:dayID="Fr"
         custom:dayName="Fr"/>
 
     <com.agrass.coffeemap.customview.CheckBoxDayView

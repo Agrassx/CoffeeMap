@@ -39,6 +39,7 @@ public class CheckBoxDayView extends RelativeLayout {
         rootView = inflate(context, R.layout.view_day, this);
         dayNameTextView = (TextView) rootView.findViewById(R.id.dayName);
         dayCheckBox = (CheckBox) rootView.findViewById(R.id.dayIsCheck);
+        dayCheckBox.setChecked(isChecked);
         dayNameTextView.setText(dayName);
     }
 
@@ -51,6 +52,6 @@ public class CheckBoxDayView extends RelativeLayout {
     }
 
     public boolean isChecked() {
-        return isChecked;
+        return dayCheckBox.isChecked();
     }
 }

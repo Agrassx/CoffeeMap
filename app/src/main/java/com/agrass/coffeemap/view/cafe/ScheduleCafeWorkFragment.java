@@ -1,6 +1,7 @@
 package com.agrass.coffeemap.view.cafe;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import com.agrass.coffeemap.R2;
 import com.agrass.coffeemap.customview.ScheduleWorkView;
 import com.agrass.coffeemap.model.parsers.TimeParser;
 import com.agrass.coffeemap.presenter.ScheduleCafeWorkPresenter;
-import com.agrass.coffeemap.view.activity.MainActivityView;
 import com.agrass.coffeemap.view.base.ActivityView;
 import com.agrass.coffeemap.view.base.BaseFragment;
 import com.agrass.coffeemap.view.base.FragmentView;
@@ -19,19 +19,19 @@ import com.agrass.coffeemap.view.dialog.DialogTimePicker;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+//  TODO: create two scheduleWorkViews for complete schedule of work
 
 public class ScheduleCafeWorkFragment extends BaseFragment implements ScheduleCafeWorkIView {
 
     @BindView(R2.id.scheduleWork) ScheduleWorkView scheduleWork;
+    @BindView(R2.id.buttonSaveSchedule) FloatingActionButton buttonSaveSchedule;
 
-    private ActivityView activityView;
+    private OnScheduleEditComplete onScheduleEditComplete;
     private ScheduleCafeWorkPresenter presenter;
 
-    public static ScheduleCafeWorkFragment newInstance(MainActivityView activityView) {
-        Bundle args = new Bundle();
+    public static ScheduleCafeWorkFragment newInstance(OnScheduleEditComplete view) {
         ScheduleCafeWorkFragment fragment = new ScheduleCafeWorkFragment();
-        fragment.setActivityView(activityView);
-        fragment.setArguments(args);
+        fragment.setOnScheduleWorkCompleteView(view);
         return fragment;
     }
 
@@ -43,15 +43,22 @@ public class ScheduleCafeWorkFragment extends BaseFragment implements ScheduleCa
         ButterKnife.bind(this, view);
         presenter = new ScheduleCafeWorkPresenter(this);
         scheduleWork.setOnCloseAtClickListener(v -> presenter.showDialog(
-                getFragmentManager(), DialogTimePicker.newInstance(this)));
+                getFragmentManager(), new DialogTimePicker()));
         scheduleWork.setOnOpenAtClickListener(v -> presenter.showDialog(
-                getFragmentManager(), DialogTimePicker.newInstance(this)));
+                getFragmentManager(), new DialogTimePicker()));
+        buttonSaveSchedule.setOnClickListener(v -> presenter.onButtonSaveClick(
+                scheduleWork.getScheduleWork(),
+                onScheduleEditComplete
+        ));
         return view;
+    }
+
+    public void setOnScheduleWorkCompleteView(OnScheduleEditComplete view) {
+        this.onScheduleEditComplete = view;
     }
 
     @Override
     public void setActivityView(ActivityView activityView) {
-        this.activityView = activityView;
     }
 
     @Override
@@ -61,7 +68,7 @@ public class ScheduleCafeWorkFragment extends BaseFragment implements ScheduleCa
 
     @Override
     public void onBackPressed() {
-
+        getActivity().onBackPressed();
     }
 
     @Override
@@ -71,8 +78,8 @@ public class ScheduleCafeWorkFragment extends BaseFragment implements ScheduleCa
 
     @Override
     public void onPositiveButtonClick(TimeParser timeFrom, TimeParser timeTo) {
-        scheduleWork.setTextCloseAt(timeTo.toString());
-        scheduleWork.setTextOpenAt(timeFrom.toString());
+        scheduleWork.setTextCloseAt(timeFrom.toString());
+        scheduleWork.setTextOpenAt(timeTo.toString());
     }
 
     @Override

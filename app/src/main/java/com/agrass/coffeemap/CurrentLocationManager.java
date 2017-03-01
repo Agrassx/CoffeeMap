@@ -36,6 +36,7 @@ public class CurrentLocationManager extends Service implements LocationListener 
                         MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                 location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             }
+
             if (isGPSEnabled(locationManager)) {
                 locationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
