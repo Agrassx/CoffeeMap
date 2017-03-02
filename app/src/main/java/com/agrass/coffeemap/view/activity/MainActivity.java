@@ -11,11 +11,13 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.agrass.coffeemap.R;
+import com.agrass.coffeemap.app.CoffeeApplication;
 import com.agrass.coffeemap.presenter.MainActivityPresenter;
 import com.agrass.coffeemap.view.base.BaseFragment;
 import com.agrass.coffeemap.view.map.MapFragment2;
@@ -32,8 +34,7 @@ import static com.agrass.coffeemap.app.Constants.RC_SIGN_IN;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainActivityView {
-
-    private static final String TAG = MainActivity.class.getName();
+    private static final String LOG = MainActivity.class.getName();
     private MainActivityPresenter presenter;
     private ProgressDialog mProgressDialog;
 

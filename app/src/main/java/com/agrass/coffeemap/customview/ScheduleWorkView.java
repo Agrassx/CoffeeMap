@@ -121,7 +121,8 @@ public class ScheduleWorkView extends LinearLayout implements CompoundButton.OnC
         if (days.getDayOn().size() < 4) {
             return getScheduleForLessThen4Days(days, open, close);
         }
-//        TODO: Add new rules for For x > 2 days in a row
+//        TODO: Add new rules for For x > 2 days in a row;
+//        TODO: Add new rules for days in a row: Su-Tu;
         return "Something was wrong :(";
     }
 

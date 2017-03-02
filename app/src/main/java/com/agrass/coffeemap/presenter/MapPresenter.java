@@ -8,6 +8,7 @@ import android.util.Log;
 import com.agrass.coffeemap.app.CoffeeApplication;
 import com.agrass.coffeemap.model.api.response.PointsResponse;
 import com.agrass.coffeemap.model.cafe.Cafe;
+import com.agrass.coffeemap.model.cafe.LocationCafe;
 import com.agrass.coffeemap.model.cafe.Status;
 import com.agrass.coffeemap.model.map.ClusterItemCafeRender;
 import com.agrass.coffeemap.presenter.base.BasePresenter;
@@ -130,9 +131,7 @@ public class MapPresenter extends BasePresenter {
     }
 
     public void okButtonClick(MainActivityView view, LatLng point) {
-        Bundle args = new Bundle();
-        args.putString(LOCATION, new Gson().toJson(point));
-        view.redirectTo(AddCafeFragment.newInstance(view), args);
+        view.redirectTo(AddCafeFragment.newInstance(view, point));
     }
 
     public void cancelButtonClick() {

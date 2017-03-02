@@ -4,11 +4,9 @@ import com.agrass.coffeemap.model.api.ApiInterface;
 import com.agrass.coffeemap.model.api.ApiModule;
 import com.agrass.coffeemap.model.api.response.CafeInfoResponse;
 import com.agrass.coffeemap.model.api.response.PointsResponse;
+import com.agrass.coffeemap.model.cafe.NewPlace;
 import com.agrass.coffeemap.model.cafe.Status;
 import com.google.android.gms.maps.model.LatLngBounds;
-
-import org.osmdroid.util.BoundingBox;
-import org.osmdroid.util.BoundingBoxE6;
 
 
 import rx.Observable;
@@ -29,7 +27,7 @@ public class ModelImpl implements Model {
 
     @Override
     public Observable<PointsResponse> getCafeItemList(LatLngBounds bounds) {
-        return apiInterface.getRepositories(
+        return apiInterface.getPoints(
                 String.valueOf(bounds.northeast.latitude),
                 String.valueOf(bounds.southwest.latitude),
                 String.valueOf(bounds.southwest.longitude),
@@ -45,6 +43,11 @@ public class ModelImpl implements Model {
     @Override
     public Observable<CafeInfoResponse> getCafeInfo(String id) {
         return apiInterface.getCafeInfo(id).compose(applySchedulers());
+    }
+
+    @Override
+    public Observable<String> postNewPlace(NewPlace newPlace) {
+        return apiInterface.postNewPlace(newPlace).compose(applySchedulers());
     }
 
     @SuppressWarnings("unchecked")
