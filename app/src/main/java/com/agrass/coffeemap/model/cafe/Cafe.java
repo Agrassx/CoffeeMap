@@ -1,6 +1,7 @@
 package com.agrass.coffeemap.model.cafe;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterItem;
 
 public class Cafe implements ClusterItem {

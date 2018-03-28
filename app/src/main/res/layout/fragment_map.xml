@@ -3,12 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
+    <FrameLayout
+        android:id="@+id/containerLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
+
+    <!--<com.google.android.gms.maps.MapView-->
+        <!--android:id="@+id/mapView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+
+    <fragment
+        android:id="@+id/mapView"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.agrass.coffeemap.view.activity.MainActivity" />
 
     <android.support.design.widget.FloatingActionButton
         android:layout_height="wrap_content"

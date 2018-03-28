@@ -1,6 +1,7 @@
 package com.agrass.coffeemap.view.map;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.agrass.coffeemap.view.activity.MainActivityView;
 import com.agrass.coffeemap.view.base.ActivityView;
 import com.agrass.coffeemap.view.base.BaseFragment;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.Cluster;
 
@@ -90,27 +92,28 @@ public class MapFragment2 extends BaseFragment implements MapView {
                 this.map.getCameraPosition().target
         ));
 //        mResourceProxy = new ResourceProxyImpl(context);
-        com.google.android.gms.maps.MapView mMapView
-                = (com.google.android.gms.maps.MapView) view.findViewById(R.id.mapView);
-//      FIXME:  mMapView.onCreate(); mMapView.onResume();
-        mMapView.onCreate(savedInstanceState);
-        mMapView.onResume();
-        mMapView.getMapAsync(this);
+
+//        com.google.android.gms.maps.MapView mMapView
+//                = (com.google.android.gms.maps.MapView) view.findViewById(R.id.mapView);
+////      FIXME:  mMapView.onCreate(); mMapView.onResume();
+//        mMapView.onCreate(savedInstanceState);
+//        mMapView.onResume();
+//        mMapView.getMapAsync(this);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
+        mapFragment.getMapAsync(this);
+
 //        mapView = (org.osmdroid.views.MapView) view.findViewById(R.id.openMapView);
-//
 //        float scale = mapView.getResources().getDisplayMetrics().density;
 //        int imageSize = (int) (256 * scale);
 //        ITileSource tileSource = new RetinaTileSource("Sputnik", 2, 18, imageSize, ".png", BASE_URLS);
 //        mapView.setTileSource(tileSource);
-//
 //        MapTileProviderBasic mProvider = new MapTileProviderBasic(getActivity(), tileSource);
 //        mTilesOverlay = new TilesOverlay(mProvider, getActivity());
 //        mTilesOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
 //        mapView.getOverlays().clear();
 //        mapView.getOverlays().add(mTilesOverlay);
-//
 ////        mapView.getTileProvider().setTileSource(tileSource);
-//
 //        mapView.setMultiTouchControls(true);
 //        mapView.setMapListener(new DelayedMapListener(this, 250));
         return view;
@@ -135,6 +138,7 @@ public class MapFragment2 extends BaseFragment implements MapView {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
+        map.setOnCameraMoveListener(this);
         presenter.init(googleMap, getActivity());
         presenter.animateCamera(googleMap, new LatLng(
                 Moscow.getLatitude(),
@@ -174,6 +178,11 @@ public class MapFragment2 extends BaseFragment implements MapView {
     @Override
     public void setActivityView(ActivityView activityView) {
 
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     public MapView getIView() {
