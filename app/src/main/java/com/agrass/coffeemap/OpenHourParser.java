@@ -13,7 +13,7 @@ public class OpenHourParser implements MarkerColors {
     private Map<String, Integer> weekDays = new HashMap<>();
     private Calendar mCalendar = Calendar.getInstance();
     private int numOfTimePart;
-    private String closed= "закрыто";
+    private String closed = "закрыто";
     private String noData = "нет данных";
     private String always = "Круглосуточно";
     private String workingTo = "до %s";
@@ -35,24 +35,28 @@ public class OpenHourParser implements MarkerColors {
         if (dayNumber == 0) {
             dayNumber = 7;
         }
+
         if (openHours.equals("")) {
             return noData;
         }
-        if (!Objects.equals(openHours, "24/7")) {
-            try {
-                if (isOpen(parseOpenHours(openHours, dayNumber))) {
-                    return getEndTimeWork(parseOpenHours(openHours, dayNumber));
-                } else {
-                    return closed;
-                }
-            } catch (Exception e){
-                Log.e("OpenHour.getOpenHours()", e.toString());
-            }
-        } else {
+
+        if (Objects.equals(openHours, "24/7")) {
             return always;
         }
+
+        try {
+            if (isOpen(parseOpenHours(openHours, dayNumber))) {
+                return getEndTimeWork(parseOpenHours(openHours, dayNumber));
+            } else {
+                return closed;
+            }
+        } catch (Exception e){
+            Log.e("OpenHour.getOpenHours()", e.toString());
+        }
+
         return noData;
     }
+
     /*
      * TODO: Add rule: "Su-Mo 08:00-23:00"
      */
@@ -244,6 +248,7 @@ public class OpenHourParser implements MarkerColors {
         if (cafeHoursOfOpen.equals(noData)) {
             return false;
         }
+
         if (getCurrentHour() < getCafeCloseHours(cafeHoursOfOpen) && getCurrentHour() > getCafeOpenHours(cafeHoursOfOpen)) {
             return true; // interval 08:00-20:00, current 10:00
         } else if (getCurrentHour() == getCafeCloseHours(cafeHoursOfOpen) && getCurrentMin() < getCafeCloseMins(cafeHoursOfOpen)) {
