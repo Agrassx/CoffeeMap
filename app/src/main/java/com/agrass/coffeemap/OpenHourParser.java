@@ -62,11 +62,11 @@ public class OpenHourParser implements MarkerColors {
     /*
      * TODO: Add rule: "Su-Mo 08:00-23:00"
      */
-    private String parseOpenHours(String StrOpenHour, int dayNumber) {
-        if (StrOpenHour.contains(";")) { //for rules where many rules as the "Mo-Th 09:00-23:00; Fr 09:00-23:00; Sa 11:00-23:00; Su off"
-            String[] timeParts = StrOpenHour.split("; ");
+    private String parseOpenHours(String openHours, int weekDay) {
+        if (openHours.contains(";")) { //for rules where many rules as the "Mo-Th 09:00-23:00; Fr 09:00-23:00; Sa 11:00-23:00; Su off"
+            String[] timeParts = openHours.split("; ");
 
-            if (checkDay(timeParts, dayNumber)) { //for exceptions in large intervals as the "Mo-Su 08:00-23:00; Fr off"
+            if (checkDay(timeParts, weekDay)) { //for exceptions in large intervals as the "Mo-Su 08:00-23:00; Fr off"
                 if (numOfTimePart != 0) {
                     timeParts[numOfTimePart] = new StringBuilder(timeParts[numOfTimePart]).deleteCharAt(0).toString();
                 }
@@ -75,22 +75,22 @@ public class OpenHourParser implements MarkerColors {
 
             for (int k = 0; k < timeParts.length; k++) {
                 TimePart timePart = parseTimePart(timeParts[k]);
-                if (isInInterval(timePart.weekDays, dayNumber)){
+                if (isInInterval(timePart.weekDays, weekDay)){
                     return timePart.time;
                 }
             }
-        } else if (isConsistDays(StrOpenHour)) { // for rules where small interval "Mo-Fr 09:00-23:00"
-            TimePart timePart = parseTimePart(StrOpenHour);
-            if (isInInterval(timePart.weekDays, dayNumber)){
+        } else if (isConsistDays(openHours)) { // for rules where small interval "Mo-Fr 09:00-23:00"
+            TimePart timePart = parseTimePart(openHours);
+            if (isInInterval(timePart.weekDays, weekDay)){
                 return timePart.time;
             }
         }
 
-        if (!isConsistDays(StrOpenHour)) { // for rules where "08:00-20:00" (without days)
-            return StrOpenHour;
+        if (!isConsistDays(openHours)) { // for rules where "08:00-20:00" (without days)
+            return openHours;
         }
 
-        if (StrOpenHour.equals("")) { // if empty
+        if (openHours.equals("")) { // if empty
             return noData;
         }
 
