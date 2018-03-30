@@ -52,7 +52,7 @@ public class OpenHourParser implements MarkerColors {
             } else {
                 return closed;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e("OpenHour.getOpenHours()", e.toString());
         }
 
@@ -63,35 +63,28 @@ public class OpenHourParser implements MarkerColors {
      * TODO: Add rule: "Su-Mo 08:00-23:00"
      */
     private String parseOpenHours(String openHours, int weekDay) {
-        if (openHours.contains(";")) { //for rules where many rules as the "Mo-Th 09:00-23:00; Fr 09:00-23:00; Sa 11:00-23:00; Su off"
-            String[] timeParts = openHours.split("; ");
-
-            if (checkDay(timeParts, weekDay)) { //for exceptions in large intervals as the "Mo-Su 08:00-23:00; Fr off"
-                if (numOfTimePart != 0) {
-                    timeParts[numOfTimePart] = new StringBuilder(timeParts[numOfTimePart]).deleteCharAt(0).toString();
-                }
-                return timeParts[numOfTimePart].split(" ")[1];
-            }
-
-            for (int k = 0; k < timeParts.length; k++) {
-                TimePart timePart = parseTimePart(timeParts[k]);
-                if (isInInterval(timePart.weekDays, weekDay)){
-                    return timePart.time;
-                }
-            }
-        } else if (isConsistDays(openHours)) { // for rules where small interval "Mo-Fr 09:00-23:00"
-            TimePart timePart = parseTimePart(openHours);
-            if (isInInterval(timePart.weekDays, weekDay)){
-                return timePart.time;
-            }
+        if (openHours.equals("")) { // if empty
+            return noData;
         }
 
-        if (!isConsistDays(openHours)) { // for rules where "08:00-20:00" (without days)
+        if (!hasDays(openHours)) { // for rules where "08:00-20:00" (without days)
             return openHours;
         }
 
-        if (openHours.equals("")) { // if empty
-            return noData;
+        String[] timeParts = openHours.split("; ");
+
+        if (checkDay(timeParts, weekDay)) { //for exceptions in large intervals as the "Mo-Su 08:00-23:00; Fr off"
+            if (numOfTimePart != 0) {
+                timeParts[numOfTimePart] = new StringBuilder(timeParts[numOfTimePart]).deleteCharAt(0).toString();
+            }
+            return timeParts[numOfTimePart].split(" ")[1];
+        }
+
+        for (int k = 0; k < timeParts.length; k++) {
+            TimePart timePart = parseTimePart(timeParts[k]);
+            if (isInInterval(timePart.weekDays, weekDay)) {
+                return timePart.time;
+            }
         }
 
         return closed;
@@ -106,14 +99,14 @@ public class OpenHourParser implements MarkerColors {
     }
 
 
-    private boolean isInInterval(String interval, int dayNumber){
-        if(interval.contains("-")) {
+    private boolean isInInterval(String interval, int dayNumber) {
+        if (interval.contains("-")) {
             Integer leftLimit = weekDays.get(interval.split("-")[0]);
             Integer rightLimit = weekDays.get(interval.split("-")[1]);
             if (leftLimit <= dayNumber && dayNumber <= rightLimit) {
                 return true;
             }
-        } else if(interval.contains(",")) {
+        } else if (interval.contains(",")) {
             String[] splitedInt = interval.split(",");
             for (String aSplitedInt : splitedInt) {
                 if (dayNumber == weekDays.get(aSplitedInt)) {
@@ -121,7 +114,7 @@ public class OpenHourParser implements MarkerColors {
                 }
             }
         } else {
-            if(dayNumber == weekDays.get(interval)) {
+            if (dayNumber == weekDays.get(interval)) {
                 return true;
             }
         }
@@ -131,14 +124,14 @@ public class OpenHourParser implements MarkerColors {
     private String getEndTimeWork(String time) {
         if (time.contains("-")) {
             return String.format(workingTo, time.split("-")[1]);
-        } else if(time.contains(dayOff)) {
+        } else if (time.contains(dayOff)) {
             return closed;
         } else {
             return noData;
         }
     }
 
-    private boolean isConsistDays(String openHours) {
+    private boolean hasDays(String openHours) {
         return openHours.contains(" ");
     }
 
@@ -256,7 +249,7 @@ public class OpenHourParser implements MarkerColors {
             return true; // interval 08:00-20:00, current 10:00
         } else if (getCurrentHour() == getCafeCloseHours(cafeHoursOfOpen) && getCurrentMin() < getCafeCloseMins(cafeHoursOfOpen)) {
             return true; // interval 08:00-20:00, current 20:30
-        }  else if (getCurrentHour() == getCafeOpenHours(cafeHoursOfOpen) && getCurrentMin() > getCafeOpenMins(cafeHoursOfOpen)) {
+        } else if (getCurrentHour() == getCafeOpenHours(cafeHoursOfOpen) && getCurrentMin() > getCafeOpenMins(cafeHoursOfOpen)) {
             return true; // interval 08:00-20:00, current 08:30
         } else {
             return false;
