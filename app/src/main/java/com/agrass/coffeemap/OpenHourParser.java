@@ -45,8 +45,9 @@ public class OpenHourParser implements MarkerColors {
         }
 
         try {
-            if (isOpen(parseOpenHours(openHours, dayNumber))) {
-                return getEndTimeWork(parseOpenHours(openHours, dayNumber));
+            String cafeOpenHours = parseOpenHours(openHours, dayNumber);
+            if (isOpen(cafeOpenHours)) {
+                return getEndTimeWork(cafeOpenHours);
             } else {
                 return closed;
             }
