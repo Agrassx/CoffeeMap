@@ -79,15 +79,14 @@ public class OpenHourParser implements MarkerColors {
                 }
 
                 TimePart timePart = parseTimePart(timeParts[k]);
-                if (isInInterval(timePart.date, dayNumber)){
+                if (isInInterval(timePart.weekDays, dayNumber)){
                     return timePart.time;
                 }
             }
         } else if (isConsistDays(StrOpenHour)) { // for rules where small interval "Mo-Fr 09:00-23:00"
-            String days = StrOpenHour.split(" ")[0];
-            String time = StrOpenHour.split(" ")[1];
-            if (isInInterval(days, dayNumber)){
-                return time;
+            TimePart timePart = parseTimePart(StrOpenHour);
+            if (isInInterval(timePart.weekDays, dayNumber)){
+                return timePart.time;
             }
         }
 

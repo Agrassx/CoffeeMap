@@ -1,11 +1,11 @@
 package com.agrass.coffeemap;
 
 public class TimePart {
-    public String date;
+    public String weekDays;
     public String time;
 
-    public TimePart(String date, String time) {
-        this.date = date;
+    public TimePart(String weekDays, String time) {
+        this.weekDays = weekDays;
         this.time = time;
     }
 
