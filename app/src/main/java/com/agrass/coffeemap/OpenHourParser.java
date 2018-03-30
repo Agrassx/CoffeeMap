@@ -1,5 +1,6 @@
 package com.agrass.coffeemap;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -62,7 +63,6 @@ public class OpenHourParser implements MarkerColors {
      * TODO: Add rule: "Su-Mo 08:00-23:00"
      */
     private String parseOpenHours(String StrOpenHour, int dayNumber) {
-
         if (StrOpenHour.contains(";")) { //for rules where many rules as the "Mo-Th 09:00-23:00; Fr 09:00-23:00; Sa 11:00-23:00; Su off"
             String[] timeParts = StrOpenHour.split(";");
 
@@ -78,11 +78,9 @@ public class OpenHourParser implements MarkerColors {
                     timeParts[k] = new StringBuilder(timeParts[k]).deleteCharAt(0).toString();
                 }
 
-                String days = timeParts[k].split(" ")[0];
-                String time = timeParts[k].split(" ")[1];
-
-                if (isInInterval(days, dayNumber)){
-                    return time;
+                TimePart timePart = parseTimePart(timeParts[k]);
+                if (isInInterval(timePart.date, dayNumber)){
+                    return timePart.time;
                 }
             }
         } else if (isConsistDays(StrOpenHour)) { // for rules where small interval "Mo-Fr 09:00-23:00"
@@ -103,6 +101,15 @@ public class OpenHourParser implements MarkerColors {
 
         return closed;
     }
+
+    @NonNull
+    private TimePart parseTimePart(String timePart1) {
+        String days = timePart1.split(" ")[0];
+        String time = timePart1.split(" ")[1];
+
+        return new TimePart(days, time);
+    }
+
 
     private boolean isInInterval(String interval, int dayNumber){
         if(interval.contains("-")) {
