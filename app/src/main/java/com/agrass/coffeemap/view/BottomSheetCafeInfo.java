@@ -69,13 +69,17 @@ public class BottomSheetCafeInfo extends BottomSheetDialogFragment implements Ca
             e.printStackTrace();
         }
 //        TODO: Dynamic day of week (fix magic number)
-        textViewCafeTimeWork.setText(new OpenHourParser().getOpenHours(
-                cafe.getOpeningHours(),
-                3
-        ));
+        textViewCafeTimeWork.setText(getOpenTill());
         textViewCafeScheduleWork.setText(cafe.getOpeningHours());
         presenter.getCafeInfo(cafe.getId());
         return view;
+    }
+
+    private String getOpenTill() {
+        return new OpenHourParser().getOpenHours(
+                cafe.getOpeningHours(),
+                3
+        );
     }
 
     @Override
