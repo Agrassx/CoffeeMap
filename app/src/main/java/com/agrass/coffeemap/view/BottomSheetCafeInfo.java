@@ -13,12 +13,13 @@ import com.agrass.coffeemap.R;
 import com.agrass.coffeemap.R2;
 import com.agrass.coffeemap.model.api.response.CafeInfoResponse;
 import com.agrass.coffeemap.model.cafe.Cafe;
-import com.agrass.coffeemap.model.parsers.OpenHourParser;
+import com.agrass.coffeemap.model.parsers.OSMHoursParser;
 import com.agrass.coffeemap.model.util.MapUtil;
 import com.agrass.coffeemap.presenter.CafeInfoFragmentPresenter;
 import com.agrass.coffeemap.view.map.ClearSelectionView;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,17 +70,19 @@ public class BottomSheetCafeInfo extends BottomSheetDialogFragment implements Ca
             e.printStackTrace();
         }
 //        TODO: Dynamic day of week (fix magic number)
-        textViewCafeTimeWork.setText(getOpenTill());
+        textViewCafeTimeWork.setText(getOpenTill(cafe.getOpeningHours()));
         textViewCafeScheduleWork.setText(cafe.getOpeningHours());
         presenter.getCafeInfo(cafe.getId());
         return view;
     }
 
-    private String getOpenTill() {
-        return new OpenHourParser().getOpenHours(
-                cafe.getOpeningHours(),
-                3
-        );
+    public int getCurrentDayNumber() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.DAY_OF_WEEK);
+    }
+
+    public String getOpenTill(String openingHours) {
+        return OSMHoursParser.OpenTill(openingHours, getCurrentDayNumber());
     }
 
     @Override
